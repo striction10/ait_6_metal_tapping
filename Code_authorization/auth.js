@@ -1,32 +1,44 @@
 const admin = {
     login: 'admin',
-    password: 'admin'
+    password: 'admin',
+    role: 'admin'
 }
-const user = {
-    login: 'user',
-    password: 'user'
+const operator = {
+    login: 'operator',
+    password: 'operator',
+    role: 'operator'
 }
-const users_array = [admin, user];
-localStorage.setItem('users', JSON.stringify(users_array));
+const technologist = {
+    login: 'technologist',
+    password: 'technologist',
+    role: 'technologist'
+}
+const users_array = [admin, operator, technologist];
 
 document.addEventListener("DOMContentLoaded", () => {
     const auth_btn = document.getElementById('auth_button');
     auth_btn.addEventListener("click", () => {
-    const login = document.getElementById('login_input').value;
-    const password = document.getElementById('password_input').value;
-    const users = JSON.parse(localStorage.getItem('users'));
-    const authenticated = users.some(user => user.login === login && user.password === password);
-    if (authenticated) {
-        alert('Успешный вход!');
-        login_input.classList.add('correct');
-        password_input.classList.add('correct'); 
-    } else {
-        alert('Неправильный логин или пароль.');
-        login_input.classList.add('error');
-        password_input.classList.add('error'); 
+    const login = document.querySelector('.auth_input.login');
+    const password = document.querySelector('.auth_input.password');
+    const users = JSON.parse(localStorage.getItem('user_logins')) || [];
+    const authenticated = Array.isArray(users) && users.some(user => user.login === login.value && user.password === password.value);
+    if (authenticated){
+        alert('Успешный вход!!');
+        login.classList.add('correct');
+        password.classList.add('correct');
+    }
+    else{
+        if (users_array.some(user => user.login === login.value && user.password === password.value)){
+            alert('Успешный вход!');
+            login.classList.add('correct');
+            password.classList.add('correct');
+            localStorage.setItem('user_logins', JSON.stringify(users_array.find(user => user.login === login.value && user.password === password.value)));        
+        }
+        else{
+            alert('Неправильный логин или пароль.');
+            login.classList.add('error');
+            password.classList.add('error');
+        }
     }
     });
 });
-
-
-

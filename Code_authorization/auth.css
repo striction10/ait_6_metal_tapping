@@ -1,6 +1,7 @@
 body{
     background-color: #F2F2F2;
     margin: 0;
+    font-family: 'Roboto';
 }
 
 #header{
@@ -21,7 +22,6 @@ body{
 
 h1{
     margin: 0;
-    font-family: 'Roboto';
     font-weight: 400;
     font-size: 36px;
     text-align: center;
@@ -47,14 +47,12 @@ h1{
 }
 
 p{
-    font-family: 'Roboto';
     font-weight: 400;
     font-size: 20px;
     margin-bottom: 5px;
 }
 
 h2{
-    font-family: 'Roboto';
     font-weight: 400;
     font-size: 36px;
     text-align: center;
@@ -114,7 +112,7 @@ h2{
     margin-top: 3%;
 }
 
-.error {
+.error{
     border: 2px solid red;
     background-color: #ffe6e6;
 }
