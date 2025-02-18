@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
 * {
     margin: 0px;
@@ -10,16 +10,22 @@ a {
     text-decoration: none;
 }
 
-.main-block {
+.logo-header img {
+    width: 70px;
+    height: auto;
+}
+
+.header-block {
     background-color: rgba(242, 242, 242, 1);
     display: flex;
+    height: 50px;
 }
 
-.list-header > li {
-    margin-inline: 70px;
+.list-main-nav > li {
+    margin-inline: 45px;
 }
 
-.list-header {
+.list-main-nav {
     list-style-type: none;
     align-items: center;
     display: flex;
@@ -27,16 +33,16 @@ a {
     font-family: "Roboto", sans-serif;
 }
 
-.main-block > span {
-    font-size: 30px;
+.header-block > span {
+    font-size: 20px;
     display: flex;
     align-items: center;
     font-family: "Roboto", sans-serif;
-    margin-left: 100px;
+    margin-left: 38vw;
 }
 
 .logo-account {
-    margin-left: 190px;
+    margin-left: 40vw;
     display: flex;
     align-items: center;
 }
@@ -45,8 +51,8 @@ a {
     list-style-type: none;
     align-items: center;
     display: flex;
-    font-size: 25px;
-    font-family: "Open Sans", sans-serif;
+    font-size: 14px;
+    font-family: "Roboto", sans-serif;
 }
 
 .list-main > li {
