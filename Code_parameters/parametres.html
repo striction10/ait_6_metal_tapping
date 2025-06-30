@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/style/parametres.css">
+    <title>Параметры</title>
+</head>
+<body>
+    <header>
+        <div class="firstPart">
+            <img src="/assets/img/rusalLogo.svg" alt="rusalLogo" width="70px">
+            <h1>Параметры</h1>
+            <button class="popupBtn">
+                <img src="/assets/img/userLogo.svg" alt="userLogo" width="30px">
+            </button>
+        </div>
+        <div class="navPart">
+            <a href="">Регламенты</a>
+            <a href="">Задания</a>
+            <a href="">Параметры</a>
+        </div>
+        <div class="selectPart">
+            <select name="" id="">
+                <option value="">Выбрать корпус</option>
+                <option value="1">Корпус 1</option>
+                <option value="2">Корпус 2</option>
+                <option value="3">Корпус 3</option>
+            </select>
+            <input type="date">
+        </div>
+    </header>
+    <div class="popupContainer">
+        <div class="popupContent">
+            <div class="userForm">
+                <label>Логин</label>
+                <h2 class="userInfo Login">Your login</h2>
+                <label>Пароль</label>
+                <h2 class="userInfo Password">Your password</h2>
+                <label>Роль</label>
+                <h2 class="userInfo Role">Your role</h2>
+            </div>
+        </div>
+    </div>
+    <main>
+        <div class="main-table">
+            <table id="data-table">
+                <tr id="color-item">
+                    <th colspan="10">Таблица параметров</th>
+                </tr>
+                <tr>
+                    <th>№ Электролиза</th>
+                    <th>Уровень металла, цель</th>
+                    <th>Уровень металла, факт</th>
+                    <th>Отклонение</th>
+                    <th>Сила тока, кА</th>
+                    <th>Выход по току, %</th>
+                    <th>Расчетное задание, кг</th>
+                    <th>ЗПР, кг</th>
+                    <th>Марка</th>
+                </tr>
+            </table>
+        </div>
+        <div class="btn-down">
+            <button>Сохранить</button>
+            <span>/</span>
+            <button>Отправить</button>
+        </div>
+    </main>
+    <script src="parametres.js"></script>
+</body>
+</html>
