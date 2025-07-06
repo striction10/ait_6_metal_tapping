@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/tasks.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <title>Задания</title>
+</head>
+<body>
+    <header>
+        <div class="firstPart">
+            <img src="/Code_reglaments/assets/img/rusalLogo.svg" alt="rusalLogo" width="70px">
+            <h1>Задания</h1>
+            <button class="popupBtn">
+                <img src="/Code_reglaments/assets/img/userLogo.svg" alt="userLogo" width="30px">
+            </button>
+        </div>
+        <div class="navPart">
+            <a href="">Регламенты</a>
+            <a href="">Задания</a>
+            <a href="">Параметры</a>
+        </div>
+        <div class="selectPart">
+            <select name="" id="">
+                <option value="0">Выбрать регламент</option>
+                <option value="1">Регламент 08.04.2025</option>
+                <option value="2">Регламент 08.05.2025</option>
+                <option value="3">Регламент 08.06.2025</option>
+            </select>
+            <select name="" id="">
+                <option value="0">Выбрать корпус</option>
+                <option value="1">Корпус 1</option>
+                <option value="2">Корпус 2</option>
+                <option value="3">Корпус 3</option>
+            </select>
+            <input type="date">
+        </div>
+    </header>
+    <div class="popupContainer">
+        <div class="popupContent">
+            <div class="userForm">
+                <label>Логин</label>
+                <h2 class="userInfo Login">Your login</h2>
+                <label>Пароль</label>
+                <h2 class="userInfo Password">Your password</h2>
+                <label>Роль</label>
+                <h2 class="userInfo Role">Your role</h2>
+            </div>
+        </div>
+    </div>
+    <main>
+        <div class="main-table">
+            <table id="data-table">
+                <tr id="color-item">
+                    <th colspan="10">Таблица выливки, %</th>
+                </tr>
+                <tr>
+                    <th>№ Электролиза</th>
+                    <th>-2</th>
+                    <th>-1</th>
+                    <th>0</th>
+                    <th>1</th>
+                    <th>2</th>
+                    <th>3</th>
+                    <th>4</th>
+                </tr>
+            </table>
+        </div>
+        <div class="btn-down">
+            <button>Сохранить</button>
+            <span>/</span>
+            <button>Отправить</button>
+        </div>
+    </main>
+    <script src="reglaments.js"></script>
+</body>
+</html>
