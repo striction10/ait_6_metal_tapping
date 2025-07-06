@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+.logo-header img {
+    width: 70px;
+    height: auto;
+}
+
+.header-block {
+    background-color: rgba(242, 242, 242, 1);
+    display: flex;
+    align-items: center;
+    height: 50px;
+}
+
+.list-main-nav > li {
+    margin-inline: 25px;
+}
+
+.list-main-nav {
+    list-style-type: none;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    font-size: 25px;
+    font-family: "Roboto", sans-serif;
+}
+
+.header-block > span {
+    font-size: 20px;
+    font-family: "Roboto", sans-serif;
+    margin-left: 835px;
+}
+
+.logo-account {
+    display: flex;
+    margin-left: 850px;
+}
+
+.nav-header {
+    display: flex;
+}
+
+.list-main {
+    list-style-type: none;
+    align-items: center;
+    display: flex;
+    font-size: 25px;
+    font-family: "Roboto", sans-serif;
+    margin-left: 925px;
+}
+
+.list-main > li {
+    margin-inline: 10px;
+    padding: 10px;
+}
+
+.main-table > table {
+    border-collapse: collapse;
+}
+
+.main-table td, .main-table tr, .main-table th {
+    border: 1px solid black;
+    height: 35px;
+    font-family: "Roboto", sans-serif;
+}
+
+.main-table th {
+    font-size: 16px;
+    width: 12vw;
+}
+
+.main-table td {
+    text-align: center;
+    font-size: 14px;
+}
+
+#color-item {
+    background-color: rgba(242, 242, 242, 1);
+}
+
+#red-item {
+    background-color: rgba(255, 199, 199, 1);
+}
