@@ -82,6 +82,11 @@ input[type='date']:hover{
 
 .navPart > a:hover{
     background-color: #F2F2F2;
+    border-bottom: 3px solid #fdb2b6;
+}
+
+.navPart > :nth-child(2){
+    border-bottom: 3px solid #fd8288;
 }
 
 .main-table{
