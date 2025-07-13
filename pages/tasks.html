@@ -25,10 +25,10 @@
         </div>
         <div class="selectPart">
             <select name="" id="">
-                <option value="0">Выбрать регламент</option>
-                <option value="1">Регламент 08.04.2025</option>
-                <option value="2">Регламент 08.05.2025</option>
-                <option value="3">Регламент 08.06.2025</option>
+                <option value="0">Выбрать сортность</option>
+                <option value="1">А6</option>
+                <option value="2">А7</option>
+                <option value="3">А8</option>
             </select>
             <select name="" id="">
                 <option value="0">Выбрать корпус</option>
@@ -44,8 +44,6 @@
             <div class="userForm">
                 <label>Логин</label>
                 <h2 class="userInfo Login">Your login</h2>
-                <label>Пароль</label>
-                <h2 class="userInfo Password">Your password</h2>
                 <label>Роль</label>
                 <h2 class="userInfo Role">Your role</h2>
             </div>
@@ -53,19 +51,28 @@
     </div>
     <main>
         <div class="main-table">
-            <table id="data-table">
+            <table class="data-table">
                 <tr id="color-item">
-                    <th colspan="10">Таблица выливки, %</th>
+                    <th colspan="20">Задание по сменам</th>
                 </tr>
                 <tr>
                     <th>№ Электролиза</th>
-                    <th>-2</th>
-                    <th>-1</th>
-                    <th>0</th>
-                    <th>1</th>
-                    <th>2</th>
-                    <th>3</th>
-                    <th>4</th>
+                    <th colspan="2">Смена 1,кг | Время</th>
+                    <th colspan="2">Смена 2,кг | Время</th>
+                    <th colspan="2">Смена 3,кг | Время</th>
+                    <th colspan="2">№ Электролиза | № Ковша</th>
+                    <th>Fe,%</th>
+                    <th>Si,%</th>
+                    <th>Марка</th>
+                </tr>
+            </table>
+            <table class="data-table">
+                <tr id="color-item">
+                    <th colspan="20">Итогое задание на смену</th>
+                </tr>
+                <tr>
+                    <th>Задание на выливку,кг</th>
+                    <th>Марка</th>
                 </tr>
             </table>
         </div>
@@ -75,6 +82,6 @@
             <button>Отправить</button>
         </div>
     </main>
-    <script src="reglaments.js"></script>
+    <script src="/scripts/tasks.js"></script>
 </body>
 </html>

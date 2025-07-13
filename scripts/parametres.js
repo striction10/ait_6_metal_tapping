@@ -34,7 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = '/auth/auth';
     }
     document.querySelector('.userInfo.Login').textContent = current_user.login;
-    document.querySelector('.userInfo.Password').textContent = current_user.password;
     document.querySelector('.userInfo.Role').textContent = current_user.role;
     popupBtn.addEventListener('click', (e) => {
         e.stopPropagation();

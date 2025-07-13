@@ -94,6 +94,10 @@ input[type='date']:hover{
     width: 100%;
 }
 
+.main-table > :nth-child(2){
+    margin-top: 10px;
+}
+
 .main-table td, .main-table tr, .main-table th {
     border: 1px solid black;
     height: 2.1rem;
