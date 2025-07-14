@@ -26,13 +26,15 @@ document.addEventListener("DOMContentLoaded", () => {
         alert('Успешный вход!!');
         login.classList.add('correct');
         password.classList.add('correct');
+        window.location.href = "reglaments.html";
     }
     else{
         if (users_array.some(user => user.login === login.value && user.password === password.value)){
             alert('Успешный вход!');
             login.classList.add('correct');
             password.classList.add('correct');
-            localStorage.setItem('user_logins', JSON.stringify(users_array.find(user => user.login === login.value && user.password === password.value)));        
+            localStorage.setItem('user_logins', JSON.stringify(users_array.find(user => user.login === login.value && user.password === password.value)));
+            window.location.href = "reglaments.html";        
         }
         else{
             alert('Неправильный логин или пароль.');
