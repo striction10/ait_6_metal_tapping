@@ -14,27 +14,25 @@ const technologist = {
     role: 'technologist'
 };
 const users_array = [admin, operator, technologist];
-const current_user = {
-    login: 'technologist',
-    password: 'technologist',
-    role: 'technologist'
-};
 
 document.addEventListener('DOMContentLoaded', () => {
     const popupBtn = document.querySelector('.popupBtn');
     const popupContainer = document.querySelector('.popupContainer');
     const popupContent = document.querySelector('.popupContent');
     const dateInput = document.querySelector('input[type="date"]');
+    const currentUser  = JSON.parse(localStorage.getItem('current_user'));
     dateInput.valueAsDate = new Date();
     for(let i = 0; i < users_array.length; i++)
     {
         localStorage.setItem(users_array[i].login, JSON.stringify(users_array[i]));
     }
-    if(!localStorage.getItem(current_user.login)){
+    if(!localStorage.getItem(currentUser.login)){
         window.location.href = '/auth/auth';
     }
-    document.querySelector('.userInfo.Login').textContent = current_user.login;
-    document.querySelector('.userInfo.Role').textContent = current_user.role;
+    else {
+        document.querySelector('.userInfo.Login').textContent = currentUser.login;
+        document.querySelector('.userInfo.Role').textContent = currentUser.role;
+    }
     popupBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         popupContainer.style.display = 'flex';
@@ -57,6 +55,7 @@ fetch('http://localhost:3000/parametres')
     const table = document.getElementById('data-table');
     const buildingSelector = document.querySelector("select");
     const saveBtn = document.querySelector('.btn-down button:first-child');
+    const currentUser  = JSON.parse(localStorage.getItem('current_user'));
     const calculateDeviation = (target, actual) => {
         return (actual - target).toFixed(2);
     };
@@ -67,7 +66,7 @@ fetch('http://localhost:3000/parametres')
             current_input.type = 'number';
             current_input.value = value ?? '';
             current_input.dataset.field = field;
-            if(current_user.role == 'operator'){
+            if(currentUser.role == 'operator'){
                 current_input.classList.add('operator');
             } else {
                 current_input.classList.add('technologist');
@@ -83,7 +82,7 @@ fetch('http://localhost:3000/parametres')
                     if (deviationCell) {
                         deviationCell.textContent = calculateDeviation(targetValue, actualValue);
                     }
-                    if (current_user.role === 'operator') {
+                    if (currentUser.role === 'operator') {
                         const zprCell = row.querySelector('.zpr-cell');
                         if (zprCell) {
                             zprCell.textContent = calculateDeviation(targetValue, actualValue);
@@ -110,7 +109,7 @@ fetch('http://localhost:3000/parametres')
     const createTechCell = (value, item) => {
         const cell = document.createElement('td');
         cell.classList.add('zpr-cell');
-        if (current_user.role == 'operator') {
+        if (currentUser.role == 'operator') {
             const zprValue = calculateDeviation(item.target_metal_level, item.actual_metal_level);
             cell.textContent = zprValue;
         } 
