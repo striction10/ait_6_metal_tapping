@@ -14,27 +14,25 @@ const technologist = {
     role: 'technologist'
 };
 const users_array = [admin, operator, technologist];
-const current_user = {
-    login: 'technologist',
-    password: 'technologist',
-    role: 'technologist'
-};
 
 document.addEventListener('DOMContentLoaded', () => {
     const popupBtn = document.querySelector('.popupBtn');
     const popupContainer = document.querySelector('.popupContainer');
     const popupContent = document.querySelector('.popupContent');
     const dateInput = document.querySelector('input[type="date"]');
+    const currentUser  = JSON.parse(localStorage.getItem('current_user'));
     dateInput.valueAsDate = new Date();
     for(let i = 0; i < users_array.length; i++)
     {
         localStorage.setItem(users_array[i].login, JSON.stringify(users_array[i]));
     }
-    if(!localStorage.getItem(current_user.login)){
+    if(!localStorage.getItem(currentUser.login)){
         window.location.href = '/auth/auth';
     }
-    document.querySelector('.userInfo.Login').textContent = current_user.login;
-    document.querySelector('.userInfo.Role').textContent = current_user.role;
+    else {
+        document.querySelector('.userInfo.Login').textContent = currentUser.login;
+        document.querySelector('.userInfo.Role').textContent = currentUser.role;
+    }
     popupBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         popupContainer.style.display = 'flex';
