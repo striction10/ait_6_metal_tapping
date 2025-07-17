@@ -76,7 +76,6 @@ fetch('http://localhost:3000/reglaments')
             electrolysers.forEach(item => {
                 const row = document.createElement('tr');
                 row.appendChild(createCell(item.id));
-                row.appendChild(createCell(item.building));
                 row.appendChild(createCell(item["-2"]));
                 row.appendChild(createCell(item["-1"]));
                 row.appendChild(createCell(item["0"]));

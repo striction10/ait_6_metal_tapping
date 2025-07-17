@@ -93,7 +93,7 @@ fetch('http://localhost:3000/tasks')
             table1.deleteRow(2);
         }
         while(table2.rows.length > 2) {
-            table1.deleteRow(2);
+            table2.deleteRow(2);
         }
         
         const filteredData = data.filter(item => {
