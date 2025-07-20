@@ -2049,7 +2049,7 @@
   "tasks": [
     {
       "id": "8",
-      "date": "12.06.2024",
+      "date": "19.07.2025",
       "shift_1_kg": "1800",
       "shift_1_time": "6:15",
       "shift_2_kg": "",
@@ -2060,11 +2060,12 @@
       "ladle": "1",
       "percentage_1": "0,18",
       "percentage_2": "0,016",
-      "grade": "A8"
+      "grade": "A8",
+      "building": "1"
     },
     {
       "id": "9",
-      "date": "12.06.2024",
+      "date": "19.07.2025",
       "shift_1_kg": "2200",
       "shift_1_time": "9:20",
       "shift_2_kg": "",
@@ -2075,11 +2076,12 @@
       "ladle": "3",
       "percentage_1": "0,16",
       "percentage_2": "0,018",
-      "grade": "A8"
+      "grade": "A8",
+      "building": "1"
     },
     {
       "id": "10",
-      "date": "12.06.2024",
+      "date": "19.07.2025",
       "shift_1_kg": "",
       "shift_1_time": "",
       "shift_2_kg": "1900",
@@ -2090,11 +2092,12 @@
       "ladle": "5",
       "percentage_1": "0,13",
       "percentage_2": "0,013",
-      "grade": "A6"
+      "grade": "A6",
+      "building": "2"
     },
     {
       "id": "11",
-      "date": "12.06.2024",
+      "date": "19.07.2025",
       "shift_1_kg": "",
       "shift_1_time": "",
       "shift_2_kg": "",
@@ -2105,11 +2108,12 @@
       "ladle": "8",
       "percentage_1": "0,14",
       "percentage_2": "0,015",
-      "grade": "A6"
+      "grade": "A6",
+      "building": "2"
     },
     {
       "id": "12",
-      "date": "12.06.2024",
+      "date": "19.07.2025",
       "shift_1_kg": "",
       "shift_1_time": "",
       "shift_2_kg": "2300",
@@ -2120,11 +2124,12 @@
       "ladle": "9",
       "percentage_1": "0,11",
       "percentage_2": "0,012",
-      "grade": "A7"
+      "grade": "A7",
+      "building": "3"
     },
     {
       "id": "13",
-      "date": "13.06.2024",
+      "date": "20.07.2025",
       "shift_1_kg": "2000",
       "shift_1_time": "5:50",
       "shift_2_kg": "",
@@ -2135,11 +2140,12 @@
       "ladle": "2",
       "percentage_1": "0,17",
       "percentage_2": "0,016",
-      "grade": "A7"
+      "grade": "A7",
+      "building": "1"
     },
     {
       "id": "14",
-      "date": "13.06.2024",
+      "date": "20.07.2025",
       "shift_1_kg": "",
       "shift_1_time": "",
       "shift_2_kg": "2400",
@@ -2150,11 +2156,12 @@
       "ladle": "6",
       "percentage_1": "0,15",
       "percentage_2": "0,014",
-      "grade": "A8"
+      "grade": "A8",
+      "building": "2"
     },
     {
       "id": "15",
-      "date": "13.06.2024",
+      "date": "20.07.2025",
       "shift_1_kg": "",
       "shift_1_time": "",
       "shift_2_kg": "",
@@ -2165,11 +2172,12 @@
       "ladle": "7",
       "percentage_1": "0,12",
       "percentage_2": "0,011",
-      "grade": "A6"
+      "grade": "A6",
+      "building": "2"
     },
     {
-      "id": "15",
-      "date": "13.06.2024",
+      "id": "16",
+      "date": "20.07.2025",
       "shift_1_kg": "",
       "shift_1_time": "",
       "shift_2_kg": "",
@@ -2180,7 +2188,40 @@
       "ladle": "7",
       "percentage_1": "0,12",
       "percentage_2": "0,011",
-      "grade": "A6"
+      "grade": "A6",
+      "building": "3"
+    },
+    {
+      "id": "17",
+      "date": "21.07.2025",
+      "shift_1_kg": "1850",
+      "shift_1_time": "6:30",
+      "shift_2_kg": "",
+      "shift_2_time": "",
+      "shift_3_kg": "",
+      "shift_3_time": "",
+      "electrolyzer_number": "2",
+      "ladle": "4",
+      "percentage_1": "0,19",
+      "percentage_2": "0,017",
+      "grade": "A8",
+      "building": "1"
+    },
+    {
+      "id": "18",
+      "date": "21.07.2025",
+      "shift_1_kg": "",
+      "shift_1_time": "",
+      "shift_2_kg": "1950",
+      "shift_2_time": "13:10",
+      "shift_3_kg": "",
+      "shift_3_time": "",
+      "electrolyzer_number": "5",
+      "ladle": "10",
+      "percentage_1": "0,14",
+      "percentage_2": "0,013",
+      "grade": "A7",
+      "building": "3"
     }
   ]
 }

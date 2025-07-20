@@ -71,14 +71,14 @@ h2{
 }
 
 .auth_input:hover{
-    background-color: #fa5961;
+    background-color: #fd8288;
     border-radius: 5px;
 }
 
 .auth_input:focus{
-    background-color: #fd8288;
+    outline: none;
+    background-color:  #fa5961;
     border-radius: 5px;
-    border: 1px solid;
 }
 
 #input2{
@@ -98,6 +98,8 @@ h2{
     font-weight: 500;
     transition: all 0.2s ease-in-out;
     box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.315);
+    background-color: #fd8288;
+    color: white;
 }
 
 #auth_button:hover{
