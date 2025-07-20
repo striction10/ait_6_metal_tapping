@@ -173,10 +173,39 @@ td > input{
     background: white;
     padding: 2rem;
     border-radius: 10px;
-    width: 30%;
-    height: 30%;
+    width: 20%;
+    height: 20%;
     box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
     animation: slideIn 0.15s ease-in-out;
+}
+
+#close {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    min-height: 50px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    margin: 30px auto;
+    font-size: clamp(16px, 4vw, 20px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: #fd8288;
+    color: white;
+}
+
+#close:hover {
+    transform: translateY(-2px);
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.25);
+    background-color: #fdb2b6;
+}
+
+#close:active {
+    transform: translateY(1px);
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .userForm {

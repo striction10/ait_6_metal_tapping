@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const popupContent = document.querySelector('.popupContent');
     const dateInput = document.querySelector('input[type="date"]');
     const currentUser  = JSON.parse(localStorage.getItem('current_user'));
+    const closeBtn = document.getElementById('close');
     dateInput.valueAsDate = new Date();
     for(let i = 0; i < users_array.length; i++)
     {
@@ -41,6 +42,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!popupContent.contains(e.target)) {
             popupContainer.style.display = 'none';
         }
+    });
+    closeBtn.addEventListener('click', (e) => {
+        popupContainer.style.display = 'none';
     });
 });
 
