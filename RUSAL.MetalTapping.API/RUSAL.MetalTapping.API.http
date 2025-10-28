@@ -1,4 +1,4 @@
-@RUSAL.MetalTapping.API_HostAddress = http://localhost:5015
+@RUSAL.MetalTapping.API_HostAddress = http://localhost:5132
 
 GET {{RUSAL.MetalTapping.API_HostAddress}}/weatherforecast/
 Accept: application/json

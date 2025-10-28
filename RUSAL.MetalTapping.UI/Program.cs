@@ -1,5 +1,3 @@
-using Microsoft.OpenApi.Models;
-    
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -31,7 +29,7 @@ else
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-        c.RoutePrefix = "api/swagger"; 
+        c.RoutePrefix = "api/swagger";
     });
 
 }
