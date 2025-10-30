@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36623.8 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RUSAL.MetalTapping.UI", "RUSAL.MetalTapping.UI\RUSAL.MetalTapping.UI.csproj", "{838C3700-B6B1-49CD-8981-395035E41201}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RUSAL.MetalTapping.BLL", "RUSAL.MetalTapping.BLL\RUSAL.MetalTapping.BLL.csproj", "{3E477CA6-9939-4EAD-8117-8014B2FC652E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RUSAL.MetalTapping.DAL", "RUSAL.MetalTapping.DAL\RUSAL.MetalTapping.DAL.csproj", "{6DF37AFF-6CC2-4878-A118-FBC97719A346}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RUSAL.MetalTapping.API", "RUSAL.MetalTapping.API\RUSAL.MetalTapping.API.csproj", "{40F68384-B516-4918-83D5-FCF719E097D7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{838C3700-B6B1-49CD-8981-395035E41201}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{838C3700-B6B1-49CD-8981-395035E41201}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{838C3700-B6B1-49CD-8981-395035E41201}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{838C3700-B6B1-49CD-8981-395035E41201}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E477CA6-9939-4EAD-8117-8014B2FC652E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E477CA6-9939-4EAD-8117-8014B2FC652E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E477CA6-9939-4EAD-8117-8014B2FC652E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E477CA6-9939-4EAD-8117-8014B2FC652E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DF37AFF-6CC2-4878-A118-FBC97719A346}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DF37AFF-6CC2-4878-A118-FBC97719A346}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DF37AFF-6CC2-4878-A118-FBC97719A346}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DF37AFF-6CC2-4878-A118-FBC97719A346}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40F68384-B516-4918-83D5-FCF719E097D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40F68384-B516-4918-83D5-FCF719E097D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40F68384-B516-4918-83D5-FCF719E097D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40F68384-B516-4918-83D5-FCF719E097D7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AED0BEC5-6C9A-4697-84C5-923532764B48}
+	EndGlobalSection
+EndGlobal
