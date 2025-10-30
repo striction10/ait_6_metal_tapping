@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace RUSAL.MetalTapping.UI.Pages
+namespace RUSAL.MetalTapping.Pages
 {
     public class PrivacyModel : PageModel
     {

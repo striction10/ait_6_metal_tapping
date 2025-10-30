@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\RUSAL.MetalTapping.DAL\RUSAL.MetalTapping.DAL.csproj" />
+  </ItemGroup>
+
 </Project>

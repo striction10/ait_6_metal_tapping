@@ -1,15 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36623.8
+VisualStudioVersion = 17.14.36623.8 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RUSAL.MetalTapping.UI", "RUSAL.MetalTapping.UI\RUSAL.MetalTapping.UI.csproj", "{05CABA5B-B130-4555-80DA-7F4949D3E777}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RUSAL.MetalTapping", "RUSAL.MetalTapping\RUSAL.MetalTapping.csproj", "{EC987858-457D-4C83-AFE8-182EFE2EF486}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RUSAL.MetalTapping.BLL", "RUSAL.MetalTapping.BLL\RUSAL.MetalTapping.BLL.csproj", "{3E0D6703-F932-4CE4-A6F1-5ABE5CF747F6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RUSAL.MetalTapping.DAL", "RUSAL.MetalTapping.DAL\RUSAL.MetalTapping.DAL.csproj", "{9C8620BD-37C9-4060-AB66-81834CD32591}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RUSAL.MetalTapping.DAL", "RUSAL.MetalTapping.DAL\RUSAL.MetalTapping.DAL.csproj", "{441E4F56-3BB5-476F-804F-12C2B3D131CD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RUSAL.MetalTapping.API", "RUSAL.MetalTapping.API\RUSAL.MetalTapping.API.csproj", "{E55A9B11-AE96-4BB6-B94B-CAE6803088F7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RUSAL.MetalTapping.BLL", "RUSAL.MetalTapping.BLL\RUSAL.MetalTapping.BLL.csproj", "{2691258C-3429-457D-BBE2-AE21739A24CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,27 +15,23 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{05CABA5B-B130-4555-80DA-7F4949D3E777}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{05CABA5B-B130-4555-80DA-7F4949D3E777}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{05CABA5B-B130-4555-80DA-7F4949D3E777}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{05CABA5B-B130-4555-80DA-7F4949D3E777}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3E0D6703-F932-4CE4-A6F1-5ABE5CF747F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3E0D6703-F932-4CE4-A6F1-5ABE5CF747F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3E0D6703-F932-4CE4-A6F1-5ABE5CF747F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3E0D6703-F932-4CE4-A6F1-5ABE5CF747F6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{441E4F56-3BB5-476F-804F-12C2B3D131CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{441E4F56-3BB5-476F-804F-12C2B3D131CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{441E4F56-3BB5-476F-804F-12C2B3D131CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{441E4F56-3BB5-476F-804F-12C2B3D131CD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E55A9B11-AE96-4BB6-B94B-CAE6803088F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E55A9B11-AE96-4BB6-B94B-CAE6803088F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E55A9B11-AE96-4BB6-B94B-CAE6803088F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E55A9B11-AE96-4BB6-B94B-CAE6803088F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC987858-457D-4C83-AFE8-182EFE2EF486}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC987858-457D-4C83-AFE8-182EFE2EF486}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC987858-457D-4C83-AFE8-182EFE2EF486}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC987858-457D-4C83-AFE8-182EFE2EF486}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C8620BD-37C9-4060-AB66-81834CD32591}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C8620BD-37C9-4060-AB66-81834CD32591}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C8620BD-37C9-4060-AB66-81834CD32591}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C8620BD-37C9-4060-AB66-81834CD32591}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2691258C-3429-457D-BBE2-AE21739A24CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2691258C-3429-457D-BBE2-AE21739A24CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2691258C-3429-457D-BBE2-AE21739A24CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2691258C-3429-457D-BBE2-AE21739A24CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {D5D1BC31-89CE-4139-9FB4-58532E0B5BCA}
+		SolutionGuid = {5C48B7B7-391F-4D0A-9931-0C43BD6EE173}
 	EndGlobalSection
 EndGlobal
