@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace RUSAL.MetalTapping.Pages
+namespace RUSAL.MetalTapping.UI.Pages
 {
     public class IndexModel : PageModel
     {

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/tasks.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" href="/assets/favicon.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <title>Задания</title>
+</head>
+<body>
+    <header>
+        <div class="firstPart">
+            <img src="/assets/rusalLogoGrey.svg" alt="rusalLogo" width="70px">
+            <h1>Задания</h1>
+            <button class="popupBtn">
+                <img src="/assets/userLogo.svg" alt="userLogo" width="30px">
+            </button>
+        </div>
+        <div class="navPart">
+            <a href="reglaments.html">Регламенты</a>
+            <a href="tasks.html">Задания</a>
+            <a href="parametres.html">Параметры</a>
+        </div>
+        <div class="selectPart">
+            <select name="" id="">
+                <option value="0">Выбрать сортность</option>
+                <option value="A6">А6</option>
+                <option value="A7">А7</option>
+                <option value="A8">А8</option>
+            </select>
+            <select name="" id="">
+                <option value="0">Выбрать корпус</option>
+                <option value="1">Корпус 1</option>
+                <option value="2">Корпус 2</option>
+                <option value="3">Корпус 3</option>
+            </select>
+            <select name="" id="">
+                <option value="all">Все смены</option>
+                <option value="1">Смена 1 (05:00-13:00)</option>
+                <option value="2">Смена 2 (13:00-21:00)</option>
+                <option value="3">Смена 3 (21:00-05:00)</option>
+            </select>
+            <input type="date">
+        </div>
+    </header>
+    <div class="popupContainer">
+        <div class="popupContent">
+            <div class="userForm">
+                <label>Логин</label>
+                <h2 class="userInfo Login">Your login</h2>
+                <label>Роль</label>
+                <h2 class="userInfo Role">Your role</h2>
+            </div>
+            <button id="close">Выйти</button>
+        </div>
+    </div>
+    <main>
+        <div class="main-table">
+            <table class="data-table">
+                <tr id="color-item">
+                    <th colspan="20">Задание по сменам</th>
+                </tr>
+                <tr>
+                    <th colspan="2">Смена 1,кг | Время</th>
+                    <th colspan="2">Смена 2,кг | Время</th>
+                    <th colspan="2">Смена 3,кг | Время</th>
+                    <th colspan="2">№ Электролиза | № Ковша</th>
+                    <th>Fe,%</th>
+                    <th>Si,%</th>
+                    <th>Марка</th>
+                </tr>
+            </table>
+            <table class="data-table">
+                <tr id="color-item">
+                    <th colspan="20">Итогое задание на смену</th>
+                </tr>
+                <tr>
+                    <th>Задание на выливку,кг</th>
+                    <th>Марка</th>
+                </tr>
+            </table>
+        </div>
+        <div class="btn-down">
+            <button>Сохранить</button>
+            <span>/</span>
+            <button>Отправить</button>
+        </div>
+    </main>
+    <script src="/scripts/tasks.js"></script>
+</body>
+</html>
