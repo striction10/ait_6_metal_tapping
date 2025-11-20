@@ -1,0 +1,10 @@
+﻿namespace RUSAL.MetalTapping.DAL.Entities
+{
+    public class MetalMarkAnalysisValueId
+    {
+        public int Id { get; set; }
+        public int ChemicalElemId { get; set; }
+        public double Value { get; set; }
+        public DateTime DateOfReceipt { get; set; }
+    }
+}
