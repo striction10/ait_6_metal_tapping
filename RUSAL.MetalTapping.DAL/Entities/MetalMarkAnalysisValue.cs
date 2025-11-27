@@ -1,6 +1,6 @@
 ﻿namespace RUSAL.MetalTapping.DAL.Entities
 {
-    public class MetalMarkAnalysisValueId
+    public class MetalMarkAnalysisValue
     {
         public int Id { get; set; }
         public int ChemicalElemId { get; set; }
