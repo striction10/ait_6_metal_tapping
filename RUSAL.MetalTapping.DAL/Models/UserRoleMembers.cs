@@ -1,5 +1,8 @@
-﻿namespace RUSAL.MetalTapping.DAL.Entities
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace RUSAL.MetalTapping.DAL.Entities
 {
+    [Keyless]
     public class UserRoleMembers
     {
         public int RoleId { get; set; }
