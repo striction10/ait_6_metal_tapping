@@ -4,11 +4,11 @@ using RUSAL.MetalTapping.DAL.Entities;
 
 namespace RUSAL.MetalTapping.DAL.Configurations
 {
-    public class BuilderConfiguration : IEntityTypeConfiguration<Building>
+    public class ChemicalElemConfiguration : IEntityTypeConfiguration<ChemicalElem>
     {
-        public void Configure(EntityTypeBuilder<Building> builder)
+        public void Configure(EntityTypeBuilder<ChemicalElem> builder)
         {
-            builder.ToTable("Building");
+        builder.ToTable("ChemicalElem");
 
             builder.HasKey(b => b.Id);
 

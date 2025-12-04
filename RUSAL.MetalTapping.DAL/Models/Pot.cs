@@ -5,5 +5,7 @@
         public int Id { get; set; }
         public int StateId { get; set; }
         public int BuildingId { get; set; }
+
+        public ICollection<ExternalData> ExternalDatas = new List<ExternalData>();
     }
 }

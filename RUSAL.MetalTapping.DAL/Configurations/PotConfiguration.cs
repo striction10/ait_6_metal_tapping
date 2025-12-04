@@ -4,22 +4,17 @@ using RUSAL.MetalTapping.DAL.Entities;
 
 namespace RUSAL.MetalTapping.DAL.Configurations
 {
-    public class BuilderConfiguration : IEntityTypeConfiguration<Building>
+    public class PotConfiguration : IEntityTypeConfiguration<Pot>
     {
-        public void Configure(EntityTypeBuilder<Building> builder)
+        public void Configure(EntityTypeBuilder<Pot> builder)
         {
-            builder.ToTable("Building");
+            builder.ToTable("Pot");
 
             builder.HasKey(b => b.Id);
 
             builder.Property(b => b.Id)
                 .HasColumnName("ID")
                 .HasColumnType("numeric(37, 0)")
-                .IsRequired();
-
-            builder.Property(b => b.Name)
-                .HasColumnName("Name")
-                .HasColumnType("nvarchar(20)")
                 .IsRequired();
         }
     }

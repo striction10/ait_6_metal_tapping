@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RUSAL.MetalTapping.DAL.Entities;
+using RUSAL.MetalTapping.DAL.Models;
 
 namespace RUSAL.MetalTapping.DAL.Contexts
 {
@@ -16,7 +17,8 @@ namespace RUSAL.MetalTapping.DAL.Contexts
         public DbSet<MetalMarkAnalysisValue> MetalMarkAnalysisValues { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Pot> Pots { get; set; }
-        public DbSet<PotParameters> PotParameters { get; set; }
+        public DbSet<PotParameter> PotParameters { get; set; }
+        public DbSet<PotParametersGroup> PotParametersGroups { get; set; }
         public DbSet<PotReglament> PotReglaments { get; set; }
         public DbSet<PotState> PotStates { get; set; }
         public DbSet<Reglament> Reglaments { get; set; }

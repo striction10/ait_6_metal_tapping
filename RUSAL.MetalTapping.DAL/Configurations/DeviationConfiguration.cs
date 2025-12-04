@@ -4,11 +4,11 @@ using RUSAL.MetalTapping.DAL.Entities;
 
 namespace RUSAL.MetalTapping.DAL.Configurations
 {
-    public class BuilderConfiguration : IEntityTypeConfiguration<Building>
+    public class DeviationConfiguration : IEntityTypeConfiguration<Deviation>
     {
-        public void Configure(EntityTypeBuilder<Building> builder)
+        public void Configure(EntityTypeBuilder<Deviation> builder)
         {
-            builder.ToTable("Building");
+            builder.ToTable("Deviation");
 
             builder.HasKey(b => b.Id);
 
@@ -20,6 +20,16 @@ namespace RUSAL.MetalTapping.DAL.Configurations
             builder.Property(b => b.Name)
                 .HasColumnName("Name")
                 .HasColumnType("nvarchar(20)")
+                .IsRequired();
+
+            builder.Property(b => b.TargetMetalLevel)
+                .HasColumnName("TargetMetalLevel")
+                .HasColumnType("numeric(4, 0)")
+                .IsRequired();
+
+            builder.HasOne(b => b.PotReglament)
+                .WithMany(b => b.Deviations)
+                .HasForeignKey(b => b.PotReglamentId)
                 .IsRequired();
         }
     }
