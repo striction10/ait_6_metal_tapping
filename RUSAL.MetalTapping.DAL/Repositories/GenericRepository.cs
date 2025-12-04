@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RUSAL.MetalTapping.DAL.Contexts;
 using RUSAL.MetalTapping.DAL.Interfaces;
 
 namespace RUSAL.MetalTapping.DAL.Repositories
@@ -21,6 +22,7 @@ namespace RUSAL.MetalTapping.DAL.Repositories
         {
             return _DbSet.Find(id);
         }
+
         public IEnumerable<TEntity> Get() 
         {
             return _DbSet.ToList();

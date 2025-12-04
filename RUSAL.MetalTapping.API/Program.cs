@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using RUSAL.MetalTapping.DAL;
+using RUSAL.MetalTapping.DAL.Contexts;
 
 var builder = WebApplication.CreateBuilder(args);
 
