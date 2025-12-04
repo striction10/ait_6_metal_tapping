@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RUSAL.MetalTapping.DAL.Contexts;
 using RUSAL.MetalTapping.DAL.Interfaces;
+using System.Linq.Expressions;
 
 namespace RUSAL.MetalTapping.DAL.Repositories
 {
@@ -13,33 +14,33 @@ namespace RUSAL.MetalTapping.DAL.Repositories
             _context = context;
             _DbSet = context.Set<TEntity>();
         }
-        public void Create(TEntity item) 
+        public async Task CreateAsync(TEntity item) 
         {
-            _DbSet.Add(item);
-            _context.SaveChanges();
+            await _DbSet.AddAsync(item);
+            await _context.SaveChangesAsync();
         }
-        public TEntity FindById(int id)
+        public async Task<TEntity?> FindByIdAsync(int id)
         {
-            return _DbSet.Find(id);
+            return await _DbSet.FindAsync(id);
+        }
+        public async Task<IEnumerable<TEntity>> GetAsync()
+        {
+            return await _DbSet.ToListAsync();
+        }
+        public async Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate) 
+        {
+            return await _DbSet.Where(predicate).ToListAsync();
+        }
+        public async Task RemoveAsync(TEntity item)
+        {
+            _DbSet.Remove(item);
+            await _context.SaveChangesAsync();
         }
 
-        public IEnumerable<TEntity> Get() 
-        {
-            return _DbSet.ToList();
-        }
-        public IEnumerable<TEntity> Get(Func<TEntity, bool> predicate) 
-        {
-            return _DbSet.Where(predicate).ToList();
-        }
-        public void Remove(TEntity item)
-        { 
-            _DbSet.Remove(item);
-            _context.SaveChanges();
-        }
-        public void Update(TEntity item) 
+        public async Task UpdateAsync(TEntity item)
         {
             _context.Entry(item).State = EntityState.Modified;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }
