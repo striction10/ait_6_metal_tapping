@@ -26,6 +26,12 @@ namespace RUSAL.MetalTapping.DAL.Configurations
                 .WithMany()
                 .HasForeignKey(b => b.PotParametersGroupId)
                 .IsRequired();
+
+            builder.Property(b => b.PotId)
+                .HasColumnType("numeric(37, 0)");
+
+            builder.Property(b => b.PotParametersGroupId)
+                .HasColumnType("numeric(37, 0)");
         }
     }
 }

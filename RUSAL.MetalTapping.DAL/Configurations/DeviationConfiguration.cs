@@ -31,6 +31,9 @@ namespace RUSAL.MetalTapping.DAL.Configurations
                 .WithMany(b => b.Deviations)
                 .HasForeignKey(b => b.PotReglamentId)
                 .IsRequired();
+
+            builder.Property(b => b.PotReglamentId)
+                .HasColumnType("numeric(37, 0)");
         }
     }
 }
