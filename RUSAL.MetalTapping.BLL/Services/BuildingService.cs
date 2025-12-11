@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using RUSAL.MetalTapping.BLL.DTOs;
 using RUSAL.MetalTapping.BLL.Interfaces;
-using RUSAL.MetalTapping.DAL.Entities;
+using RUSAL.MetalTapping.DAL.Models;
 using RUSAL.MetalTapping.DAL.Interfaces;
 
 namespace RUSAL.MetalTapping.BLL.Services
