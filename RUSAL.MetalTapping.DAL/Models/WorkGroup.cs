@@ -1,8 +1,11 @@
-﻿namespace RUSAL.MetalTapping.DAL.Entities
+﻿namespace RUSAL.MetalTapping.DAL.Models
 {
     public class WorkGroup
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
+        public ICollection<Shift> Shifts { get; set; } = new List<Shift>();
+        public ICollection<User> Users { get; set; } = new List<User>();
+        public ICollection<WorkGroupMembers> WorkGroupMembers { get; set; } = new List<WorkGroupMembers>();
     }
 }

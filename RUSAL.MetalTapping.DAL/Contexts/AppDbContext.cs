@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RUSAL.MetalTapping.DAL.Entities;
+using RUSAL.MetalTapping.DAL.Models;
 using RUSAL.MetalTapping.DAL.Models;
 
 namespace RUSAL.MetalTapping.DAL.Contexts
@@ -29,7 +29,7 @@ namespace RUSAL.MetalTapping.DAL.Contexts
         public DbSet<TapTask> TapTasks { get; set; }
         public DbSet<TapTaskPot> TapTaskPots { get; set; }
         public DbSet<ShiftTask> Tasks { get; set; }
-        public DbSet<User> users { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<UserRoleMembers> UserRoleMembers { get; set; }
         public DbSet<WorkGroup> WorkGroups { get; set; }
         public DbSet<WorkGroupMembers> WorkGroupMembers { get; set; }

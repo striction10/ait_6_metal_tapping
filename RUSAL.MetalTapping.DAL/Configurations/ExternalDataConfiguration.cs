@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RUSAL.MetalTapping.DAL.Entities;
+using RUSAL.MetalTapping.DAL.Models;
 
 namespace RUSAL.MetalTapping.DAL.Configurations
 {
@@ -17,6 +17,12 @@ namespace RUSAL.MetalTapping.DAL.Configurations
                 .HasColumnType("date")
                 .IsRequired();
 
+            builder.Property(b => b.PotId)
+                .HasColumnType("numeric(37, 0)");
+
+            builder.Property(b => b.PotParametersGroupId)
+                .HasColumnType("numeric(37, 0)");
+            
             builder.HasOne(b => b.Pot)
                 .WithMany(b => b.ExternalDatas)
                 .HasForeignKey(b => b.PotId)
@@ -26,12 +32,6 @@ namespace RUSAL.MetalTapping.DAL.Configurations
                 .WithMany()
                 .HasForeignKey(b => b.PotParametersGroupId)
                 .IsRequired();
-
-            builder.Property(b => b.PotId)
-                .HasColumnType("numeric(37, 0)");
-
-            builder.Property(b => b.PotParametersGroupId)
-                .HasColumnType("numeric(37, 0)");
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace RUSAL.MetalTapping.DAL.Entities
+﻿namespace RUSAL.MetalTapping.DAL.Models
 {
     public class ShiftTask
     {

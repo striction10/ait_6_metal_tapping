@@ -1,8 +1,11 @@
-﻿namespace RUSAL.MetalTapping.DAL.Entities
+﻿namespace RUSAL.MetalTapping.DAL.Models
 {
     public class Building
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public ICollection<Pot> Pots { get; set; } = new List<Pot>();
+        public ICollection<Scoop> Scoops { get; set; } = new List<Scoop>();
+        public ICollection<TapTask> TapTasks { get; set; } = new List<TapTask>();
     }
 }

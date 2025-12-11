@@ -1,6 +1,4 @@
-﻿using RUSAL.MetalTapping.DAL.Models;
-
-namespace RUSAL.MetalTapping.DAL.Entities
+﻿namespace RUSAL.MetalTapping.DAL.Models
 {
     public class ExternalData
     {

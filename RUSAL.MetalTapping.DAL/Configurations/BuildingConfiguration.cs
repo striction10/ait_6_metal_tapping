@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RUSAL.MetalTapping.DAL.Entities;
+using RUSAL.MetalTapping.DAL.Models;
 
 namespace RUSAL.MetalTapping.DAL.Configurations
 {
-    public class BuilderConfiguration : IEntityTypeConfiguration<Building>
+    public class BuildingConfiguration : IEntityTypeConfiguration<Building>
     {
         public void Configure(EntityTypeBuilder<Building> builder)
         {

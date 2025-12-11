@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RUSAL.MetalTapping.DAL.Entities;
+using RUSAL.MetalTapping.DAL.Models;
 
 namespace RUSAL.MetalTapping.DAL.Configurations
 {
@@ -23,6 +23,11 @@ namespace RUSAL.MetalTapping.DAL.Configurations
             builder.Property(b => b.DeviationId)
                 .HasColumnName("DeviationID")
                 .HasColumnType("numeric(37, 0)")
+                .IsRequired();
+
+            builder.HasOne(b => b.Deviation)
+                .WithMany(b => b.DeviationValues)
+                .HasForeignKey(b => b.DeviationId)
                 .IsRequired();
         }
     }

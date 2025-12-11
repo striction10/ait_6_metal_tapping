@@ -1,4 +1,4 @@
-﻿namespace RUSAL.MetalTapping.DAL.Entities
+﻿namespace RUSAL.MetalTapping.DAL.Models
 {
     public class Reglament
     {
@@ -6,5 +6,6 @@
         public string Name { get; set; } = string.Empty;
         public DateTime DateStart { get; set; }
         public DateTime DateStop { get; set; }
+        public ICollection<PotReglament> Reglaments = new List<PotReglament>();
     }
 }
