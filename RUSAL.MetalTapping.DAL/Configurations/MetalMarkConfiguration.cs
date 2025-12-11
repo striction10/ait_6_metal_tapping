@@ -1,18 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RUSAL.MetalTapping.DAL.Entities;
+using RUSAL.MetalTapping.DAL.Models;
 
 namespace RUSAL.MetalTapping.DAL.Configurations
 {
-    public class BuilderConfiguration : IEntityTypeConfiguration<Building>
+    public class MetalMarkConfiguration : IEntityTypeConfiguration<MetalMark>
     {
-        public void Configure(EntityTypeBuilder<Building> builder)
+        public void Configure(EntityTypeBuilder<MetalMark> builder)
         {
-            builder.ToTable("Building");
+            builder.ToTable("MetalMark");
 
-            builder.HasKey(o => o.Id);
+            builder.HasKey(b => b.Id);
 
-            builder.Property(o => o.Id)
+            builder.Property(b => b.Id)
                 .HasColumnName("ID")
                 .HasColumnType("numeric(37, 0)")
                 .IsRequired();

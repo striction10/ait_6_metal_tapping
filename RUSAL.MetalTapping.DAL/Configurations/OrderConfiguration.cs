@@ -1,0 +1,39 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using RUSAL.MetalTapping.DAL.Models;
+
+namespace RUSAL.MetalTapping.DAL.Configurations
+{
+    public class OrderConfgiration : IEntityTypeConfiguration<Order>
+    {
+        public void Configure(EntityTypeBuilder<Order> builder)
+        {
+            builder.ToTable("Order");
+
+            builder.HasKey(b => b.Id);
+            
+            builder.Property(b => b.Id)
+                .HasColumnName("ID")
+                .HasColumnType("numeric(37, 0)")
+                .IsRequired();
+            
+            builder.Property(b => b.WeightOfMetal)
+                .HasColumnName("WeightOfMetal")
+                .HasColumnType("numeric(10, 0)")
+                .IsRequired();
+            
+            builder.Property(b => b.DateOfOrder)
+                .HasColumnName("DateOfOrder")
+                .HasColumnType("datetime")
+                .IsRequired();
+
+            builder.Property(b => b.MetalMarkId)
+                .HasColumnType("numeric(37, 0)");
+            
+            builder.HasOne(b => b.MetalMark)
+                .WithMany(b => b.Orders)
+                .HasForeignKey(b => b.MetalMarkId)
+                .IsRequired();
+        }
+    }
+}

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using RUSAL.MetalTapping.BLL.DTOs;
-using RUSAL.MetalTapping.DAL.Entities;
+using RUSAL.MetalTapping.DAL.Models;
 
 namespace RUSAL.MetalTapping.BLL.Mapping
 {
@@ -17,7 +17,7 @@ namespace RUSAL.MetalTapping.BLL.Mapping
             CreateMap<MetalMarkAnalysisValue, MetalMarkAnalysisValueDto>().ReverseMap();
             CreateMap<Order, OrderDto>().ReverseMap();
             CreateMap<Pot, PotDto>().ReverseMap();
-            CreateMap<PotParameters, PotParametersDto>().ReverseMap();
+            CreateMap<PotParameter, PotParametersDto>().ReverseMap();
             CreateMap<PotReglament, PotReglamentDto>().ReverseMap();
             CreateMap<PotState, PotStateDto>().ReverseMap();
             CreateMap<Reglament, ReglamentDto>().ReverseMap();

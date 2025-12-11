@@ -16,4 +16,8 @@
     <ProjectReference Include="..\RUSAL.MetalTapping.DAL\RUSAL.MetalTapping.DAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="16.0.0" />
+  </ItemGroup>
+
 </Project>

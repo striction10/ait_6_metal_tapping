@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace RUSAL.MetalTapping.DAL.Entities
+﻿namespace RUSAL.MetalTapping.DAL.Models
 {
-    [Keyless]
     public class WorkGroupMembers
     {
+        public int Id { get; set; }
         public int UserId { get; set; }
         public int WorkGroupId { get; set; }
+        public WorkGroup WorkGroup { get; set; } = null!;
+        public User User { get; set; } = null!;
     }
 }
