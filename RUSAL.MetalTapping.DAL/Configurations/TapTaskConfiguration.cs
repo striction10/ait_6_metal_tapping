@@ -34,6 +34,7 @@ public class TapTaskConfiguration : IEntityTypeConfiguration<TapTask>
         builder.HasOne(b => b.Building)
             .WithMany(b => b.TapTasks)
             .HasForeignKey(b => b.BuildingId)
+            .OnDelete(DeleteBehavior.NoAction)
             .IsRequired();
             
         builder.HasOne(b => b.Order)

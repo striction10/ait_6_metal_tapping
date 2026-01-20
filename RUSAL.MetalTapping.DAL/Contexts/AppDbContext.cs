@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RUSAL.MetalTapping.DAL.Models;
-using RUSAL.MetalTapping.DAL.Models;
 
 namespace RUSAL.MetalTapping.DAL.Contexts
 {
