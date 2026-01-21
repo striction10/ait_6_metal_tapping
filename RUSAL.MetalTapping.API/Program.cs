@@ -1,10 +1,15 @@
 using Microsoft.EntityFrameworkCore;
+using RUSAL.MetalTapping.BLL.Interfaces;
+using RUSAL.MetalTapping.BLL.Services;
 using RUSAL.MetalTapping.DAL.Contexts;
+using RUSAL.MetalTapping.DAL.Interfaces;
+using RUSAL.MetalTapping.DAL.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
 
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -20,6 +25,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"))
 );
+
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+builder.Services.AddScoped(typeof(IGenericService<,>), typeof(GenericService<,>));
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 
@@ -44,8 +55,6 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
-
-app.MapRazorPages();
+app.MapControllers();
 
 app.Run();
