@@ -13,15 +13,15 @@ public class PotReglamentConfiguration : IEntityTypeConfiguration<PotReglament>
         builder.HasKey(b => b.Id);
         
         builder.Property(b => b.Id)
-            .HasColumnName("ID")
-            .HasColumnType("numeric(37, 0)")
+            .HasColumnName("Id")
+            .HasColumnType("uniqueidentifier")
             .IsRequired();
 
         builder.Property(b => b.ReglamentId)
-            .HasColumnType("numeric(37, 0)");
+            .HasColumnType("uniqueidentifier");
         
         builder.Property(b => b.PotId)
-            .HasColumnType("numeric(37, 0)");
+            .HasColumnType("uniqueidentifier");
         
         builder.HasOne(b => b.Reglament)
             .WithMany(b => b.Reglaments)

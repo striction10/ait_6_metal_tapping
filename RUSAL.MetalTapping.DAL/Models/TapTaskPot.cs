@@ -2,10 +2,10 @@
 {
     public class TapTaskPot
     {
-        public int Id { get; set; }
-        public int TapTaskId { get; set; }
-        public int PotId { get; set; }
-        public int MetalMarkAnalysisId { get; set; }
+        public Guid Id { get; set; }
+        public Guid TapTaskId { get; set; }
+        public Guid PotId { get; set; }
+        public Guid MetalMarkAnalysisId { get; set; }
         public double PotMetalWeigth { get; set; }
         public TapTask TapTask { get; set; } = null!;
         public Pot Pot { get; set; } = null!;

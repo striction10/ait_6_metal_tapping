@@ -2,9 +2,9 @@
 {
     public class MetalMarkAnalysisValue
     {
-        public int Id { get; set; }
-        public int ChemicalElemId { get; set; }
-        public int MetalMarkAnalysisId { get; set; }
+        public Guid Id { get; set; }
+        public Guid ChemicalElemId { get; set; }
+        public Guid MetalMarkAnalysisId { get; set; }
         public double Value { get; set; }
         public DateTime DateOfReceipt { get; set; }
         public MetalMarkAnalysis Analysis { get; set; } = null!;

@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RUSAL.MetalTapping.DAL.Contexts;
 using RUSAL.MetalTapping.DAL.Interfaces;
-using System.Linq.Expressions;
 
 namespace RUSAL.MetalTapping.DAL.Repositories
 {
@@ -26,10 +25,6 @@ namespace RUSAL.MetalTapping.DAL.Repositories
         public async Task<IEnumerable<TEntity>> GetAsync()
         {
             return await _DbSet.ToListAsync();
-        }
-        public async Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate) 
-        {
-            return await _DbSet.Where(predicate).ToListAsync();
         }
         public async Task RemoveAsync(TEntity item)
         {

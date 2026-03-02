@@ -14,7 +14,7 @@ public class WorkGroupConfiguration : IEntityTypeConfiguration<WorkGroup>
         
         builder.Property(wg => wg.Id)
             .HasColumnName("WorkGroupId")
-            .HasColumnType("numeric(37, 0)")
+            .HasColumnType("uniqueidentifier")
             .IsRequired();
         
         builder.Property(wg => wg.Name)

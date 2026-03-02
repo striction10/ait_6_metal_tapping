@@ -8,13 +8,13 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
 {
     public void Configure(EntityTypeBuilder<Role> builder)
     {
-        builder.ToTable("Role");
+        builder.ToTable("Roles");
         
         builder.HasKey(r => r.Id);
         
         builder.Property(r => r.Id)
-            .HasColumnName("ID")
-            .HasColumnType("numeric(37, 0)")
+            .HasColumnName("Id")
+            .HasColumnType("uniqueidentifier")
             .IsRequired();
         
         builder.Property(r => r.Name)

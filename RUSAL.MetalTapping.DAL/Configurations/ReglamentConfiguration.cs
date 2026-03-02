@@ -13,8 +13,8 @@ public class ReglamentConfiguration : IEntityTypeConfiguration<Reglament>
         builder.HasKey(b => b.Id);
         
         builder.Property(b => b.Id)
-            .HasColumnName("ID")
-            .HasColumnType("numeric(37, 0)")
+            .HasColumnName("Id")
+            .HasColumnType("uniqueidentifier")
             .IsRequired();
         
         builder.Property(b => b.Name)

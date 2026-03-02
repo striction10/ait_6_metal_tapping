@@ -13,8 +13,8 @@ public class PotParametersGroupConfiguraion : IEntityTypeConfiguration<PotParame
         builder.HasKey(b => b.Id);
         
         builder.Property(b => b.Id)
-            .HasColumnName("ID")
-            .HasColumnType("numeric(37, 0)")
+            .HasColumnName("Id")
+            .HasColumnType("uniqueidentifier")
             .IsRequired();
     }
 }

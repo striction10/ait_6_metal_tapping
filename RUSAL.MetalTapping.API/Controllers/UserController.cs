@@ -1,17 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RUSAL.MetalTapping.BLL.DTOs;
 using RUSAL.MetalTapping.BLL.Interfaces;
-using RUSAL.MetalTapping.DAL.Models;
 
 namespace RUSAL.MetalTapping.API.Controllers
 {
-    [Route("api/data")]
+    [Route("api/user")]
     [ApiController]
-    public class DataController : ControllerBase
+    public class UserController : ControllerBase
     {
-        private readonly IGenericService<Building, BuildingDto> _service;
+        private readonly IGenericService<UserDto> _service;
 
-        public DataController(IGenericService<Building, BuildingDto> service)
+        public UserController(IGenericService<UserDto> service)
         {
             _service = service;
         }

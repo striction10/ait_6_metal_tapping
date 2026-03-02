@@ -2,7 +2,7 @@
 {
     public class Building
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public ICollection<Pot> Pots { get; set; } = new List<Pot>();
         public ICollection<Scoop> Scoops { get; set; } = new List<Scoop>();

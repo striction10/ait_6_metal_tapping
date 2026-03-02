@@ -1,13 +1,14 @@
 using Microsoft.EntityFrameworkCore;
+using RUSAL.MetalTapping.BLL.DTOs;
 using RUSAL.MetalTapping.BLL.Interfaces;
 using RUSAL.MetalTapping.BLL.Services;
+using RUSAL.MetalTapping.DAL.Auth;
 using RUSAL.MetalTapping.DAL.Contexts;
 using RUSAL.MetalTapping.DAL.Interfaces;
+using RUSAL.MetalTapping.DAL.Models;
 using RUSAL.MetalTapping.DAL.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddRazorPages();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -26,9 +27,15 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
-builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-
-builder.Services.AddScoped(typeof(IGenericService<,>), typeof(GenericService<,>));
+builder.Services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
+builder.Services.AddScoped<IGenericService<UserDto>, GenericService<User, UserDto>>();
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.Configure<JwtOptions>(
+    builder.Configuration.GetSection("JwtOptions"));
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -44,7 +51,7 @@ else
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "MetalTapping API V1");
         c.RoutePrefix = "api/swagger";
     });
 

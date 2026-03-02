@@ -9,28 +9,27 @@ public class UserRoleMembersConfiguration : IEntityTypeConfiguration<UserRoleMem
     public void Configure(EntityTypeBuilder<UserRoleMembers> builder)
     {
         builder.ToTable("UserRoleMembers");
-        
-        builder.HasKey(r => r.UserId);
-        
-        builder.Property(r => r.UserId)
-            .HasColumnName("ID")
-            .HasColumnType("numeric(37, 0)")
+
+        builder.HasKey(urm => new { urm.UserId, urm.RoleId });
+
+        builder.Property(urm => urm.UserId)
+            .HasColumnName("UserId")
+            .HasColumnType("uniqueidentifier")
             .IsRequired();
 
-        builder.Property(r => r.RoleId)
-            .HasColumnType("numeric(37, 0)");
-        
-        builder.Property(b => b.UserId)
-            .HasColumnType("numeric(37, 0)");
-        
-        builder.HasOne(r => r.Role)
-            .WithMany(r => r.UserRoleMembers)
-            .HasForeignKey(r => r.RoleId)
+        builder.Property(urm => urm.RoleId)
+            .HasColumnName("RoleId")
+            .HasColumnType("uniqueidentifier")
             .IsRequired();
-        
-        builder.HasOne(r => r.User)
+
+        builder.HasOne(urm => urm.User)
+            .WithMany(u => u.UserRoleMembers)
+            .HasForeignKey(urm => urm.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasOne(urm => urm.Role)
             .WithMany(r => r.UserRoleMembers)
-            .HasForeignKey(r => r.UserId)
-            .IsRequired();
+            .HasForeignKey(urm => urm.RoleId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

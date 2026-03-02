@@ -13,8 +13,8 @@ public class ScoopConfiguration : IEntityTypeConfiguration<Scoop>
         builder.HasKey(scoop => scoop.Id);
         
         builder.Property(scoop => scoop.Id)
-            .HasColumnName("ID")
-            .HasColumnType("numeric(37, 0)")
+            .HasColumnName("Id")
+            .HasColumnType("uniqueidentifier")
             .IsRequired();
         
         builder.Property(scoop => scoop.Name)
@@ -23,10 +23,10 @@ public class ScoopConfiguration : IEntityTypeConfiguration<Scoop>
             .IsRequired();
 
         builder.Property(b => b.StateId)
-            .HasColumnType("numeric(37, 0)");
+            .HasColumnType("uniqueidentifier");
         
         builder.Property(b => b.BuildingId)
-            .HasColumnType("numeric(37, 0)");
+            .HasColumnType("uniqueidentifier");
         
         builder.HasOne(b => b.Building)
             .WithMany(b => b.Scoops)

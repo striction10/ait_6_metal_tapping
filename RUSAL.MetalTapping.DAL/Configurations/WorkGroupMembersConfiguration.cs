@@ -13,15 +13,15 @@ public class WorkGroupMembersConfiguration : IEntityTypeConfiguration<WorkGroupM
         builder.HasKey(x => x.Id);
         
         builder.Property(x => x.Id)
-            .HasColumnName("ID")
-            .HasColumnType("numeric(37, 0)")
+            .HasColumnName("Id")
+            .HasColumnType("uniqueidentifier")
             .IsRequired();
 
         builder.Property(x => x.UserId)
-            .HasColumnType("numeric(37, 0)");
+            .HasColumnType("uniqueidentifier");
 
         builder.Property(x => x.WorkGroupId)
-            .HasColumnType("numeric(37, 0)");
+            .HasColumnType("uniqueidentifier");
         
         builder.HasOne(x => x.User)
             .WithMany(x => x.WorkGroupMembers)

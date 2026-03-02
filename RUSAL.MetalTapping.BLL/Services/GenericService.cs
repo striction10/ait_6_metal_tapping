@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
 using RUSAL.MetalTapping.BLL.Interfaces;
 using RUSAL.MetalTapping.DAL.Interfaces;
-using System.Linq.Expressions;
 
 namespace RUSAL.MetalTapping.BLL.Services
 {
-    public class GenericService<TEntity, TDto> : IGenericService<TEntity, TDto>
+    public class GenericService<TEntity, TDto> : IGenericService<TDto>
         where TEntity : class
         where TDto : class
     {
@@ -27,12 +26,6 @@ namespace RUSAL.MetalTapping.BLL.Services
         public async Task<IEnumerable<TDto>> GetAllAsync()
         {
             var entities = await _repository.GetAsync();
-            return _mapper.Map<IEnumerable<TDto>>(entities);
-        }
-
-        public async Task<IEnumerable<TDto>> GetByConditionAsync(Expression<Func<TEntity, bool>> predicate)
-        {
-            var entities = await _repository.GetAsync(predicate);
             return _mapper.Map<IEnumerable<TDto>>(entities);
         }
 

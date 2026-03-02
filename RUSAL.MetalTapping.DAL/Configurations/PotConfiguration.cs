@@ -13,15 +13,15 @@ namespace RUSAL.MetalTapping.DAL.Configurations
             builder.HasKey(b => b.Id);
 
             builder.Property(b => b.Id)
-                .HasColumnName("ID")
-                .HasColumnType("numeric(37, 0)")
+                .HasColumnName("Id")
+                .HasColumnType("uniqueidentifier")
                 .IsRequired();
 
             builder.Property(b => b.StateId)
-                .HasColumnType("numeric(37, 0)");
+                .HasColumnType("uniqueidentifier");
             
             builder.Property(b => b.BuildingId)
-                .HasColumnType("numeric(37, 0)");
+                .HasColumnType("uniqueidentifier");
             
             builder.HasOne(b => b.Building)
                 .WithMany(b => b.Pots)

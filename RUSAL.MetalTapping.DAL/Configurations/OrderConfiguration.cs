@@ -13,8 +13,8 @@ namespace RUSAL.MetalTapping.DAL.Configurations
             builder.HasKey(b => b.Id);
             
             builder.Property(b => b.Id)
-                .HasColumnName("ID")
-                .HasColumnType("numeric(37, 0)")
+                .HasColumnName("Id")
+                .HasColumnType("uniqueidentifier")
                 .IsRequired();
             
             builder.Property(b => b.WeightOfMetal)
@@ -28,7 +28,7 @@ namespace RUSAL.MetalTapping.DAL.Configurations
                 .IsRequired();
 
             builder.Property(b => b.MetalMarkId)
-                .HasColumnType("numeric(37, 0)");
+                .HasColumnType("uniqueidentifier");
             
             builder.HasOne(b => b.MetalMark)
                 .WithMany(b => b.Orders)

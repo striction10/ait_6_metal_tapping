@@ -7,7 +7,6 @@ namespace RUSAL.MetalTapping.DAL.Interfaces
         Task CreateAsync(TEntity item);
         Task<TEntity?> FindByIdAsync(int id);
         Task<IEnumerable<TEntity>> GetAsync();
-        Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate);
         Task RemoveAsync(TEntity item);
         Task UpdateAsync(TEntity item);
     }

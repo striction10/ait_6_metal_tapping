@@ -8,37 +8,29 @@ public class TapTaskConfiguration : IEntityTypeConfiguration<TapTask>
 {
     public void Configure(EntityTypeBuilder<TapTask> builder)
     {
-        builder.ToTable("TapTask");
-        
-        builder.HasKey(b => b.Id);
+        builder.ToTable("TapTasks");
 
-        builder.Property(b => b.Id)
-            .HasColumnName("ID")
-            .HasColumnType("numeric(37, 0)")
+        builder.HasKey(x => x.Id);
+
+        builder.Property(x => x.Id)
+            .HasColumnName("Id")
+            .HasColumnType("uniqueidentifier")
+            .HasDefaultValueSql("NEWID()")
             .IsRequired();
 
-        builder.Property(b => b.BuildingId)
-            .HasColumnType("numeric(37, 0)");
-        
-        builder.Property(b => b.ScoopId)
-            .HasColumnType("numeric(37, 0)");
-        
-        builder.Property(b => b.OrderId)
-            .HasColumnType("numeric(37, 0)");
-        
-        builder.HasOne(b => b.Scoop)
+        builder.HasOne(t => t.Building)
             .WithMany(b => b.TapTasks)
-            .HasForeignKey(b => b.ScoopId)
-            .IsRequired();
-        
-        builder.HasOne(b => b.Building)
-            .WithMany(b => b.TapTasks)
-            .HasForeignKey(b => b.BuildingId)
-            .IsRequired();
-            
-        builder.HasOne(b => b.Order)
-            .WithMany(b => b.TapTasks)
-            .HasForeignKey(b => b.OrderId)
-            .IsRequired();
+            .HasForeignKey(t => t.BuildingId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(t => t.Order)
+            .WithMany(o => o.TapTasks)
+            .HasForeignKey(t => t.OrderId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(t => t.Scoop)
+            .WithMany(s => s.TapTasks)
+            .HasForeignKey(t => t.ScoopId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

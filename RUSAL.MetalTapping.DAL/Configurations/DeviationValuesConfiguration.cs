@@ -22,7 +22,7 @@ namespace RUSAL.MetalTapping.DAL.Configurations
 
             builder.Property(b => b.DeviationId)
                 .HasColumnName("DeviationID")
-                .HasColumnType("numeric(37, 0)")
+                .HasColumnType("uniqueidentifier")
                 .IsRequired();
 
             builder.HasOne(b => b.Deviation)

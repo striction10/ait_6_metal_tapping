@@ -2,8 +2,8 @@
 {
     public class ShiftTask
     {
-        public int Id { get; set; }
-        public int TapTaskId { get; set; }
-        public int ShiftId { get; set; }
+        public Guid Id { get; set; }
+        public Guid TapTaskId { get; set; }
+        public Guid ShiftId { get; set; }
     }
 }

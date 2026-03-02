@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RUSAL.MetalTapping.DAL.Models;
-using RUSAL.MetalTapping.DAL.Models;
+using System;
 
 namespace RUSAL.MetalTapping.DAL.Contexts
 {
@@ -33,5 +33,9 @@ namespace RUSAL.MetalTapping.DAL.Contexts
         public DbSet<UserRoleMembers> UserRoleMembers { get; set; }
         public DbSet<WorkGroup> WorkGroups { get; set; }
         public DbSet<WorkGroupMembers> WorkGroupMembers { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+        }
     }
 }

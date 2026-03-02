@@ -18,10 +18,10 @@ namespace RUSAL.MetalTapping.DAL.Configurations
                 .IsRequired();
 
             builder.Property(b => b.PotId)
-                .HasColumnType("numeric(37, 0)");
+                .HasColumnType("uniqueidentifier");
 
             builder.Property(b => b.PotParametersGroupId)
-                .HasColumnType("numeric(37, 0)");
+                .HasColumnType("uniqueidentifier");
             
             builder.HasOne(b => b.Pot)
                 .WithMany(b => b.ExternalDatas)

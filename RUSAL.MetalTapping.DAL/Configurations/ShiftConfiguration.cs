@@ -13,8 +13,8 @@ public class ShiftConfiguration : IEntityTypeConfiguration<Shift>
         builder.HasKey(x => x.Id);
         
         builder.Property(x => x.Id)
-            .HasColumnName("ID")
-            .HasColumnType("numeric(37, 0)")
+            .HasColumnName("Id")
+            .HasColumnType("uniqueidentifier")
             .IsRequired();
         
         builder.Property(b => b.BeginDate)
@@ -28,7 +28,7 @@ public class ShiftConfiguration : IEntityTypeConfiguration<Shift>
             .IsRequired();
 
         builder.Property(b => b.WorkGroupId)
-            .HasColumnType("numeric(37, 0)");
+            .HasColumnType("uniqueidentifier");
         
         builder.HasOne(b => b.WorkGroup)
             .WithMany(b => b.Shifts)
