@@ -12,8 +12,8 @@ using RUSAL.MetalTapping.DAL.Contexts;
 namespace RUSAL.MetalTapping.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260302171701_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260303113859_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -362,7 +362,7 @@ namespace RUSAL.MetalTapping.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Role", (string)null);
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.Scoop", b =>
@@ -515,36 +515,32 @@ namespace RUSAL.MetalTapping.DAL.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Id");
+                        .HasColumnName("Id")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(20)")
+                        .HasColumnType("nvarchar(256)")
                         .HasColumnName("Email");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(20)")
+                        .HasColumnType("nvarchar(100)")
                         .HasColumnName("FirstName");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(20)")
+                        .HasColumnType("nvarchar(100)")
                         .HasColumnName("LastName");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(20)")
+                        .HasColumnType("nvarchar(256)")
                         .HasColumnName("Password");
-
-                    b.Property<Guid?>("WorkGroupId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("WorkGroupId");
-
-                    b.ToTable("User", (string)null);
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.UserRoleMembers", b =>
@@ -569,7 +565,7 @@ namespace RUSAL.MetalTapping.DAL.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("WorkGroupId");
+                        .HasColumnName("Id");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -589,10 +585,12 @@ namespace RUSAL.MetalTapping.DAL.Migrations
                         .HasColumnName("Id");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("UserId");
 
                     b.Property<Guid>("WorkGroupId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("WorkGroupId");
 
                     b.HasKey("Id");
 
@@ -807,13 +805,6 @@ namespace RUSAL.MetalTapping.DAL.Migrations
                     b.Navigation("TapTask");
                 });
 
-            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.User", b =>
-                {
-                    b.HasOne("RUSAL.MetalTapping.DAL.Models.WorkGroup", null)
-                        .WithMany("Users")
-                        .HasForeignKey("WorkGroupId");
-                });
-
             modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.UserRoleMembers", b =>
                 {
                     b.HasOne("RUSAL.MetalTapping.DAL.Models.Role", "Role")
@@ -947,8 +938,6 @@ namespace RUSAL.MetalTapping.DAL.Migrations
             modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.WorkGroup", b =>
                 {
                     b.Navigation("Shifts");
-
-                    b.Navigation("Users");
 
                     b.Navigation("WorkGroupMembers");
                 });

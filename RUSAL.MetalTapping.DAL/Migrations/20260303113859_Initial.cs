@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace RUSAL.MetalTapping.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -97,7 +97,7 @@ namespace RUSAL.MetalTapping.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Role",
+                name: "Roles",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -105,7 +105,7 @@ namespace RUSAL.MetalTapping.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Role", x => x.Id);
+                    table.PrimaryKey("PK_Roles", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -134,15 +134,30 @@ namespace RUSAL.MetalTapping.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
+                    FirstName = table.Column<string>(type: "nvarchar(100)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(100)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(256)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(256)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "WorkGroup",
                 columns: table => new
                 {
-                    WorkGroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(20)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WorkGroup", x => x.WorkGroupId);
+                    table.PrimaryKey("PK_WorkGroup", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -264,6 +279,30 @@ namespace RUSAL.MetalTapping.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserRoleMembers",
+                columns: table => new
+                {
+                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserRoleMembers", x => new { x.UserId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_UserRoleMembers_Roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserRoleMembers_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Shift",
                 columns: table => new
                 {
@@ -279,29 +318,33 @@ namespace RUSAL.MetalTapping.DAL.Migrations
                         name: "FK_Shift_WorkGroup_WorkGroupId",
                         column: x => x.WorkGroupId,
                         principalTable: "WorkGroup",
-                        principalColumn: "WorkGroupId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "WorkGroupMembers",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(20)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(20)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(20)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(20)", nullable: false),
-                    WorkGroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WorkGroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.PrimaryKey("PK_WorkGroupMembers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_User_WorkGroup_WorkGroupId",
+                        name: "FK_WorkGroupMembers_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_WorkGroupMembers_WorkGroup_WorkGroupId",
                         column: x => x.WorkGroupId,
                         principalTable: "WorkGroup",
-                        principalColumn: "WorkGroupId");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -385,55 +428,6 @@ namespace RUSAL.MetalTapping.DAL.Migrations
                         principalTable: "Scoop",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserRoleMembers",
-                columns: table => new
-                {
-                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserRoleMembers", x => new { x.UserId, x.RoleId });
-                    table.ForeignKey(
-                        name: "FK_UserRoleMembers_Role_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "Role",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserRoleMembers_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "WorkGroupMembers",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    WorkGroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_WorkGroupMembers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_WorkGroupMembers_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_WorkGroupMembers_WorkGroup_WorkGroupId",
-                        column: x => x.WorkGroupId,
-                        principalTable: "WorkGroup",
-                        principalColumn: "WorkGroupId",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -615,11 +609,6 @@ namespace RUSAL.MetalTapping.DAL.Migrations
                 column: "ScoopId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_WorkGroupId",
-                table: "User",
-                column: "WorkGroupId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_UserRoleMembers_RoleId",
                 table: "UserRoleMembers",
                 column: "RoleId");
@@ -681,10 +670,13 @@ namespace RUSAL.MetalTapping.DAL.Migrations
                 name: "TapTasks");
 
             migrationBuilder.DropTable(
-                name: "Role");
+                name: "Roles");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "WorkGroup");
 
             migrationBuilder.DropTable(
                 name: "PotReglament");
@@ -694,9 +686,6 @@ namespace RUSAL.MetalTapping.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "Scoop");
-
-            migrationBuilder.DropTable(
-                name: "WorkGroup");
 
             migrationBuilder.DropTable(
                 name: "Pot");

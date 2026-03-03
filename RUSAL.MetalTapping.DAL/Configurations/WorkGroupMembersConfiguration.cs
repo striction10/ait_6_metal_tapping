@@ -18,9 +18,11 @@ public class WorkGroupMembersConfiguration : IEntityTypeConfiguration<WorkGroupM
             .IsRequired();
 
         builder.Property(x => x.UserId)
+            .HasColumnName("UserId")
             .HasColumnType("uniqueidentifier");
 
         builder.Property(x => x.WorkGroupId)
+            .HasColumnName("WorkGroupId")
             .HasColumnType("uniqueidentifier");
         
         builder.HasOne(x => x.User)
