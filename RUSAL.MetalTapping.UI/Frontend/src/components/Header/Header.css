@@ -1,0 +1,26 @@
+#header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #F2F2F2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 3rem;
+}
+
+h1 {
+    font-size: 1.3rem;
+    font-weight: 400;
+    font-family: "Roboto";
+    margin: 0;
+    text-align: center;
+    position: absolute;
+}
+
+#logo1 {
+    position: absolute;
+    left: 0;
+    height: 3rem;
+}

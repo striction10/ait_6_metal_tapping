@@ -1,0 +1,43 @@
+.input-wrapper {
+    margin: 0;
+    margin-top: 3%;
+}
+
+.input-label {
+    font-weight: 400;
+    font-size: 20px;
+    margin-bottom: 5px;
+    margin-top: 15px;
+}
+
+.auth-input {
+    border: none;
+    font-size: 14px;
+    width: 100%;
+    height: 40px;
+    border-radius: 5px;
+    background-color: white;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.315);
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+
+.auth-input:hover {
+    background-color: #fd8288;
+}
+
+.auth-input:focus {
+    outline: none;
+    background-color: #fa5961;
+}
+
+.error {
+    border: 2px solid red;
+    background-color: #ffe6e6;
+}
+
+.correct {
+    border: 2px solid rgb(0, 255, 76);
+    background-color: #90f1ae85;
+}
