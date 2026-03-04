@@ -18,7 +18,7 @@ namespace RUSAL.MetalTapping.DAL.Repositories
             await _DbSet.AddAsync(item);
             await _context.SaveChangesAsync();
         }
-        public async Task<TEntity?> FindByIdAsync(int id)
+        public async Task<TEntity?> FindByIdAsync(Guid id)
         {
             return await _DbSet.FindAsync(id);
         }
