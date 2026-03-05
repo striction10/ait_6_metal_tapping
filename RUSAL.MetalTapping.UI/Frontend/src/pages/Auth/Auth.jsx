@@ -9,7 +9,11 @@ function Auth() {
     }
     return (
         <>
-            <Header />
+            <Header title="Выливка металла"
+                showNav={false}
+                showUserBtn={false}
+                activeNav = ""
+            />
             <div id="main">
                 <AuthBox title="Войти">
                     <AuthForm onSubmit={handleLogin} />
