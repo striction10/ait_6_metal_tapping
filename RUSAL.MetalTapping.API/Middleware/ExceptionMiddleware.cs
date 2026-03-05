@@ -1,5 +1,4 @@
 ﻿using RUSAL.MetalTapping.BLL.Exceptions;
-using System.Security.Authentication;
 
 namespace RUSAL.MetalTapping.API.Middleware
 {

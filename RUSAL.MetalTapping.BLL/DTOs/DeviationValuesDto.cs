@@ -3,7 +3,7 @@
     public class DeviationValuesDto
     {
         public int DeviationId { get; set; }
-        public double Value { get; set; }
+        public int Value { get; set; }
         public double CastingRatio { get; set; }
     }
 }

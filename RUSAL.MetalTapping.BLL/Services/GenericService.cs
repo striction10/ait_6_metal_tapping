@@ -17,7 +17,7 @@ namespace RUSAL.MetalTapping.BLL.Services
             _mapper = mapper;
         }
 
-        public async Task<TDto?> GetByIdAsync(int id)
+        public async Task<TDto?> GetByIdAsync(Guid id)
         {
             var entity = await _repository.FindByIdAsync(id);
             return entity == null ? null : _mapper.Map<TDto>(entity);
@@ -42,7 +42,7 @@ namespace RUSAL.MetalTapping.BLL.Services
             await _repository.UpdateAsync(entity);
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(Guid id)
         {
             var entity = await _repository.FindByIdAsync(id);
             if (entity != null)

@@ -27,13 +27,20 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
-builder.Services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
-builder.Services.AddScoped<IGenericService<UserDto>, GenericService<User, UserDto>>();
-builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<IJwtProvider, JwtProvider>();
-builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IReglamentRepository, ReglamentRepository>();
+builder.Services.AddScoped<IPotReglamentRepository, PotReglamentRepository>();
+
+builder.Services.AddScoped(typeof(IGenericService<UserDto>), typeof(GenericService<User, UserDto>));
+
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<DeviationValuesService>();
+
+builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.Configure<JwtOptions>(
     builder.Configuration.GetSection("JwtOptions"));
 

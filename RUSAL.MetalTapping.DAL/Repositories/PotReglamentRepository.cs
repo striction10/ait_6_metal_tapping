@@ -14,9 +14,25 @@ namespace RUSAL.MetalTapping.DAL.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<PotReglament?>> getByReglamentId(Guid reglamentId)
+        public async Task<IEnumerable<PotReglament?>> getByReglamentAndBuildingId(Guid reglamentId, Guid buildingId)
         {
-            return await _context.PotReglaments.Where(pr => pr.ReglamentId == reglamentId).ToListAsync();
+            return await _context.PotReglaments
+                .Include(pr => pr.Pot)
+                .Where(pr => pr.ReglamentId == reglamentId && pr.Pot.BuildingId == buildingId)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<PotReglament>> GetByReglamentAndBuildingWithDeviationsAsync(
+            Guid reglamentId,
+            Guid buildingId)
+        {
+            return await _context.PotReglaments
+                .Include(pr => pr.Pot)
+                .Include(pr => pr.Deviations)
+                    .ThenInclude(d => d.DeviationValues)
+                .Where(pr => pr.ReglamentId == reglamentId &&
+                            pr.Pot.BuildingId == buildingId)
+                .ToListAsync();
         }
     }
 }

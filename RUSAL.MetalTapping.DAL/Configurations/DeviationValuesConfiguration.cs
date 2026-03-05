@@ -12,12 +12,12 @@ namespace RUSAL.MetalTapping.DAL.Configurations
 
             builder.Property(b => b.Value)
                 .HasColumnName("Value")
-                .HasColumnType("numeric(4, 0)")
+                .HasColumnType("int")
                 .IsRequired();
 
             builder.Property(b => b.CastingRatio)
                 .HasColumnName("CastingRatio")
-                .HasColumnType("numeric(4, 0)")
+                .HasColumnType("int")
                 .IsRequired();
 
             builder.Property(b => b.DeviationId)

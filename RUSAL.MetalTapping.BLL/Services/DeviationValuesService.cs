@@ -1,4 +1,7 @@
-﻿using RUSAL.MetalTapping.BLL.Contracts;
+﻿using System.Linq;
+using System.Net.WebSockets;
+using RUSAL.MetalTapping.BLL.Contracts;
+using RUSAL.MetalTapping.BLL.DTOs;
 using RUSAL.MetalTapping.BLL.Exceptions;
 using RUSAL.MetalTapping.DAL.Interfaces;
 using RUSAL.MetalTapping.DAL.Models;
@@ -21,7 +24,7 @@ namespace RUSAL.MetalTapping.BLL.Services
             _potReglamentRepository = potReglamentRepository;
         }
 
-        public async Task GetReglamentTableAsync(ReglamentTableRequest model)
+        public async Task<ReglamentTableResponse> GetReglamentTableAsync(ReglamentTableRequest model)
         {
             var existingBuilding = await _buildingRepository.FindByIdAsync(model.buildingId);
 
@@ -29,25 +32,60 @@ namespace RUSAL.MetalTapping.BLL.Services
             {
                 throw new NotFoundException($"Building with id {model.buildingId} was not found");
             }
+            
+            var existingReglament = await _reglamentRepository.FindByIdAsync(model.reglamentId);
 
-            if (model.reglamentId.HasValue)
+            if (existingReglament == null)
             {
-                var existingReglament = await _reglamentRepository.FindByIdAsync(model.reglamentId.Value);
+                throw new NotFoundException($"Reglament with id {model.reglamentId} was not found");
+            }
 
-                if (existingReglament == null)
+            var existingPotsDeviations = await _potReglamentRepository.GetByReglamentAndBuildingWithDeviationsAsync(model.reglamentId, model.buildingId);
+
+            var pots = new List<PotDeviationDto>();
+
+            foreach (var potReglament in existingPotsDeviations)
+            {
+                var deviation = potReglament.Deviations.FirstOrDefault();
+
+                var castingRatios = new Dictionary<int, int>();
+
+                if (deviation?.DeviationValues != null)
                 {
-                    throw new NotFoundException($"Reglament with id {model.reglamentId} was not found");
+                    foreach (var devValue in deviation.DeviationValues)
+                    {
+                        castingRatios[devValue.Value] = devValue.CastingRatio;
+                    }
                 }
 
-                var existingPotReglaments = _potReglamentRepository.getByReglamentId(model.reglamentId.Value);
-            }
-            else
-            {
-                var latestReglament = await _reglamentRepository.GetNewReglament();
-                var existingPotReglaments = _potReglamentRepository.getByReglamentId(latestReglament.Id);
+                var potDevDto = new PotDeviationDto
+                    (
+                        id: potReglament.PotId,
+                        name: deviation?.Name,
+                        castingRatio: castingRatios
+                    );
+
+                pots.Add(potDevDto);
             }
 
-            //TODO: Фильтрация по корпусам
+            var response = new ReglamentTableResponse
+                (
+                    building: new BuildingDto
+                    {
+                        Id = existingBuilding.Id,
+                        Name = existingBuilding.Name
+                    },
+                    reglament: new ReglamentDto
+                    {
+                        Id = existingReglament.Id,
+                        Name = existingReglament.Name,
+                        DateStart = existingReglament.DateStart,
+                        DateStop = existingReglament.DateStop
+                    },
+                    pots: pots
+                );
+
+            return response;
         }
     }
 }
