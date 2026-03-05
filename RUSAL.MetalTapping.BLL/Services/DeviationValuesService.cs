@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Net.WebSockets;
-using RUSAL.MetalTapping.BLL.Contracts;
+﻿using RUSAL.MetalTapping.BLL.Contracts;
 using RUSAL.MetalTapping.BLL.DTOs;
 using RUSAL.MetalTapping.BLL.Exceptions;
 using RUSAL.MetalTapping.DAL.Interfaces;

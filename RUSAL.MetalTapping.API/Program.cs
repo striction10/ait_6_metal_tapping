@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using RUSAL.MetalTapping.API.Middleware;
 using RUSAL.MetalTapping.BLL.DTOs;
 using RUSAL.MetalTapping.BLL.Interfaces;
 using RUSAL.MetalTapping.BLL.Services;
@@ -68,6 +69,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.MapControllers();
 
