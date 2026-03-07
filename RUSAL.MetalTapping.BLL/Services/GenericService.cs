@@ -4,14 +4,14 @@ using RUSAL.MetalTapping.DAL.Interfaces;
 
 namespace RUSAL.MetalTapping.BLL.Services
 {
-    public class GenericService<TEntity, TDto> : IGenericService<TDto>
+    public class GenericService<TEntity, TDto> : Interfaces.IGenericService<TDto>
         where TEntity : class
         where TDto : class
     {
-        private readonly IGenericRepository<TEntity> _repository;
+        private readonly DAL.Interfaces.IGenericService<TEntity> _repository;
         private readonly IMapper _mapper;
 
-        public GenericService(IGenericRepository<TEntity> repository, IMapper mapper)
+        public GenericService(DAL.Interfaces.IGenericService<TEntity> repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;

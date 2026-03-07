@@ -3,6 +3,7 @@
     public class Pot
     {
         public Guid Id { get; set; }
+        public string Name { get; set; } = string.Empty;
         public Guid StateId { get; set; }
         public Guid BuildingId { get; set; }
         public Building Building { get; set; } = null!;

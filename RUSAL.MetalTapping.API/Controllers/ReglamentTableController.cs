@@ -6,11 +6,11 @@ namespace RUSAL.MetalTapping.API.Controllers
 {
     [ApiController]
     [Route("api/reglamentTable")]
-    public class DeviationValueController : ControllerBase
+    public class ReglamentTableController : ControllerBase
     {
         private readonly DeviationValuesService _service;
 
-        public DeviationValueController(DeviationValuesService controller)
+        public ReglamentTableController(DeviationValuesService controller)
         {
             _service = controller;
         }

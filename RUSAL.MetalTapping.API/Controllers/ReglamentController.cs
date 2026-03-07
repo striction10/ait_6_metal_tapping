@@ -4,18 +4,20 @@ using RUSAL.MetalTapping.BLL.Interfaces;
 
 namespace RUSAL.MetalTapping.API.Controllers
 {
-    [Route("api/user")]
     [ApiController]
-    public class UserController : ControllerBase
+    [Route("api/reglament")]
+    public class ReglamentController : ControllerBase
     {
-        private readonly IGenericService<UserDto> _service;
+        private readonly IGenericService<ReglamentDto> _service;
 
-        public UserController(IGenericService<UserDto> service)
+        public ReglamentController(IGenericService<ReglamentDto> service)
         {
             _service = service;
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(ReglamentDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAll()
         {
             var response = await _service.GetAllAsync();

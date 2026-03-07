@@ -2,7 +2,7 @@
 
 namespace RUSAL.MetalTapping.DAL.Interfaces
 {
-    public interface IPotReglamentRepository : IGenericRepository<PotReglament>
+    public interface IPotReglamentRepository : IGenericService<PotReglament>
     {
         Task<IEnumerable<PotReglament?>> getByReglamentAndBuildingId(Guid reglamentId, Guid buildingId);
         Task<IEnumerable<PotReglament>> GetByReglamentAndBuildingWithDeviationsAsync(

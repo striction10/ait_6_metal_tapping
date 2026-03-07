@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-
-namespace RUSAL.MetalTapping.BLL.Interfaces
+﻿namespace RUSAL.MetalTapping.BLL.Interfaces
 {
     public interface IGenericService<TDto>
         where TDto : class

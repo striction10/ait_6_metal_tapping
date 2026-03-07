@@ -8,12 +8,12 @@ namespace RUSAL.MetalTapping.BLL.Services
 {
     public class DeviationValuesService
     {
-        private readonly IGenericRepository<Building> _buildingRepository;
+        private readonly IGenericService<Building> _buildingRepository;
         private readonly IReglamentRepository _reglamentRepository;
         private readonly IPotReglamentRepository _potReglamentRepository;
 
         public DeviationValuesService(
-            IGenericRepository<Building> buildingRepository,
+            IGenericService<Building> buildingRepository,
             IReglamentRepository reglamentRepository,
             IPotReglamentRepository potReglamentRepository)
         {
@@ -59,7 +59,7 @@ namespace RUSAL.MetalTapping.BLL.Services
                 var potDevDto = new PotDeviationDto
                     (
                         id: potReglament.PotId,
-                        name: deviation?.Name,
+                        name: deviation?.PotReglament.Pot.Name,
                         castingRatio: castingRatios
                     );
 
@@ -68,18 +68,6 @@ namespace RUSAL.MetalTapping.BLL.Services
 
             var response = new ReglamentTableResponse
                 (
-                    building: new BuildingDto
-                    {
-                        Id = existingBuilding.Id,
-                        Name = existingBuilding.Name
-                    },
-                    reglament: new ReglamentDto
-                    {
-                        Id = existingReglament.Id,
-                        Name = existingReglament.Name,
-                        DateStart = existingReglament.DateStart,
-                        DateStop = existingReglament.DateStop
-                    },
                     pots: pots
                 );
 

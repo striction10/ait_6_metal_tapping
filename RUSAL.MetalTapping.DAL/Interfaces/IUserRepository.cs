@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RUSAL.MetalTapping.DAL.Interfaces
 {
-    public interface IUserRepository : IGenericRepository<User>
+    public interface IUserRepository : IGenericService<User>
     {
         Task<User?> GetByEmailAsync(string email);
     }

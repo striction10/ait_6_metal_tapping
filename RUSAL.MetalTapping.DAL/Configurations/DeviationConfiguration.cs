@@ -17,9 +17,9 @@ namespace RUSAL.MetalTapping.DAL.Configurations
                 .HasColumnType("uniqueidentifier")
                 .IsRequired();
 
-            builder.Property(b => b.Name)
-                .HasColumnName("Name")
-                .HasColumnType("nvarchar(20)")
+            builder.Property(b => b.ActualMetalLevel)
+                .HasColumnName("ActualMetalLevel")
+                .HasColumnType("numeric(4, 0)")
                 .IsRequired();
 
             builder.Property(b => b.TargetMetalLevel)
