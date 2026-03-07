@@ -1,4 +1,4 @@
-import './AuthBox.css';
+import './AuthBox.css'
 
 function AuthBox({ title, children }) {
     return (

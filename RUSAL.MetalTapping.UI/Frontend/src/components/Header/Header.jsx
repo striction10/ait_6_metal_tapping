@@ -1,12 +1,14 @@
-import "./Header.css";
-import logo from '../../assets/rusalLogoGrey.svg';
-import userLogo from '../../assets/userLogo.svg';
+import "./Header.css"
+import logo from '../../assets/rusalLogoGrey.svg'
+import userLogo from '../../assets/userLogo.svg'
+import SelectGroup from "../SelectGroup/SelectGroup"
 
 function Header ({ 
     title = "Выливка металла",
     showNav = false,
     showUserBtn = false,
-    activeNav = ""
+    activeNav = "",
+    selectConfig = null
 }) {
     return (
         <header id="header">
@@ -39,6 +41,11 @@ function Header ({
                     >
                         Параметры
                     </a>
+                </div>
+            )}
+            {selectConfig && (
+                <div className="selectPart">
+                    <SelectGroup {...selectConfig} />
                 </div>
             )}
         </header>

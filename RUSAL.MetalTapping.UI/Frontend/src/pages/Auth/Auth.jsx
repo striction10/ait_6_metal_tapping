@@ -1,6 +1,7 @@
 import Header from '../../components/Header/Header'
 import AuthBox from '../../components/AuthBox/AuthBox'
 import AuthForm from '../../components/AuthForm/AuthForm'
+import PageTitle from '../../components/PageTitle'
 import './Auth.css'
 
 function Auth() {
@@ -9,6 +10,7 @@ function Auth() {
     }
     return (
         <>
+            <PageTitle title={"Выливка металла"} />
             <Header title="Выливка металла"
                 showNav={false}
                 showUserBtn={false}
