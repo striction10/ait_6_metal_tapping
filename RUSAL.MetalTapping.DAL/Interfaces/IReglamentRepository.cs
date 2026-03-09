@@ -2,7 +2,7 @@
 
 namespace RUSAL.MetalTapping.DAL.Interfaces
 {
-    public interface IReglamentRepository : IGenericService<Reglament>
+    public interface IReglamentRepository : IGenericRepository<Reglament>
     {
         Task<Reglament?> GetNewReglament();
     }

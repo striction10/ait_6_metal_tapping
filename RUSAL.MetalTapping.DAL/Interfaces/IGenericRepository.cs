@@ -2,7 +2,7 @@
 
 namespace RUSAL.MetalTapping.DAL.Interfaces
 {
-    public interface IGenericService<TEntity> where TEntity : class
+    public interface IGenericRepository<TEntity> where TEntity : class
     {
         Task CreateAsync(TEntity item);
         Task<TEntity?> FindByIdAsync(Guid id);

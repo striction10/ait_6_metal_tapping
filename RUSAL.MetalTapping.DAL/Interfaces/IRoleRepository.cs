@@ -2,7 +2,7 @@
 
 namespace RUSAL.MetalTapping.DAL.Interfaces
 {
-    public interface IRoleRepository : IGenericService<Role>
+    public interface IRoleRepository : IGenericRepository<Role>
     {
         Task<Role?> GetByNameAsync(string name);
     }

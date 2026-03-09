@@ -2,8 +2,8 @@
 {
     public class PotDto
     {
-        public int Id { get; set; }
-        public int StateId { get; set; }
-        public int BuildingId { get; set; }
+        public Guid Id { get; set; }
+        public Guid StateId { get; set; }
+        public Guid BuildingId { get; set; }
     }
 }

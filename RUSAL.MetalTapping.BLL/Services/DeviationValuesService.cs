@@ -8,12 +8,12 @@ namespace RUSAL.MetalTapping.BLL.Services
 {
     public class DeviationValuesService
     {
-        private readonly IGenericService<Building> _buildingRepository;
+        private readonly IGenericRepository<Building> _buildingRepository;
         private readonly IReglamentRepository _reglamentRepository;
         private readonly IPotReglamentRepository _potReglamentRepository;
 
         public DeviationValuesService(
-            IGenericService<Building> buildingRepository,
+            IGenericRepository<Building> buildingRepository,
             IReglamentRepository reglamentRepository,
             IPotReglamentRepository potReglamentRepository)
         {

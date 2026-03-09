@@ -33,6 +33,7 @@ namespace RUSAL.MetalTapping.DAL.Contexts
         public DbSet<UserRoleMembers> UserRoleMembers { get; set; }
         public DbSet<WorkGroup> WorkGroups { get; set; }
         public DbSet<WorkGroupMembers> WorkGroupMembers { get; set; }
+        public DbSet<CalculatedTask> CalculatedTasks { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);

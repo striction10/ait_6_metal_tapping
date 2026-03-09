@@ -32,6 +32,7 @@ namespace RUSAL.MetalTapping.BLL.Mapping
             CreateMap<UserRoleMembers, UserRoleMembersDto>().ReverseMap();
             CreateMap<WorkGroup, WorkGroupDto>().ReverseMap();
             CreateMap<WorkGroupMembers, WorkGroupMembersDto>().ReverseMap();
+            CreateMap<CalculatedTask, CalculatedTaskDto>().ReverseMap();
         }
     }
 }

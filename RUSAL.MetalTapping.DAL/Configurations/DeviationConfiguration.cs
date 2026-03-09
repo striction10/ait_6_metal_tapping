@@ -19,14 +19,17 @@ namespace RUSAL.MetalTapping.DAL.Configurations
 
             builder.Property(b => b.ActualMetalLevel)
                 .HasColumnName("ActualMetalLevel")
-                .HasColumnType("numeric(4, 0)")
-                .IsRequired();
+                .HasColumnType("numeric(4, 0)");
 
             builder.Property(b => b.TargetMetalLevel)
                 .HasColumnName("TargetMetalLevel")
                 .HasColumnType("numeric(4, 0)")
                 .IsRequired();
 
+            builder.Property(b => b.IsValid)
+                .HasColumnName("IsValid")
+                .HasColumnType("bit");
+               
             builder.HasOne(b => b.PotReglament)
                 .WithMany(b => b.Deviations)
                 .HasForeignKey(b => b.PotReglamentId)

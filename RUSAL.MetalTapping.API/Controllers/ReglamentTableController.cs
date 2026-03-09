@@ -15,7 +15,7 @@ namespace RUSAL.MetalTapping.API.Controllers
             _service = controller;
         }
 
-        [HttpGet("table")]
+        [HttpGet]
         [ProducesResponseType(typeof(ReglamentTableResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ReglamentTableResponse>> GetReglamentTable(

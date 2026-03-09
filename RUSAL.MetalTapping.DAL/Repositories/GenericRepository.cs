@@ -4,7 +4,7 @@ using RUSAL.MetalTapping.DAL.Interfaces;
 
 namespace RUSAL.MetalTapping.DAL.Repositories
 {
-    public class GenericRepository<TEntity> : IGenericService<TEntity> where TEntity : class
+    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
     {
         private readonly AppDbContext _context;
         DbSet<TEntity> _DbSet;

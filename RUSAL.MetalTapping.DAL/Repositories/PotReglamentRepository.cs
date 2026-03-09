@@ -14,7 +14,9 @@ namespace RUSAL.MetalTapping.DAL.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<PotReglament?>> getByReglamentAndBuildingId(Guid reglamentId, Guid buildingId)
+        public async Task<IEnumerable<PotReglament?>> getByReglamentAndBuildingId(
+            Guid reglamentId, 
+            Guid buildingId)
         {
             return await _context.PotReglaments
                 .Include(pr => pr.Pot)

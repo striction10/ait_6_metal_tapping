@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
-using RUSAL.MetalTapping.BLL.Interfaces;
+using RUSAL.MetalTapping.DAL.Interfaces;
 using RUSAL.MetalTapping.BLL.Mapping;
 using RUSAL.MetalTapping.BLL.Services;
 
@@ -14,7 +14,7 @@ public static class DependencyInjection
         {
             services.Scan(scan => scan
                 .FromAssemblies(serviceAssembly)
-                .AddClasses(classes => classes.AssignableTo(typeof(IGenericService<>)))
+                .AddClasses(classes => classes.AssignableTo(typeof(IGenericRepository<>)))
                 .AsImplementedInterfaces()
                 .WithScopedLifetime());
         }
@@ -23,7 +23,7 @@ public static class DependencyInjection
             serviceAssembly = typeof(GenericService<,>).Assembly;
             services.Scan(scan => scan
                 .FromAssemblies(serviceAssembly)
-                .AddClasses(classes => classes.AssignableTo(typeof(IGenericService<>)))
+                .AddClasses(classes => classes.AssignableTo(typeof(IGenericRepository<>)))
                 .AsImplementedInterfaces()
                 .WithScopedLifetime());
         }
