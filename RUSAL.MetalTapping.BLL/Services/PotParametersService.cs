@@ -47,8 +47,7 @@ namespace RUSAL.MetalTapping.BLL.Services
             var deviationAmount = model.actualMetalLevel - existingDeviation.TargetMetalLevel;
 
             var matchingDeviationValue = existingDeviationValues
-                .OrderBy(v => Math.Abs(v.Value - deviationAmount))
-                .FirstOrDefault();
+                .FirstOrDefault(v => v.Value == deviationAmount);
 
             if (matchingDeviationValue == null)
             {
@@ -104,12 +103,18 @@ namespace RUSAL.MetalTapping.BLL.Services
                 Id = Guid.NewGuid(),
                 PotId = model.potId,
                 CalculatedTaskForPot = (decimal)calculatedTask,
-                RoundCalculatedTaskForPot = (decimal)roundCalculatedTask
+                RoundCalculatedTaskForPot = (decimal)roundCalculatedTask,
+                CreatedAt = DateTime.UtcNow
             };
 
-            await _calculatedTaskRepository.CreateAsync(calkTask);
+            await _calculatedTaskRepository.CreateAsync( calkTask);
 
             return response;
+        }
+
+        public async Task ViewDeviationAndTaskAsync()
+        {
+
         }
     }
 }

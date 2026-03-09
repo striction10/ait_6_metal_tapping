@@ -30,6 +30,11 @@ namespace RUSAL.MetalTapping.DAL.Configurations
                 .HasColumnType("numeric(18, 4)")
                 .IsRequired();
 
+            builder.Property(x => x.CreatedAt)
+                .HasColumnName("CreatedAt")
+                .HasColumnType("datetime")
+                .IsRequired();
+
             builder.HasOne(x => x.Pot)
                 .WithMany(x => x.calculatedTasks)
                 .HasForeignKey(x => x.PotId)
