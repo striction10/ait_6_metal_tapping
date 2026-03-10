@@ -1,6 +1,5 @@
 .tasks-container {
     max-height: 78vh;
-    overflow-y: scroll;
     position: fixed;
     left: 0;
     top: 9.08rem;
@@ -10,6 +9,7 @@
 .tables-wrapper {
     display: flex;
     flex-direction: column;
+    overflow-y: scroll;
     gap: 10px;
 }
 

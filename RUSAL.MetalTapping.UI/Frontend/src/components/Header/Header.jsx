@@ -1,7 +1,10 @@
+import { useState } from 'react'
 import "./Header.css"
 import logo from '../../assets/rusalLogoGrey.svg'
 import userLogo from '../../assets/userLogo.svg'
 import SelectGroup from "../SelectGroup/SelectGroup"
+import UserPopup from "../UserPopup/UserPopup"
+import { useUser } from '../../contexts/UserContext'
 
 function Header ({ 
     title = "Выливка металла",
@@ -10,13 +13,16 @@ function Header ({
     activeNav = "",
     selectConfig = null
 }) {
+    const [isPopupOpen, setIsPopupOpen] = useState(false)
+    const { userData } = useUser()
+
     return (
         <header id="header">
             <div className="firstPart">
                 <img src={logo} alt="rusalLogo" id="logo1" width="70px" />
                 <h1>{title}</h1>
                 {showUserBtn && (
-                    <button className="popupBtn">
+                    <button className="popupBtn" onClick={() => setIsPopupOpen(true)}>
                         <img src={userLogo} alt="userLogo" width="30px" />
                     </button>
                 )}
@@ -48,6 +54,12 @@ function Header ({
                     <SelectGroup {...selectConfig} />
                 </div>
             )}
+            
+            <UserPopup 
+                isOpen={isPopupOpen}
+                onClose={() => setIsPopupOpen(false)}
+                userData={userData}
+            />
         </header>
     )
 }

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Header from '../../components/Header/Header'
 import PageTitle from '../../components//PageTitle'
 import Table from '../../components/Table/Table'
+import ActionButtons from '../../components/ActionButton/ActionButton'
 
 function Reglaments () {
     const [selectedReglament, setSelectedReglament] = useState('0')
@@ -15,8 +16,8 @@ function Reglaments () {
         { electrolyzerNumber: 2, m2: -2, m1: 4, zero: 3, p1: -1, p2: 5, p3: 2, p4: 1 },
         { electrolyzerNumber: 3, m2: 3, m1: 2, zero: 1, p1: 0, p2: 4, p3: 3, p4: 2 },
         { electrolyzerNumber: 4, m2: 1, m1: -3, zero: 2, p1: 3, p2: 2, p3: 1, p4: 4 },
-        { electrolyzerNumber: 5, m2: 4, m1: 5, zero: 3, p1: 2, p2: 1, p3: 0, p4: 3 },
-    ];
+        { electrolyzerNumber: 5, m2: 4, m1: 5, zero: 3, p1: 2, p2: 1, p3: 0, p4: 3 }
+    ]
 
     const tableHeaders = [
         '№ Электролизёра',
@@ -39,6 +40,16 @@ function Reglaments () {
         { field: 'p3' },
         { field: 'p4' }
     ]
+
+    const handleSave = () => {
+        console.log('Сохранение данных...')
+        alert('Данные сохранены')
+    }
+
+    const handleSubmit = () => {
+        console.log('Отправка данных...')
+        alert('Данные отправлены')
+    }
 
     return (
         <>
@@ -78,13 +89,21 @@ function Reglaments () {
                     onDateChange: (e) => setSelectedDate(e.target.value)
                 }}
             />
-            <Table 
-                title="Таблица выливки, %"
-                headers={tableHeaders}
-                data={pouringData}
-                columns={columns}
-                colspan={8}
-            />
+            <div className="tasks-container">
+                <div className="tables-wrapper">
+                    <Table 
+                        title="Таблица выливки, %"
+                        headers={tableHeaders}
+                        data={pouringData}
+                        columns={columns}
+                        colspan={8}
+                    />
+                </div>
+                <ActionButtons 
+                    onSave={handleSave}
+                    onSubmit={handleSubmit}
+                />
+            </div>
         </>
     );
 }

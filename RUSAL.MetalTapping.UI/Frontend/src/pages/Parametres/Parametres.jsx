@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Header from '../../components/Header/Header'
 import PageTitle from '../../components/PageTitle'
 import Table from '../../components/Table/Table'
+import ActionButtons from '../../components/ActionButton/ActionButton'
 
 function Parametres() {
     const [selectedCorpus, setSelectedCorpus] = useState('0')
@@ -36,6 +37,17 @@ function Parametres() {
         { field: 'zpr' },
         { field: 'mark' }
     ]
+
+    const handleSave = () => {
+        console.log('Сохранение данных...')
+        alert('Данные сохранены')
+    }
+
+    const handleSubmit = () => {
+        console.log('Отправка данных...')
+        alert('Данные отправлены')
+    }
+
     return (
         <>
             <PageTitle title={"Параметры"} />
@@ -43,6 +55,7 @@ function Parametres() {
                 title="Параметры"
                 showNav={true}
                 showUserBtn={true}
+                onUserClick={() => setIsPopupOpen(true)}
                 activeNav="parametres"
                 selectConfig={{
                     selects: [
@@ -63,13 +76,21 @@ function Parametres() {
                     onDateChange: (e) => setSelectedDate(e.target.value)
                 }}
             />
-            <Table 
-                title="Таблица параметров"
-                headers={headers}
-                data={data}
-                columns={columns}
-                colspan={10}
-            />
+            <div className="tasks-container">
+                <div className="tables-wrapper">
+                    <Table 
+                        title="Таблица параметров"
+                        headers={headers}
+                        data={data}
+                        columns={columns}
+                        colspan={10}
+                    />
+                </div>
+                <ActionButtons 
+                    onSave={handleSave}
+                    onSubmit={handleSubmit}
+                />
+            </div>
         </>
     )
 }

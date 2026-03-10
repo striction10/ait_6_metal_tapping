@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Header from '../../components/Header/Header'
 import PageTitle from '../../components/PageTitle'
 import Table from '../../components/Table/Table'
+import ActionButtons from '../../components/ActionButton/ActionButton'
 import './Tasks.css'
 
 function Tasks () {
@@ -77,6 +78,16 @@ function Tasks () {
         { field: 'mark' }
     ]
 
+    const handleSave = () => {
+        console.log('Сохранение данных...')
+        alert('Данные сохранены')
+    }
+
+    const handleSubmit = () => {
+        console.log('Отправка данных...')
+        alert('Данные отправлены')
+    }
+
     return (
         <>
             <PageTitle title="Задания" />
@@ -145,6 +156,10 @@ function Tasks () {
                         colspan={2}
                     />
                 </div>
+                <ActionButtons 
+                onSave={handleSave}
+                onSubmit={handleSubmit}
+                />
             </div>
         </>
     );
