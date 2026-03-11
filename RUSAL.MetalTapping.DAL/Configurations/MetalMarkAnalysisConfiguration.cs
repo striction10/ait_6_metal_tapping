@@ -17,9 +17,34 @@ namespace RUSAL.MetalTapping.DAL.Configurations
                 .HasColumnType("nvarchar(20)")
                 .IsRequired();
 
+            builder.Property(b => b.PotId)
+                .HasColumnName("PotId")
+                .HasColumnType("uniqueidentifier")
+                .IsRequired();
+
+            builder.Property(b => b.MetalMarkId)
+                .HasColumnName("MetalMarkId")
+                .HasColumnType("uniqueidentifier")
+                .IsRequired();
+
+            builder.Property(b => b.DateOfReceipt)
+                .HasColumnName("DateOfReceipt")
+                .HasColumnType("date")
+                .IsRequired();
+
             builder.HasMany(p => p.Values)
                 .WithOne(p => p.Analysis)
                 .HasForeignKey(p => p.MetalMarkAnalysisId)
+                .IsRequired();
+
+            builder.HasOne(p => p.MetalMark)
+                .WithMany(p => p.Analyses)
+                .HasForeignKey(p => p.MetalMarkId)
+                .IsRequired();
+
+            builder.HasOne(p => p.Pot)
+                .WithMany(p => p.metalMarkAnalyses)
+                .HasForeignKey (p => p.PotId)
                 .IsRequired();
         }
     }

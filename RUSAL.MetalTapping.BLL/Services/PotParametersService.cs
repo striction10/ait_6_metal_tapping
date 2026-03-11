@@ -1,8 +1,9 @@
 ﻿using RUSAL.MetalTapping.BLL.Contracts;
-using RUSAL.MetalTapping.BLL.Exceptions;
 using RUSAL.MetalTapping.BLL.Enums;
+using RUSAL.MetalTapping.BLL.Exceptions;
 using RUSAL.MetalTapping.DAL.Interfaces;
 using RUSAL.MetalTapping.DAL.Models;
+using RUSAL.MetalTapping.DAL.Repositories;
 
 namespace RUSAL.MetalTapping.BLL.Services
 {
@@ -13,19 +14,22 @@ namespace RUSAL.MetalTapping.BLL.Services
         private readonly IPotParametersRepository _potParametersRepository;
         private readonly IExternalDataRepository _externalDataRepository;
         private readonly IGenericRepository<CalculatedTask> _calculatedTaskRepository;
+        private readonly IGenericRepository<Building> _buildingRepository;
 
         public PotParametersService(
             IDeviationRepository deviationRepository,
             IDeviationValuesRepository deviationValuesRepository,
             IPotParametersRepository potParametersRepository,
             IExternalDataRepository externalDataRepository,
-            IGenericRepository<CalculatedTask> calculatedTaskRepository) 
+            IGenericRepository<CalculatedTask> calculatedTaskRepository,
+            IGenericRepository<Building> buidlingRepository) 
         {
             _deviationRepository = deviationRepository;
             _deviationValuesRepository = deviationValuesRepository;
             _potParametersRepository = potParametersRepository;
             _externalDataRepository = externalDataRepository;
             _calculatedTaskRepository = calculatedTaskRepository;
+            _buildingRepository = buidlingRepository;
         }
 
         public async Task<ProcessDeviationAndTaskResponse> ProcessDeviationAndTaskAsync(ProcessDeviationAndTaskRequest model)
@@ -65,7 +69,7 @@ namespace RUSAL.MetalTapping.BLL.Services
             }
 
             existingDeviation.IsValid = true;
-            existingDeviation.ActualMetalLevel = deviationAmount;
+            existingDeviation.ActualMetalLevel = model.actualMetalLevel;
 
             var castingRatio = matchingDeviationValue.CastingRatio;
             var externalData = await _externalDataRepository.GetExternalDataWithPotId(model.potId);
@@ -114,7 +118,12 @@ namespace RUSAL.MetalTapping.BLL.Services
 
         public async Task ViewDeviationAndTaskAsync(ViewDeviationAndTaskRequest model)
         {
-            
+            var existingBuilding = await _buildingRepository.FindByIdAsync(model.buildingId);
+
+            if (existingBuilding == null)
+            {
+                throw new NotFoundException($"Building with id {model.buildingId} was not found");
+            }
         }
     }
 }

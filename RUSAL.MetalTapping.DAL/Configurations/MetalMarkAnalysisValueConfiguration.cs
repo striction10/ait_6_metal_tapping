@@ -20,11 +20,6 @@ namespace RUSAL.MetalTapping.DAL.Configurations{
                 .HasColumnName("Value")
                 .HasColumnType("numeric(10, 0)")
                 .IsRequired();
-            
-            builder.Property(k => k.DateOfReceipt)
-                .HasColumnName("DateOfReceipt")
-                .HasColumnType("datetime")
-                .IsRequired();
 
             builder.Property(k => k.MetalMarkAnalysisId)
                 .HasColumnName("MetalMarkAnalysisID")

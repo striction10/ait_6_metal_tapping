@@ -8,6 +8,7 @@
         public Guid BuildingId { get; set; }
         public Building Building { get; set; }
         public PotState State { get; set; }
+        public ICollection<MetalMarkAnalysis> metalMarkAnalyses { get; set; } = new List<MetalMarkAnalysis>();
         public ICollection<PotReglament> Reglaments = new List<PotReglament>();
         public ICollection<CalculatedTask> calculatedTasks = new List<CalculatedTask>();
         public ICollection<ExternalData> ExternalDatas = new List<ExternalData>();

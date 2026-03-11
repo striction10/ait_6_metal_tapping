@@ -6,7 +6,6 @@
         public Guid ChemicalElemId { get; set; }
         public Guid MetalMarkAnalysisId { get; set; }
         public double Value { get; set; }
-        public DateTime DateOfReceipt { get; set; }
         public MetalMarkAnalysis Analysis { get; set; } = null!;
         public ChemicalElem ChemicalElem { get; set; } = null!;
     }
