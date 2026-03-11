@@ -1,0 +1,49 @@
+.select-group {
+    display: flex;
+    flex-direction: row;
+    font-size: 1.3rem;
+    height: 3rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.select-group.layout-row {
+    flex-direction: row;
+}
+
+.select-group.layout-column {
+    flex-direction: column;
+    height: auto;
+}
+
+.select-group select,
+.select-group input[type='date'] {
+    width: 15rem;
+    border: none;
+    text-align: center;
+    outline: none;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1em;
+    transition: all 0.15s ease-in-out;
+    padding-right: 0.5rem;
+    height: 3rem;
+    background-color: white;
+    border-radius: 0;
+}
+
+.select-group select:hover,
+.select-group input[type='date']:hover {
+    background-color: #F2F2F2;
+}
+
+.select-group select:focus,
+.select-group input[type='date']:focus {
+    outline: none;
+    background-color: #F2F2F2;
+}
+
+.select-group select option {
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+}
+
