@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RUSAL.MetalTapping.BLL.Contracts;
 using RUSAL.MetalTapping.BLL.DTOs;
 using RUSAL.MetalTapping.BLL.Interfaces;
+using RUSAL.MetalTapping.BLL.Services;
 
 namespace RUSAL.MetalTapping.API.Controllers
 {
@@ -8,11 +10,15 @@ namespace RUSAL.MetalTapping.API.Controllers
     [Route("api/reglament")]
     public class ReglamentController : ControllerBase
     {
-        private readonly IGenericService<ReglamentDto> _service;
+        private readonly IGenericService<ReglamentDto> _genericService;
+        private readonly DeviationValuesService _deviationValuesService;
 
-        public ReglamentController(IGenericService<ReglamentDto> service)
+        public ReglamentController(
+            IGenericService<ReglamentDto> genericService,
+            DeviationValuesService deviationValuesService)
         {
-            _service = service;
+            _genericService = genericService;
+            _deviationValuesService = deviationValuesService;
         }
 
         [HttpGet]
@@ -20,7 +26,19 @@ namespace RUSAL.MetalTapping.API.Controllers
         [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAll()
         {
-            var response = await _service.GetAllAsync();
+            var response = await _genericService.GetAllAsync();
+            return Ok(response);
+        }
+
+        [HttpGet("table")]
+        [ProducesResponseType(typeof(ReglamentTableResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<ReglamentTableResponse>> GetReglamentTable(
+            [FromQuery] Guid buildingId,
+            [FromQuery] Guid reglamentId)
+        {
+            var request = new ReglamentTableRequest(buildingId, reglamentId);
+            var response = await _deviationValuesService.GetReglamentTableAsync(request);
             return Ok(response);
         }
     }

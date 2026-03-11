@@ -81,6 +81,11 @@ app.UseRouting();
 
 app.UseMiddleware<ExceptionMiddleware>();
 
+app.MapGet("/swagger", context => {
+    context.Response.Redirect("/api/swagger");
+    return Task.CompletedTask;
+});
+
 app.MapControllers();
 
 app.Run();
