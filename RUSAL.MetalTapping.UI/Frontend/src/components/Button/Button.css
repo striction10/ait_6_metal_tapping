@@ -1,0 +1,26 @@
+.btn {
+    width: 120px;
+    height: 40px;
+    border-radius: 5px;
+    border: none;
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.315);
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: #fd8288;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #fa5961;
+    transform: scale(1.05);
+}
+
+.btn-primary:active {
+    background-color: #fc858b;
+}
