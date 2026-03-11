@@ -112,9 +112,9 @@ namespace RUSAL.MetalTapping.BLL.Services
             return response;
         }
 
-        public async Task ViewDeviationAndTaskAsync()
+        public async Task ViewDeviationAndTaskAsync(ViewDeviationAndTaskRequest model)
         {
-
+            
         }
     }
 }
