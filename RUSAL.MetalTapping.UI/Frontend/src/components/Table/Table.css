@@ -19,8 +19,12 @@
     color: black;
 }
 
-.main-table tr:nth-child(even) td {
+.main-table tbody tr:nth-child(odd) td {
     background-color: #F2F2F2;
+}
+
+.main-table tbody tr:nth-child(even) td {
+    background-color: white;
 }
 
 .main-table th {
