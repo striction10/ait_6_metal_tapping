@@ -27,7 +27,7 @@ namespace RUSAL.MetalTapping.API.Controllers
             return Ok(response);
         }
 
-        [HttpGet("/api/table")]
+        [HttpGet("/api/parameters/table")]
         [ProducesResponseType(typeof(ViewDeviationAndTaskResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ViewDeviationAndTaskResponse>> GetTable(

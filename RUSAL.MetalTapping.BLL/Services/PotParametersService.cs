@@ -44,136 +44,110 @@ namespace RUSAL.MetalTapping.BLL.Services
 
         public async Task<ProcessDeviationAndTaskResponse> ProcessDeviationAndTaskAsync(ProcessDeviationAndTaskRequest model)
         {
-            var existingDeviation = await _deviationRepository.GetDeviationWithPotIdAsync(model.potId);
+            var deviation = EnsureFound(
+                await _deviationRepository.GetDeviationWithPotIdAsync(model.potId),
+                $"Deviation with pot id {model.potId} was not found");
 
-            if (existingDeviation == null)
-            {
-                throw new NotFoundException($"Deviation with pot id {model.potId} was not found");
-            }
+            var deviationValues = EnsureFound(
+                await _deviationValuesRepository.GetDeviationValuesWithDeviationId(deviation.Id),
+                $"DeviationValues with deviation id {deviation.Id} was not found");
 
-            var existingDeviationValues = await _deviationValuesRepository.GetDeviationValuesWithDeviationId(existingDeviation.Id);
+            var deviationAmount = model.actualMetalLevel - deviation.TargetMetalLevel;
 
-            if (existingDeviationValues == null)
-            {
-                throw new NotFoundException($"DeviationValues with deviation id {existingDeviation.Id} was not found");
-            }
-
-            var deviationAmount = model.actualMetalLevel - existingDeviation.TargetMetalLevel;
-
-            var matchingDeviationValue = existingDeviationValues
-                .FirstOrDefault(v => v.Value == deviationAmount);
+            var matchingDeviationValue = deviationValues.FirstOrDefault(v => v.Value == deviationAmount);
 
             if (matchingDeviationValue == null)
             {
-                existingDeviation.IsValid = false;
+                deviation.IsValid = false;
+                deviation.ActualMetalLevel = deviationAmount;
 
-                existingDeviation.ActualMetalLevel = deviationAmount;
+                await _deviationRepository.UpdateAsync(deviation);
 
-                await _deviationRepository.UpdateAsync(existingDeviation);
-
-                var response1 = new ProcessDeviationAndTaskResponse(
-                        deviation: deviationAmount
-                    );
-
-                return response1;
+                return new ProcessDeviationAndTaskResponse(deviationAmount);
             }
 
-            existingDeviation.IsValid = true;
-            existingDeviation.ActualMetalLevel = model.actualMetalLevel;
+            deviation.IsValid = true;
+            deviation.ActualMetalLevel = model.actualMetalLevel;
 
-            var castingRatio = matchingDeviationValue.CastingRatio;
-            var externalData = await _externalDataRepository.GetExternalDataWithPotId(model.potId);
+            var externalData = EnsureFound(
+                await _externalDataRepository.GetExternalDataWithPotId(model.potId),
+                $"ExternalData with pot id {model.potId} was not found");
 
-            if (externalData == null)
-            {
-                throw new NotFoundException($"ExternalData with pot id {model.potId} was not found");
-            }
+            var potParameters = EnsureFound(
+                await _potParametersRepository.GetPotParametersWithGroupId(externalData.PotParametersGroupId),
+                $"PotParameters with potGroupId {model.potId} was not found");
 
-            var potParameters = await _potParametersRepository.GetPotParametersWithGroupId(externalData.PotParametersGroupId);
+            var amperage = potParameters.First(p => p.Name == "Amperage").Value;
+            var averageAmperage = potParameters.First(p => p.Name == "AverageAmperage").Value;
 
-            if (potParameters == null)
-            {
-                throw new NotFoundException($"PotParameters with potGroupId {model.potId} was not found");
-            }
+            var calculatedTask = Math.Round(
+                ((amperage * averageAmperage * CalculateConstants.K) / 100) * CalculateConstants.hoursCount,
+                2);
 
-            var amperage = potParameters.FirstOrDefault(p => p.Name == "Amperage").Value;
-            var averageAmperage = potParameters.FirstOrDefault(p => p.Name == "AverageAmperage").Value;
+            var roundCalculatedTask = (calculatedTask * matchingDeviationValue.CastingRatio) / 100;
 
-            var calculatedTask = ((amperage * averageAmperage * CalculateConstants.K) / 100) * CalculateConstants.hoursCount;
-            calculatedTask = Math.Round(calculatedTask, 2);
+            await _deviationRepository.UpdateAsync(deviation);
 
-            var roundCalculatedTask = (calculatedTask * castingRatio) / 100;
-
-            var response = new ProcessDeviationAndTaskResponse(
-                    deviation: deviationAmount,
-                    calculatedTask: calculatedTask,
-                    roundCalculatedTask: roundCalculatedTask
-                );
-
-            await _deviationRepository.UpdateAsync(existingDeviation);
-
-            var calkTask = new CalculatedTask
+            await _calculatedTaskRepository.CreateAsync(new CalculatedTask
             {
                 Id = Guid.NewGuid(),
                 PotId = model.potId,
                 CalculatedTaskForPot = calculatedTask,
                 RoundCalculatedTaskForPot = roundCalculatedTask,
                 CreatedAt = DateTime.UtcNow
-            };
+            });
 
-            await _calculatedTaskRepository.CreateAsync(calkTask);
-
-            return response;
+            return new ProcessDeviationAndTaskResponse(
+                deviationAmount,
+                calculatedTask,
+                roundCalculatedTask);
         }
 
         public async Task<ViewDeviationAndTaskResponse> ViewDeviationAndTaskAsync(ViewDeviationAndTaskRequest model)
         {
-            var existingBuilding = await _buildingRepository.FindByIdAsync(model.buildingId);
+            EnsureFound(await _buildingRepository.FindByIdAsync(model.buildingId),
+                $"Building with id {model.buildingId} was not found");
 
-            if (existingBuilding == null)
-            {
-                throw new NotFoundException($"Building with id {model.buildingId} was not found");
-            }
+            EnsureFound(await _reglamentRepository.FindByIdAsync(model.reglamentId),
+                $"Reglament with id {model.reglamentId} was not found");
 
-            var existingReglament = await _reglamentRepository.FindByIdAsync(model.reglamentId);
-
-            if (existingReglament == null)
-            {
-                throw new NotFoundException($"Reglament with id {model.reglamentId} was not found");
-            }
-
-            var existingPotDeviations = await _potReglamentRepository.GetByReglamentAndBuildingWithDeviationsAsync(model.reglamentId, model.buildingId);
+            var potReglaments =
+                await _potReglamentRepository.GetByReglamentAndBuildingWithDeviationsAsync(
+                    model.reglamentId, model.buildingId);
 
             var pots = new List<ViewDeviationAndTaskPot>();
 
-            foreach (var potReglament in existingPotDeviations)
+            foreach (var potReglament in potReglaments)
             {
                 var deviation = potReglament.Deviations.FirstOrDefault();
+                if (deviation == null)
+                    continue;
 
-                var lastCalculatedTask = await _calculatedTaskRepository.GetCalculatedTaskWithPotIdAsync(potReglament.PotId);
-
+                var lastTask = await _calculatedTaskRepository.GetCalculatedTaskWithPotIdAsync(potReglament.PotId);
                 var metalMark = await _metalMarkAnalysisRepository.GetMetalMarkAnalysisWithPotIdAsync(potReglament.PotId);
 
-                var actualDeviation = deviation?.TargetMetalLevel - deviation?.ActualMetalLevel;
+                var deviationValue = deviation.TargetMetalLevel - deviation.ActualMetalLevel;
 
-                var pot = new ViewDeviationAndTaskPot(
-                        potName: potReglament.Pot.Name,
-                        targetMetalLevel: deviation.TargetMetalLevel,
-                        actualMetalLevel: deviation.ActualMetalLevel ?? null,
-                        deviationValue: actualDeviation ?? null,
-                        calculatedTask: lastCalculatedTask?.CalculatedTaskForPot ?? null,
-                        roundCalculatedTask: lastCalculatedTask?.RoundCalculatedTaskForPot ?? null,
-                        metalMarkName: metalMark?.MetalMark.Name ?? "N/A"
-                    );
-
-                pots.Add(pot);
+                pots.Add(new ViewDeviationAndTaskPot(
+                    potName: potReglament.Pot.Name,
+                    targetMetalLevel: deviation.TargetMetalLevel,
+                    actualMetalLevel: deviation.ActualMetalLevel,
+                    deviationValue: deviationValue,
+                    calculatedTask: lastTask?.CalculatedTaskForPot,
+                    roundCalculatedTask: lastTask?.RoundCalculatedTaskForPot,
+                    metalMarkName: metalMark?.MetalMark?.Name ?? "N/A"
+                ));
             }
 
-            var reponse = new ViewDeviationAndTaskResponse(
-                    pots: pots
-                );
+            return new ViewDeviationAndTaskResponse(pots);
+        }
 
-            return reponse;
+        private static T EnsureFound<T>(T entity, string message) // TODO: Вынести в отдельный класс
+        {
+            if (entity == null)
+                throw new NotFoundException(message);
+
+            return entity;
         }
     }
 }

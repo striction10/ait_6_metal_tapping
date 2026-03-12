@@ -24,31 +24,27 @@ namespace RUSAL.MetalTapping.BLL.Services
 
         public async Task<ReglamentTableResponse> GetReglamentTableAsync(ReglamentTableRequest model)
         {
-            var existingBuilding = await _buildingRepository.FindByIdAsync(model.buildingId);
+            EnsureFound(await _buildingRepository.FindByIdAsync(model.buildingId),
+                $"Building with id {model.buildingId} was not found");
 
-            if (existingBuilding == null)
-            {
-                throw new NotFoundException($"Building with id {model.buildingId} was not found");
-            }
-            
-            var existingReglament = await _reglamentRepository.FindByIdAsync(model.reglamentId);
+            EnsureFound(await _reglamentRepository.FindByIdAsync(model.reglamentId),
+                $"Reglament with id {model.reglamentId} was not found");
 
-            if (existingReglament == null)
-            {
-                throw new NotFoundException($"Reglament with id {model.reglamentId} was not found");
-            }
-
-            var existingPotsDeviations = await _potReglamentRepository.GetByReglamentAndBuildingWithDeviationsAsync(model.reglamentId, model.buildingId);
+            var potReglaments =
+                await _potReglamentRepository.GetByReglamentAndBuildingWithDeviationsAsync(
+                    model.reglamentId, model.buildingId);
 
             var pots = new List<PotDeviationDto>();
 
-            foreach (var potReglament in existingPotsDeviations)
+            foreach (var potReglament in potReglaments)
             {
                 var deviation = potReglament.Deviations.FirstOrDefault();
+                if (deviation == null)
+                    continue;
 
                 var castingRatios = new Dictionary<int, int>();
 
-                if (deviation?.DeviationValues != null)
+                if (deviation.DeviationValues != null)
                 {
                     foreach (var devValue in deviation.DeviationValues)
                     {
@@ -56,22 +52,23 @@ namespace RUSAL.MetalTapping.BLL.Services
                     }
                 }
 
-                var potDevDto = new PotDeviationDto
-                    (
-                        id: potReglament.PotId,
-                        name: deviation?.PotReglament.Pot.Name,
-                        castingRatio: castingRatios
-                    );
-
-                pots.Add(potDevDto);
+                pots.Add(new PotDeviationDto(
+                    id: potReglament.PotId,
+                    name: potReglament.Pot.Name,
+                    castingRatio: castingRatios
+                ));
             }
 
-            var response = new ReglamentTableResponse
-                (
-                    pots: pots
-                );
+            return new ReglamentTableResponse(pots);
+        }
 
-            return response;
+        private static T EnsureFound<T>(T entity, string message) // TODO: Вынести в отдельный класс
+        {
+            if (entity == null)
+                throw new NotFoundException(message);
+
+            return entity;
         }
     }
+
 }
