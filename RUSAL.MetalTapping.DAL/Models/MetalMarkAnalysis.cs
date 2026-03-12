@@ -3,7 +3,6 @@
     public class MetalMarkAnalysis
     {
         public Guid Id { get; set; }
-        public string Name { get; set; } = string.Empty;
         public Guid PotId { get; set; }
         public Guid MetalMarkId { get; set; }
         public DateTime DateOfReceipt { get; set; }

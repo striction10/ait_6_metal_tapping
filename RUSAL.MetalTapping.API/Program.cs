@@ -38,6 +38,8 @@ builder.Services.AddScoped<IDeviationRepository, DeviationRepository>();
 builder.Services.AddScoped<IDeviationValuesRepository, DeviationValuesRepository>();
 builder.Services.AddScoped<IPotParametersRepository, PotParametersRepository>();
 builder.Services.AddScoped<IExternalDataRepository, ExternalDataRepository>();
+builder.Services.AddScoped<ICalculatedTaskRepository, CalculatedTaskRepository>();
+builder.Services.AddScoped<IMetalMarkAnalysisRepository, MetalMarkAnalysisRepository>();
 
 builder.Services.AddScoped(typeof(IGenericService<UserDto>), typeof(GenericService<User, UserDto>));
 builder.Services.AddScoped(typeof(IGenericService<BuildingDto>), typeof(GenericService<Building, BuildingDto>));

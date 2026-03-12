@@ -1,4 +1,5 @@
 ﻿using RUSAL.MetalTapping.BLL.Contracts;
+using RUSAL.MetalTapping.BLL.DTOs;
 using RUSAL.MetalTapping.BLL.Enums;
 using RUSAL.MetalTapping.BLL.Exceptions;
 using RUSAL.MetalTapping.DAL.Interfaces;
@@ -13,16 +14,22 @@ namespace RUSAL.MetalTapping.BLL.Services
         private readonly IDeviationValuesRepository _deviationValuesRepository;
         private readonly IPotParametersRepository _potParametersRepository;
         private readonly IExternalDataRepository _externalDataRepository;
-        private readonly IGenericRepository<CalculatedTask> _calculatedTaskRepository;
+        private readonly ICalculatedTaskRepository _calculatedTaskRepository;
         private readonly IGenericRepository<Building> _buildingRepository;
+        private readonly IReglamentRepository _reglamentRepository;
+        private readonly IPotReglamentRepository _potReglamentRepository;
+        private readonly IMetalMarkAnalysisRepository _metalMarkAnalysisRepository;
 
         public PotParametersService(
             IDeviationRepository deviationRepository,
             IDeviationValuesRepository deviationValuesRepository,
             IPotParametersRepository potParametersRepository,
             IExternalDataRepository externalDataRepository,
-            IGenericRepository<CalculatedTask> calculatedTaskRepository,
-            IGenericRepository<Building> buidlingRepository) 
+            ICalculatedTaskRepository calculatedTaskRepository,
+            IGenericRepository<Building> buidlingRepository,
+            IReglamentRepository reglamentRepository,
+            IPotReglamentRepository potReglamentRepository,
+            IMetalMarkAnalysisRepository metalMarkAnalysisRepository)
         {
             _deviationRepository = deviationRepository;
             _deviationValuesRepository = deviationValuesRepository;
@@ -30,6 +37,9 @@ namespace RUSAL.MetalTapping.BLL.Services
             _externalDataRepository = externalDataRepository;
             _calculatedTaskRepository = calculatedTaskRepository;
             _buildingRepository = buidlingRepository;
+            _reglamentRepository = reglamentRepository;
+            _potReglamentRepository = potReglamentRepository;
+            _metalMarkAnalysisRepository = metalMarkAnalysisRepository;
         }
 
         public async Task<ProcessDeviationAndTaskResponse> ProcessDeviationAndTaskAsync(ProcessDeviationAndTaskRequest model)
@@ -106,17 +116,17 @@ namespace RUSAL.MetalTapping.BLL.Services
             {
                 Id = Guid.NewGuid(),
                 PotId = model.potId,
-                CalculatedTaskForPot = (decimal)calculatedTask,
-                RoundCalculatedTaskForPot = (decimal)roundCalculatedTask,
+                CalculatedTaskForPot = calculatedTask,
+                RoundCalculatedTaskForPot = roundCalculatedTask,
                 CreatedAt = DateTime.UtcNow
             };
 
-            await _calculatedTaskRepository.CreateAsync( calkTask);
+            await _calculatedTaskRepository.CreateAsync(calkTask);
 
             return response;
         }
 
-        public async Task ViewDeviationAndTaskAsync(ViewDeviationAndTaskRequest model)
+        public async Task<ViewDeviationAndTaskResponse> ViewDeviationAndTaskAsync(ViewDeviationAndTaskRequest model)
         {
             var existingBuilding = await _buildingRepository.FindByIdAsync(model.buildingId);
 
@@ -124,6 +134,46 @@ namespace RUSAL.MetalTapping.BLL.Services
             {
                 throw new NotFoundException($"Building with id {model.buildingId} was not found");
             }
+
+            var existingReglament = await _reglamentRepository.FindByIdAsync(model.reglamentId);
+
+            if (existingReglament == null)
+            {
+                throw new NotFoundException($"Reglament with id {model.reglamentId} was not found");
+            }
+
+            var existingPotDeviations = await _potReglamentRepository.GetByReglamentAndBuildingWithDeviationsAsync(model.reglamentId, model.buildingId);
+
+            var pots = new List<ViewDeviationAndTaskPot>();
+
+            foreach (var potReglament in existingPotDeviations)
+            {
+                var deviation = potReglament.Deviations.FirstOrDefault();
+
+                var lastCalculatedTask = await _calculatedTaskRepository.GetCalculatedTaskWithPotIdAsync(potReglament.PotId);
+
+                var metalMark = await _metalMarkAnalysisRepository.GetMetalMarkAnalysisWithPotIdAsync(potReglament.PotId);
+
+                var actualDeviation = deviation?.TargetMetalLevel - deviation?.ActualMetalLevel;
+
+                var pot = new ViewDeviationAndTaskPot(
+                        potName: potReglament.Pot.Name,
+                        targetMetalLevel: deviation.TargetMetalLevel,
+                        actualMetalLevel: deviation.ActualMetalLevel ?? null,
+                        deviationValue: actualDeviation ?? null,
+                        calculatedTask: lastCalculatedTask?.CalculatedTaskForPot ?? null,
+                        roundCalculatedTask: lastCalculatedTask?.RoundCalculatedTaskForPot ?? null,
+                        metalMarkName: metalMark?.MetalMark.Name ?? "N/A"
+                    );
+
+                pots.Add(pot);
+            }
+
+            var reponse = new ViewDeviationAndTaskResponse(
+                    pots: pots
+                );
+
+            return reponse;
         }
     }
 }

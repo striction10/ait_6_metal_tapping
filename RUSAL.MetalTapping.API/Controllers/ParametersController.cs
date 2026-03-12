@@ -26,5 +26,17 @@ namespace RUSAL.MetalTapping.API.Controllers
             var response = await _service.ProcessDeviationAndTaskAsync(request);
             return Ok(response);
         }
+
+        [HttpGet("/api/table")]
+        [ProducesResponseType(typeof(ViewDeviationAndTaskResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<ViewDeviationAndTaskResponse>> GetTable(
+            [FromQuery] Guid reglamentId,
+            [FromQuery] Guid buidlingId)
+        {
+            var request = new ViewDeviationAndTaskRequest(reglamentId, buidlingId);
+            var response = await _service.ViewDeviationAndTaskAsync(request);
+            return Ok(response);
+        }
     }
 }

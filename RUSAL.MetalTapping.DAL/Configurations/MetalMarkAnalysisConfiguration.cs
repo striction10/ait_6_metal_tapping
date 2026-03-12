@@ -12,11 +12,6 @@ namespace RUSAL.MetalTapping.DAL.Configurations
             
             builder.HasKey(k => k.Id);
 
-            builder.Property(e => e.Name)
-                .HasColumnName("Name")
-                .HasColumnType("nvarchar(20)")
-                .IsRequired();
-
             builder.Property(b => b.PotId)
                 .HasColumnName("PotId")
                 .HasColumnType("uniqueidentifier")
