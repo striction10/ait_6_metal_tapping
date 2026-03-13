@@ -27,7 +27,7 @@ namespace RUSAL.MetalTapping.API.Controllers
             return Ok(response);
         }
 
-        [HttpGet("/api/parameters/table")]
+        [HttpGet("table")]
         [ProducesResponseType(typeof(ViewDeviationAndTaskResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ViewDeviationAndTaskResponse>> GetTable(
@@ -36,6 +36,19 @@ namespace RUSAL.MetalTapping.API.Controllers
         {
             var request = new ViewDeviationAndTaskRequest(reglamentId, buidlingId);
             var response = await _service.ViewDeviationAndTaskAsync(request);
+            return Ok(response);
+        }
+
+        [HttpPost("calculated")]
+        [ProducesResponseType(typeof(ProcessCalculatedTaskResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<ProcessCalculatedTaskResponse>> PutCalculatedTask(
+            [FromQuery] Guid potId,
+            [FromQuery] double calculatedTask,
+            [FromQuery] double? roundCalculatedTask)
+        {
+            var request = new ProcessCalculatedTaskRequest(potId, calculatedTask, roundCalculatedTask);
+            var response = await _service.ProcessCalculatedTaskAsync(request);
             return Ok(response);
         }
     }

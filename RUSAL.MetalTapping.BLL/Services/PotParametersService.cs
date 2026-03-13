@@ -78,7 +78,7 @@ namespace RUSAL.MetalTapping.BLL.Services
                 $"PotParameters with potGroupId {model.potId} was not found");
 
             var amperage = potParameters.First(p => p.Name == "Amperage").Value;
-            var averageAmperage = potParameters.First(p => p.Name == "AverageAmperage").Value;
+            var averageAmperage = potParameters.First(p => p.Name == "AverageAmperage").Value; //TODO: Вынести в отдельный Enum
 
             var calculatedTask = Math.Round(
                 ((amperage * averageAmperage * CalculateConstants.K) / 100) * CalculateConstants.hoursCount,
@@ -101,6 +101,39 @@ namespace RUSAL.MetalTapping.BLL.Services
                 deviationAmount,
                 calculatedTask,
                 roundCalculatedTask);
+        }
+
+        public async Task<ProcessCalculatedTaskResponse> ProcessCalculatedTaskAsync(ProcessCalculatedTaskRequest model)
+        {
+            var calculatedTasks = await _calculatedTaskRepository.GetCalculatedTaskWithPotIdAsync(model.potId);
+
+            if (calculatedTasks == null) 
+            {
+                await _calculatedTaskRepository.CreateAsync(new CalculatedTask
+                {
+                    Id = Guid.NewGuid(),
+                    PotId = model.potId,
+                    CalculatedTaskForPot = model.calculatedTask,
+                    RoundCalculatedTaskForPot = model.roundedCalculatedTask ?? 0,
+                    CreatedAt = DateTime.UtcNow
+                });
+
+                return new ProcessCalculatedTaskResponse(
+                    calculatedTask: model.calculatedTask,
+                    roundCalculatedTask: model.roundedCalculatedTask ?? 0
+                );
+            }
+
+            calculatedTasks.CalculatedTaskForPot = model.calculatedTask;
+            calculatedTasks.RoundCalculatedTaskForPot = model.roundedCalculatedTask ?? 0;
+            calculatedTasks.CreatedAt = DateTime.UtcNow;
+
+            await _calculatedTaskRepository.UpdateAsync(calculatedTasks);
+
+            return new ProcessCalculatedTaskResponse(
+                calculatedTask: model.calculatedTask,
+                roundCalculatedTask: model.roundedCalculatedTask ?? 0
+            );
         }
 
         public async Task<ViewDeviationAndTaskResponse> ViewDeviationAndTaskAsync(ViewDeviationAndTaskRequest model)
@@ -129,6 +162,7 @@ namespace RUSAL.MetalTapping.BLL.Services
                 var deviationValue = deviation.TargetMetalLevel - deviation.ActualMetalLevel;
 
                 pots.Add(new ViewDeviationAndTaskPot(
+                    potId: potReglament.PotId,
                     potName: potReglament.Pot.Name,
                     targetMetalLevel: deviation.TargetMetalLevel,
                     actualMetalLevel: deviation.ActualMetalLevel,

@@ -7,6 +7,6 @@
         public double? CalculatedTaskForPot { get; set; }
         public double? RoundCalculatedTaskForPot { get; set; }
         public DateTime CreatedAt { get; set; }
-        public Pot Pot { get; set; } = new Pot();
+        public Pot Pot { get; set; }
     }
 }

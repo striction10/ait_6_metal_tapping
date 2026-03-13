@@ -1,6 +1,7 @@
 ﻿namespace RUSAL.MetalTapping.BLL.Contracts
 {
     public record ViewDeviationAndTaskPot(
+        Guid potId,
         string potName,
         double targetMetalLevel,
         double? actualMetalLevel,
