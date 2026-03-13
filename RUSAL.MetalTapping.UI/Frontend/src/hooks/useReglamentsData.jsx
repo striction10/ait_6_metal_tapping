@@ -5,32 +5,50 @@ export function useReglamentsData() {
     const [reglaments, setReglaments] = useState([])
     const [buildings, setBuildings] = useState([])
 
+    const extractNumber = (str) => {
+        const match = str?.match(/\d+/)
+        return match ? parseInt(match[0]) : 0
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const [reglamentsRes, buildingsRes] = await Promise.all([
                     api.get('/api/reglament'),
                     api.get('/api/building')
-                ]);
+                ])
 
-                const reglamentsOptions = reglamentsRes.data.map(reg => ({
-                    value: reg.id,
-                    label: reg.name || `Регламент ${new Date(reg.date).toLocaleDateString()}`
-                }));
+                const sortedBuildings = buildingsRes.data
+                    .map(building => ({
+                        value: building.id,
+                        label: building.name || `Корпус ${building.number || ''}`
+                    }))
+                    .sort((a, b) => {
+                        const numA = extractNumber(a.label);
+                        const numB = extractNumber(b.label);
+                        return numA - numB;
+                    })
 
-                const buildingsOptions = buildingsRes.data.map(building => ({
-                    value: building.id,
-                    label: building.name || `Корпус ${building.number || ''}`
-                }));
+                const sortedReglaments = reglamentsRes.data
+                    .map(reg => ({
+                        value: reg.id,
+                        label: reg.name || `Регламент ${new Date(reg.dateStart).toLocaleDateString()}`
+                    }))
+                    .sort((a, b) => {
+                        const numA = extractNumber(a.label)
+                        const numB = extractNumber(b.label)
+                        return numA - numB
+                    })
 
-                setReglaments(reglamentsOptions);
-                setBuildings(buildingsOptions);
+                setReglaments(sortedReglaments)
+                setBuildings(sortedBuildings)
+                
             } catch (err) {
-                console.error('Ошибка загрузки данных:', err);
+                console.error('Ошибка загрузки данных:', err)
             }
         };
 
-        fetchData();
+        fetchData()
     }, [])
 
     return { reglaments, buildings }

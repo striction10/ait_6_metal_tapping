@@ -11,17 +11,24 @@ function Reglaments() {
     const [selectedCorpus, setSelectedCorpus] = useState('')
     const [selectedDate, setSelectedDate] = useState(
         new Date().toISOString().split('T')[0]
-    );
+    )
     
     const [tableData, setTableData] = useState([])
+    const [sortedData, setSortedData] = useState([])
     
     const { reglaments, buildings } = useReglamentsData()
+
+    const extractNumber = (name) => {
+        const match = name?.match(/\d+/)
+        return match ? parseInt(match[0]) : 0
+    }
 
     useEffect(() => {
         const fetchTableData = async () => {
             if (!selectedReglament || !selectedCorpus || 
                 selectedReglament === '0' || selectedCorpus === '0') {
                 setTableData([])
+                setSortedData([])
                 return
             }
 
@@ -33,17 +40,25 @@ function Reglaments() {
                     }
                 })
                 
-                console.log('Данные с бэка:', response.data)
-                
                 if (response.data && response.data.pots && Array.isArray(response.data.pots)) {
+                    const sorted = [...response.data.pots].sort((a, b) => {
+                        const numA = extractNumber(a.name)
+                        const numB = extractNumber(b.name)
+                        return numA - numB
+                    })
+                    
                     setTableData(response.data.pots)
+                    setSortedData(sorted)
+                    console.log('Отсортированные данные:', sorted.map(item => item.name))
                 } else {
                     setTableData([])
+                    setSortedData([])
                 }
                 
             } catch (err) {
                 console.error('Ошибка загрузки данных:', err)
                 setTableData([])
+                setSortedData([])
             }
         }
 
@@ -51,9 +66,9 @@ function Reglaments() {
     }, [selectedReglament, selectedCorpus, selectedDate])
 
     const getHeaders = () => {
-        if (tableData.length === 0) return []
+        if (sortedData.length === 0) return ['№ Электролиза']
         
-        const firstItem = tableData[0]
+        const firstItem = sortedData[0]
         const ratioKeys = Object.keys(firstItem.castingRatio || {})
             .sort((a, b) => Number(a) - Number(b))
         
@@ -61,11 +76,11 @@ function Reglaments() {
     }
 
     const getColumns = () => {
-        if (tableData.length === 0) return []
+        if (sortedData.length === 0) return [{ field: 'name' }];
         
-        const firstItem = tableData[0];
+        const firstItem = sortedData[0];
         const ratioKeys = Object.keys(firstItem.castingRatio || {})
-            .sort((a, b) => Number(a) - Number(b))
+            .sort((a, b) => Number(a) - Number(b));
         
         return [
             { 
@@ -83,11 +98,11 @@ function Reglaments() {
     const columns = getColumns()
 
     const handleSave = () => {
-        console.log('Сохранение данных...', tableData)
+        console.log('Сохранение данных...', sortedData);
     }
 
     const handleSubmit = () => {
-        console.log('Отправка данных...', tableData)
+        console.log('Отправка данных...', sortedData);
     }
 
     return (
@@ -129,7 +144,7 @@ function Reglaments() {
                 <Table 
                     title="Таблица выливки, %"
                     headers={headers}
-                    data={tableData}
+                    data={sortedData}
                     columns={columns}
                     colspan={headers.length}
                 />
