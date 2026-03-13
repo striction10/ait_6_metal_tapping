@@ -49,7 +49,6 @@ function Reglaments() {
                     
                     setTableData(response.data.pots)
                     setSortedData(sorted)
-                    console.log('Отсортированные данные:', sorted.map(item => item.name))
                 } else {
                     setTableData([])
                     setSortedData([])
@@ -66,7 +65,7 @@ function Reglaments() {
     }, [selectedReglament, selectedCorpus, selectedDate])
 
     const getHeaders = () => {
-        if (sortedData.length === 0) return ['№ Электролиза']
+        if (sortedData.length === 0) return []
         
         const firstItem = sortedData[0]
         const ratioKeys = Object.keys(firstItem.castingRatio || {})
@@ -76,11 +75,11 @@ function Reglaments() {
     }
 
     const getColumns = () => {
-        if (sortedData.length === 0) return [{ field: 'name' }];
+        if (sortedData.length === 0) return []
         
-        const firstItem = sortedData[0];
+        const firstItem = sortedData[0]
         const ratioKeys = Object.keys(firstItem.castingRatio || {})
-            .sort((a, b) => Number(a) - Number(b));
+            .sort((a, b) => Number(a) - Number(b))
         
         return [
             { 
@@ -98,11 +97,11 @@ function Reglaments() {
     const columns = getColumns()
 
     const handleSave = () => {
-        console.log('Сохранение данных...', sortedData);
+        console.log('Сохранение данных...', sortedData)
     }
 
     const handleSubmit = () => {
-        console.log('Отправка данных...', sortedData);
+        console.log('Отправка данных...', sortedData)
     }
 
     return (

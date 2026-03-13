@@ -1,6 +1,9 @@
 import './UserPopup.css'
+import { useNavigate } from 'react-router-dom'
 
 function UserPopup({ isOpen, onClose, userData }) {
+    const navigate = useNavigate()
+
     if (!isOpen) {
         return null
     }
@@ -12,8 +15,10 @@ function UserPopup({ isOpen, onClose, userData }) {
     };
 
     const handleLogout = () => {
-        console.log('Выход из системы')
+        //TODO: do logout
+        
         onClose()
+        navigate('/auth')
     };
 
     return (
