@@ -10,6 +10,20 @@ function Table({
     renderCell,
     getCellClassName
 }) {
+    const getNestedValue = (obj, path) => {
+        if (!obj || !path) return '-'
+        
+        const parts = path.split('.')
+        let value = obj
+        
+        for (const part of parts) {
+            if (value === null || value === undefined) return '-'
+            value = value[part]
+        }
+        
+        return value !== undefined && value !== null ? value : '-'
+    }
+
     return (
         <div className={`main-table ${className}`}>
             <table className="data-table">
@@ -28,12 +42,23 @@ function Table({
                         <tr key={rowIndex}>
                             {columns.map((col, colIndex) => {
                                 const cellClass = getCellClassName ? getCellClassName(row, col, rowIndex, colIndex) : ''
+                                let cellContent
+                                
+                                if (renderCell) {
+                                    cellContent = renderCell(row, col, rowIndex, colIndex)
+                                } else if (typeof col === 'string') {
+                                    cellContent = getNestedValue(row, col)
+                                } else if (col.field) {
+                                    cellContent = getNestedValue(row, col.field)
+                                } else if (col.render) {
+                                    cellContent = col.render(row)
+                                } else {
+                                    cellContent = '-'
+                                }
+                                
                                 return (
                                     <td key={colIndex} className={cellClass}>
-                                        {renderCell 
-                                            ? renderCell(row, col, rowIndex, colIndex)
-                                            : row[col.field]
-                                        }
+                                        {cellContent}
                                     </td>
                                 )
                             })}
