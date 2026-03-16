@@ -4,9 +4,9 @@ using RUSAL.MetalTapping.DAL.Models;
 
 namespace RUSAL.MetalTapping.DAL.Configurations
 {
-    public class PotConfiguration : IEntityTypeConfiguration<Pot>
+    public class PotConfiguration : IEntityTypeConfiguration<PotModel>
     {
-        public void Configure(EntityTypeBuilder<Pot> builder)
+        public void Configure(EntityTypeBuilder<PotModel> builder)
         {
             builder.ToTable("Pot");
 

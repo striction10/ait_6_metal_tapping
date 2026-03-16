@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using RUSAL.MetalTapping.BLL.DTOs;
-using RUSAL.MetalTapping.BLL.Interfaces;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using RUSAL.MetalTapping.BLL.Application.DTOs;
+using RUSAL.MetalTapping.BLL.Application.UseCases.Buildings;
 
 namespace RUSAL.MetalTapping.API.Controllers
 {
@@ -8,19 +9,20 @@ namespace RUSAL.MetalTapping.API.Controllers
     [Route("api/building")]
     public class BuildingController : ControllerBase
     {
-        private readonly IGenericService<BuildingDto> _service;
+        private readonly GetAllBuildingsUseCase _useCase;
 
-        public BuildingController(IGenericService<BuildingDto> service)
+        public BuildingController(GetAllBuildingsUseCase useCase)
         {
-            _service = service;
+            _useCase = useCase;
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(BuildingDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
+        [Authorize]
+        [ProducesResponseType(typeof(IEnumerable<BuildingDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetAll()
         {
-            var response = await _service.GetAllAsync();
+            var response = await _useCase.ExecuteAsync();
             return Ok(response);
         }
     }

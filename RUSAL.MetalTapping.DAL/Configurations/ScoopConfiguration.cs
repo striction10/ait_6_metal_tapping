@@ -4,9 +4,9 @@ using RUSAL.MetalTapping.DAL.Models;
 
 namespace RUSAL.MetalTapping.DAL.Configurations;
 
-public class ScoopConfiguration : IEntityTypeConfiguration<Scoop>
+public class ScoopConfiguration : IEntityTypeConfiguration<ScoopModel>
 {
-    public void Configure(EntityTypeBuilder<Scoop> builder)
+    public void Configure(EntityTypeBuilder<ScoopModel> builder)
     {
         builder.ToTable("Scoop");
         

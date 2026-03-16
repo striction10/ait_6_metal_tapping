@@ -4,9 +4,9 @@ using RUSAL.MetalTapping.DAL.Models;
 
 namespace RUSAL.MetalTapping.DAL.Configurations
 {
-    public class ExternalDataConfiguration : IEntityTypeConfiguration<ExternalData>
+    public class ExternalDataConfiguration : IEntityTypeConfiguration<ExternalDataModel>
     {
-        public void Configure(EntityTypeBuilder<ExternalData> builder)
+        public void Configure(EntityTypeBuilder<ExternalDataModel> builder)
         {
             builder.ToTable("ExternalData");
 

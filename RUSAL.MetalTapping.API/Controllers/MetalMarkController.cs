@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using RUSAL.MetalTapping.BLL.Contracts;
-using RUSAL.MetalTapping.BLL.DTOs;
-using RUSAL.MetalTapping.BLL.Interfaces;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using RUSAL.MetalTapping.BLL.Application.UseCases;
+using RUSAL.MetalTapping.BLL.Domain.Entities;
+using RUSAL.MetalTapping.BLL.Domain.Interfaces;
 
 namespace RUSAL.MetalTapping.API.Controllers
 {
@@ -9,19 +10,20 @@ namespace RUSAL.MetalTapping.API.Controllers
     [Route("api/metalMark")]
     public class MetalMarkController : ControllerBase
     {
-        private readonly IGenericService<MetalMarkDto> _service;
+        private readonly GetAllMetalMarksUseCase _service;
 
-        public MetalMarkController(IGenericService<MetalMarkDto> service)
+        public MetalMarkController(GetAllMetalMarksUseCase service)
         {
             _service = service;
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(MetalMarkDto), StatusCodes.Status200OK)]
+        [Authorize]
+        [ProducesResponseType(typeof(MetalMark), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAll()
         {
-            var response = await _service.GetAllAsync();
+            var response = await _service.ExecuteAsync();
             return Ok(response);
         }
     }

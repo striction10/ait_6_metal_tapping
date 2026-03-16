@@ -4,9 +4,9 @@ using RUSAL.MetalTapping.DAL.Models;
 
 namespace RUSAL.MetalTapping.DAL.Configurations;
 
-public class TapTaskPotConfiguration : IEntityTypeConfiguration<TapTaskPot>
+public class TapTaskPotConfiguration : IEntityTypeConfiguration<TapTaskPotModel>
 {
-    public void Configure(EntityTypeBuilder<TapTaskPot> builder)
+    public void Configure(EntityTypeBuilder<TapTaskPotModel> builder)
     {
         builder.ToTable("TapTaskPot");
 

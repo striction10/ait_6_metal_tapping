@@ -4,9 +4,9 @@ using RUSAL.MetalTapping.DAL.Models;
 
 namespace RUSAL.MetalTapping.DAL.Configurations
 {
-    public class MetalMarkAnalysisConfiguration : IEntityTypeConfiguration<MetalMarkAnalysis>
+    public class MetalMarkAnalysisConfiguration : IEntityTypeConfiguration<MetalMarkAnalysisModel>
     {
-        public void Configure(EntityTypeBuilder<MetalMarkAnalysis> builder)
+        public void Configure(EntityTypeBuilder<MetalMarkAnalysisModel> builder)
         {
             builder.ToTable("MetalMarkAnalysis");
             

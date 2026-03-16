@@ -4,9 +4,9 @@ using RUSAL.MetalTapping.DAL.Models;
 
 namespace RUSAL.MetalTapping.DAL.Configurations;
 
-public class ShiftConfiguration : IEntityTypeConfiguration<Shift>
+public class ShiftConfiguration : IEntityTypeConfiguration<ShiftModel>
 {
-    public void Configure(EntityTypeBuilder<Shift> builder)
+    public void Configure(EntityTypeBuilder<ShiftModel> builder)
     {
         builder.ToTable("Shift");
         

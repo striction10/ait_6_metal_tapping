@@ -1,4 +1,4 @@
-﻿using RUSAL.MetalTapping.DAL.Interfaces;
+﻿using RUSAL.MetalTapping.BLL.Domain.Interfaces;
 
 namespace RUSAL.MetalTapping.DAL.Auth
 {

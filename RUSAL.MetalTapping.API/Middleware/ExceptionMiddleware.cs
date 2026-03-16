@@ -1,4 +1,4 @@
-﻿using RUSAL.MetalTapping.BLL.Exceptions;
+﻿using RUSAL.MetalTapping.BLL.Domain.Exceptions;
 
 namespace RUSAL.MetalTapping.API.Middleware
 {

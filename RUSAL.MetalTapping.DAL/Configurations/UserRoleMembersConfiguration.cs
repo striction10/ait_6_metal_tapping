@@ -4,9 +4,9 @@ using RUSAL.MetalTapping.DAL.Models;
 
 namespace RUSAL.MetalTapping.DAL.Configurations;
 
-public class UserRoleMembersConfiguration : IEntityTypeConfiguration<UserRoleMembers>
+public class UserRoleMembersConfiguration : IEntityTypeConfiguration<UserRoleMembersModel>
 {
-    public void Configure(EntityTypeBuilder<UserRoleMembers> builder)
+    public void Configure(EntityTypeBuilder<UserRoleMembersModel> builder)
     {
         builder.ToTable("UserRoleMembers");
 

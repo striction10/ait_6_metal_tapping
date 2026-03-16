@@ -4,9 +4,9 @@ using RUSAL.MetalTapping.DAL.Models;
 
 namespace RUSAL.MetalTapping.DAL.Configurations;
 
-public class ReglamentConfiguration : IEntityTypeConfiguration<Reglament>
+public class ReglamentConfiguration : IEntityTypeConfiguration<ReglamentModel>
 {
-    public void Configure(EntityTypeBuilder<Reglament> builder)
+    public void Configure(EntityTypeBuilder<ReglamentModel> builder)
     {
         builder.ToTable("Reglament");
 

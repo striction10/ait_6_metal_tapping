@@ -1,71 +1,89 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using RUSAL.MetalTapping.API.Middleware;
-using RUSAL.MetalTapping.BLL.DTOs;
-using RUSAL.MetalTapping.BLL.Interfaces;
-using RUSAL.MetalTapping.BLL.Services;
+using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+using RUSAL.MetalTapping.DAL;
 using RUSAL.MetalTapping.DAL.Auth;
-using RUSAL.MetalTapping.DAL.Contexts;
-using RUSAL.MetalTapping.DAL.Interfaces;
-using RUSAL.MetalTapping.DAL.Models;
-using RUSAL.MetalTapping.DAL.Repositories;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    c.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "RUSAL.MetalTapping",
         Version = "v1",
         Description = "API for RUSAL.MetalTapping"
     });
+
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "¬ведите токен в формате: Bearer {your token}"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
 });
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection"))
-);
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new InvalidOperationException("Connection string 'DefaultConnection' is not configured.");
+}
 
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-builder.Services.AddScoped<IReglamentRepository, ReglamentRepository>();
-builder.Services.AddScoped<IPotReglamentRepository, PotReglamentRepository>();
-builder.Services.AddScoped<IDeviationRepository, DeviationRepository>();
-builder.Services.AddScoped<IDeviationValuesRepository, DeviationValuesRepository>();
-builder.Services.AddScoped<IPotParametersRepository, PotParametersRepository>();
-builder.Services.AddScoped<IExternalDataRepository, ExternalDataRepository>();
-builder.Services.AddScoped<ICalculatedTaskRepository, CalculatedTaskRepository>();
-builder.Services.AddScoped<IMetalMarkAnalysisRepository, MetalMarkAnalysisRepository>();
+builder.Services.AddDAL(connectionString);
 
-builder.Services.AddScoped(typeof(IGenericService<UserDto>), typeof(GenericService<User, UserDto>));
-builder.Services.AddScoped(typeof(IGenericService<BuildingDto>), typeof(GenericService<Building, BuildingDto>));
-builder.Services.AddScoped(typeof(IGenericService<ReglamentDto>), typeof(GenericService<Reglament, ReglamentDto>));
-builder.Services.AddScoped(typeof(IGenericService<MetalMarkDto>), typeof(GenericService<MetalMark, MetalMarkDto>));
-builder.Services.AddScoped(typeof(IGenericService<CalculatedTaskDto>), typeof(GenericService<CalculatedTask, CalculatedTaskDto>));
-
-builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<DeviationValuesService>();
-builder.Services.AddScoped<PotParametersService>();
+builder.Services.AddBLL();
 
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.Configure<JwtOptions>(
     builder.Configuration.GetSection("JwtOptions"));
 
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+
+            ValidIssuer = builder.Configuration["JwtOptions:Issuer"],
+            ValidAudience = builder.Configuration["JwtOptions:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["JwtOptions:SecretKey"]))
+        };
+    });
 
 var app = builder.Build();
 
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Error");
-    app.UseHsts();
-}
-else
+if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c =>
@@ -73,13 +91,20 @@ else
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "MetalTapping API V1");
         c.RoutePrefix = "api/swagger";
     });
-
+}
+else
+{
+    app.UseExceptionHandler("/Error");
+    app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseMiddleware<ExceptionMiddleware>();
 

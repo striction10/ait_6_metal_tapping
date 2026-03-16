@@ -4,9 +4,9 @@ using RUSAL.MetalTapping.DAL.Models;
 
 namespace RUSAL.MetalTapping.DAL.Configurations
 {
-    public class MetalMarkConfiguration : IEntityTypeConfiguration<MetalMark>
+    public class MetalMarkConfiguration : IEntityTypeConfiguration<MetalMarkModel>
     {
-        public void Configure(EntityTypeBuilder<MetalMark> builder)
+        public void Configure(EntityTypeBuilder<MetalMarkModel> builder)
         {
             builder.ToTable("MetalMark");
 

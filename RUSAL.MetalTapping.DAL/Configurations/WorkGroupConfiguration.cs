@@ -4,9 +4,9 @@ using RUSAL.MetalTapping.DAL.Models;
 
 namespace RUSAL.MetalTapping.DAL.Configurations;
 
-public class WorkGroupConfiguration : IEntityTypeConfiguration<WorkGroup>
+public class WorkGroupConfiguration : IEntityTypeConfiguration<WorkGroupModel>
 {
-    public void Configure(EntityTypeBuilder<WorkGroup> builder)
+    public void Configure(EntityTypeBuilder<WorkGroupModel> builder)
     {
         builder.ToTable("WorkGroup");
         

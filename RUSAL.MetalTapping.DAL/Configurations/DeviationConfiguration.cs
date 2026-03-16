@@ -4,9 +4,9 @@ using RUSAL.MetalTapping.DAL.Models;
 
 namespace RUSAL.MetalTapping.DAL.Configurations
 {
-    public class DeviationConfiguration : IEntityTypeConfiguration<Deviation>
+    public class DeviationConfiguration : IEntityTypeConfiguration<DeviationModel>
     {
-        public void Configure(EntityTypeBuilder<Deviation> builder)
+        public void Configure(EntityTypeBuilder<DeviationModel> builder)
         {
             builder.ToTable("Deviation");
 

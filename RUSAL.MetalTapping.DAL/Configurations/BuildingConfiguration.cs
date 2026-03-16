@@ -4,9 +4,9 @@ using RUSAL.MetalTapping.DAL.Models;
 
 namespace RUSAL.MetalTapping.DAL.Configurations
 {
-    public class BuildingConfiguration : IEntityTypeConfiguration<Building>
+    public class BuildingConfiguration : IEntityTypeConfiguration<BuildingModel>
     {
-        public void Configure(EntityTypeBuilder<Building> builder)
+        public void Configure(EntityTypeBuilder<BuildingModel> builder)
         {
             builder.ToTable("Building");
 

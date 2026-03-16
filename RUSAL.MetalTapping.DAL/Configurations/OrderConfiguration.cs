@@ -4,9 +4,9 @@ using RUSAL.MetalTapping.DAL.Models;
 
 namespace RUSAL.MetalTapping.DAL.Configurations
 {
-    public class OrderConfgiration : IEntityTypeConfiguration<Order>
+    public class OrderConfgiration : IEntityTypeConfiguration<OrderModel>
     {
-        public void Configure(EntityTypeBuilder<Order> builder)
+        public void Configure(EntityTypeBuilder<OrderModel> builder)
         {
             builder.ToTable("Order");
 

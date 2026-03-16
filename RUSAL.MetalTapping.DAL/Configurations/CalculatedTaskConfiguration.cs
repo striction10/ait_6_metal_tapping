@@ -4,9 +4,9 @@ using RUSAL.MetalTapping.DAL.Models;
 
 namespace RUSAL.MetalTapping.DAL.Configurations
 {
-    public class CalculatedTaskConfiguration : IEntityTypeConfiguration<CalculatedTask>
+    public class CalculatedTaskConfiguration : IEntityTypeConfiguration<CalculatedTaskModel>
     {
-        public void Configure(EntityTypeBuilder<CalculatedTask> builder)
+        public void Configure(EntityTypeBuilder<CalculatedTaskModel> builder)
         {
             builder.HasKey(x => x.Id);
 

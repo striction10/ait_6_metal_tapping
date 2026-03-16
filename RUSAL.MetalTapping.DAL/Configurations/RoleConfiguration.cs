@@ -4,9 +4,9 @@ using RUSAL.MetalTapping.DAL.Models;
 
 namespace RUSAL.MetalTapping.DAL.Configurations;
 
-public class RoleConfiguration : IEntityTypeConfiguration<Role>
+public class RoleConfiguration : IEntityTypeConfiguration<RoleModel>
 {
-    public void Configure(EntityTypeBuilder<Role> builder)
+    public void Configure(EntityTypeBuilder<RoleModel> builder)
     {
         builder.ToTable("Roles");
         

@@ -1,14 +1,12 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using RUSAL.MetalTapping.DAL.Interfaces;
-using RUSAL.MetalTapping.DAL.Models;
-using System;
-using System.Collections.Generic;
+using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+using RUSAL.MetalTapping.BLL.Domain.Entities;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Formatters.Internal;
+using System.Net;
 
 namespace RUSAL.MetalTapping.DAL.Auth
 {
@@ -21,9 +19,18 @@ namespace RUSAL.MetalTapping.DAL.Auth
             _jwtOptions = jwtOptions.Value;
         }
 
-        public string GenerateJwtToken(User user) 
+        public string GenerateJwtToken(User user, IEnumerable<string> roles) 
         {
-            Claim[] claims = [new("userId", user.Id.ToString())];
+            var claims = new List<Claim>
+            {
+                new Claim("userId", user.Id.ToString()),
+                new Claim(ClaimTypes.Email, user.Email)
+            };
+
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var signingCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SecretKey)),
@@ -31,6 +38,8 @@ namespace RUSAL.MetalTapping.DAL.Auth
 
             var token = new JwtSecurityToken(
                 claims: claims,
+                audience: _jwtOptions.Audience,
+                issuer: _jwtOptions.Issuer,
                 signingCredentials: signingCredentials,
                 expires: DateTime.UtcNow.AddHours(_jwtOptions.ExpiresHours));
 

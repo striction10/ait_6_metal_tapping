@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RUSAL.MetalTapping.BLL.Contracts;
-using RUSAL.MetalTapping.BLL.Services;
+using RUSAL.MetalTapping.BLL.Application.Contracts;
+using RUSAL.MetalTapping.BLL.Application.UseCases;
 
 namespace RUSAL.MetalTapping.API.Controllers
 {
@@ -8,25 +8,29 @@ namespace RUSAL.MetalTapping.API.Controllers
     [Route("api/auth")]
     public class AuthController : ControllerBase
     {
-        private readonly UserService _userService;
+        private readonly RegisterUserUseCase _registerUserUseCase;
+        private readonly LoginUserUseCase _loginUserUseCase;
 
-        public AuthController(UserService userService)
+        public AuthController(
+            RegisterUserUseCase registerUserUseCase,
+            LoginUserUseCase loginUserUseCase)
         {
-            _userService = userService;
+            _registerUserUseCase = registerUserUseCase;
+            _loginUserUseCase = loginUserUseCase;
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterUserRequest model)
         {
-            await _userService.Register(model);
+            await _registerUserUseCase.ExecuteAsync(model);
             return Ok();
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginUserRequest model)
         {
-            await _userService.Login(model);
-            return Ok();
+            var token = await _loginUserUseCase.ExecuteAsync(model);
+            return Ok(token);
         }
     }
 }

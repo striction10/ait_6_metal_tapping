@@ -4,9 +4,9 @@ using RUSAL.MetalTapping.DAL.Models;
 
 namespace RUSAL.MetalTapping.DAL.Configurations
 {
-    public class ChemicalElemConfiguration : IEntityTypeConfiguration<ChemicalElem>
+    public class ChemicalElemConfiguration : IEntityTypeConfiguration<ChemicalElemModel>
     {
-        public void Configure(EntityTypeBuilder<ChemicalElem> builder)
+        public void Configure(EntityTypeBuilder<ChemicalElemModel> builder)
         {
         builder.ToTable("ChemicalElem");
 
