@@ -5,6 +5,7 @@ import Table from '../../components/Table/Table'
 import ActionButtons from '../../components/ActionButton/ActionButton'
 import { useReglamentsData } from '../../hooks/useReglamentsData'
 import { useParametersData } from '../../hooks/useParametresData'
+import { exportTableToPDF } from '../../utils/exportToPDFParametres'
 import api from '../../services/api'
 
 function Parametres() {
@@ -69,6 +70,7 @@ function Parametres() {
 
     const handleSave = () => {
         console.log('Сохранение данных...', sortedData) //TODO: save
+        exportTableToPDF(sortedData, selectedCorpus)
         alert('Данные сохранены')
     }
 
