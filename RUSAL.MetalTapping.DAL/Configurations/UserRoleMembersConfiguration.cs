@@ -10,7 +10,12 @@ public class UserRoleMembersConfiguration : IEntityTypeConfiguration<UserRoleMem
     {
         builder.ToTable("UserRoleMembers");
 
-        builder.HasKey(urm => new { urm.UserId, urm.RoleId });
+        builder.HasKey(urm => urm.Id);
+
+        builder.Property(urm => urm.Id)
+            .HasColumnName("Id")
+            .HasColumnType("uniqueidentifier")
+            .IsRequired();
 
         builder.Property(urm => urm.UserId)
             .HasColumnName("UserId")

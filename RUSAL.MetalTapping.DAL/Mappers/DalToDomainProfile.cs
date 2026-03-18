@@ -12,9 +12,11 @@ namespace RUSAL.MetalTapping.DAL.Mappers
             CreateMap<BuildingModel, Building>();
 
             CreateMap<CalculatedTaskModel, CalculatedTask>();
+            CreateMap<CalculatedTask, CalculatedTaskModel>();
 
             CreateMap<ChemicalElemModel, ChemicalElem>();
 
+            CreateMap<Deviation, DeviationModel>();
             CreateMap<DeviationModel, Deviation>()
                 .ForMember(dest => dest.Values,
                            opt => opt.MapFrom(src => src.DeviationValues));

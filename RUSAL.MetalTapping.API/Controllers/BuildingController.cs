@@ -6,7 +6,7 @@ using RUSAL.MetalTapping.BLL.Application.UseCases.Buildings;
 namespace RUSAL.MetalTapping.API.Controllers
 {
     [ApiController]
-    [Route("api/building")]
+    [Route("api/[controller]")]
     public class BuildingController : ControllerBase
     {
         private readonly GetAllBuildingsUseCase _useCase;

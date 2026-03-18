@@ -66,5 +66,6 @@ namespace RUSAL.MetalTapping.DAL.Repositories
         public Task CreateAsync(TDomain domain) => _inner.CreateAsync(domain);
         public Task UpdateAsync(TDomain domain) => _inner.UpdateAsync(domain);
         public Task DeleteAsync(Guid id) => _inner.DeleteAsync(id);
+        public Task SaveChangesAsync() => _inner.SaveChangesAsync();
     }
 }

@@ -7,7 +7,7 @@ using RUSAL.MetalTapping.BLL.Domain.Interfaces;
 namespace RUSAL.MetalTapping.API.Controllers
 {
     [ApiController]
-    [Route("api/metalMark")]
+    [Route("api/[controller]")]
     public class MetalMarkController : ControllerBase
     {
         private readonly GetAllMetalMarksUseCase _service;

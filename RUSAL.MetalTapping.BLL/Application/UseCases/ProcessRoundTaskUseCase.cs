@@ -4,16 +4,16 @@ using RUSAL.MetalTapping.BLL.Domain.Interfaces;
 
 namespace RUSAL.MetalTapping.BLL.Application.UseCases
 {
-    public class ProcessCalculatedTaskUseCase
+    public class ProcessRoundTaskUseCase
     {
         private readonly ICalculatedTaskRepository _calculatedTaskRepository;
 
-        public ProcessCalculatedTaskUseCase(ICalculatedTaskRepository calculatedTaskRepository)
+        public ProcessRoundTaskUseCase(ICalculatedTaskRepository calculatedTaskRepository)
         {
             _calculatedTaskRepository = calculatedTaskRepository;
         }
 
-        public async Task ExecuteAsync(ProcessCalculatedTaskRequest model)
+        public async Task ExecuteAsync(ProcessRoundTaskRequest model)
         {
             var existingTask = await _calculatedTaskRepository.GetCalculatedTaskWithPotIdAsync(model.potId);
 
@@ -23,7 +23,7 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
                 {
                     Id = Guid.NewGuid(),
                     PotId = model.potId,
-                    CalculatedTaskForPot = model.calculatedTask,
+                    RoundCalculatedTaskForPot = model.roundTask,
                     CreatedAt = DateTime.UtcNow
                 };
 
@@ -32,7 +32,7 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
                 return;
             }
 
-            existingTask.CalculatedTaskForPot = model.calculatedTask;
+            existingTask.RoundCalculatedTaskForPot = model.roundTask;
             existingTask.CreatedAt = DateTime.UtcNow;
 
             await _calculatedTaskRepository.UpdateAsync(existingTask);

@@ -23,12 +23,12 @@ namespace RUSAL.MetalTapping.DAL.Configurations
             builder.Property(x => x.CalculatedTaskForPot)
                 .HasColumnName("CalculatedTask")
                 .HasColumnType("numeric(18, 4)")
-                .IsRequired();
+                .IsRequired(false);
 
             builder.Property(x => x.RoundCalculatedTaskForPot)
                 .HasColumnName("RoundCalculatedTask")
                 .HasColumnType("numeric(18, 4)")
-                .IsRequired();
+                .IsRequired(false);
 
             builder.Property(x => x.CreatedAt)
                 .HasColumnName("CreatedAt")

@@ -19,6 +19,7 @@ public static class DependencyInjection
         services.AddScoped<ViewDeviationAndTaskUseCase>();
         services.AddScoped<RegisterUserUseCase>();
         services.AddScoped<LoginUserUseCase>();
+        services.AddScoped<ProcessRoundTaskUseCase>();
 
         return services;
     }

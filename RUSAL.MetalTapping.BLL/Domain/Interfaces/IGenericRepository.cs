@@ -7,5 +7,6 @@
         Task CreateAsync(TDomain entity);
         Task UpdateAsync(TDomain entity);
         Task DeleteAsync(Guid id);
+        Task SaveChangesAsync();
     }
 }

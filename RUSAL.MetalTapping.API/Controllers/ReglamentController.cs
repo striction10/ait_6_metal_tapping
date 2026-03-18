@@ -8,7 +8,7 @@ using RUSAL.MetalTapping.BLL.Domain.Interfaces;
 namespace RUSAL.MetalTapping.API.Controllers
 {
     [ApiController]
-    [Route("api/reglament")]
+    [Route("api/[controller]")]
     public class ReglamentController : ControllerBase
     {
         private readonly IGenericService<Reglament> _genericService;

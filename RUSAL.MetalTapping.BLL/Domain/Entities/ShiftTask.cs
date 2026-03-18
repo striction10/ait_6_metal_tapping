@@ -1,6 +1,8 @@
-﻿namespace RUSAL.MetalTapping.BLL.Domain.Entities
+﻿using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+
+namespace RUSAL.MetalTapping.BLL.Domain.Entities
 {
-    public class ShiftTask
+    public class ShiftTask : IDomain
     {
         public Guid Id { get; set; }
         public Guid TapTaskId { get; set; }

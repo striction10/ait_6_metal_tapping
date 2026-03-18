@@ -7,6 +7,7 @@ namespace RUSAL.MetalTapping.DAL.Repositories
 {
     public class GenericRepository<TDomain, TEntity> : IGenericRepository<TDomain>
         where TEntity : class
+        where TDomain : IDomain
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
@@ -38,9 +39,13 @@ namespace RUSAL.MetalTapping.DAL.Repositories
 
         public async Task UpdateAsync(TDomain domain)
         {
-            var entity = _mapper.Map<TEntity>(domain);
-            _dbSet.Update(entity);
-            await _context.SaveChangesAsync();
+            var existingEntity = await _dbSet.FindAsync(domain.Id);
+            if (existingEntity == null)
+                throw new Exception("Entity not found");
+
+            _mapper.Map(domain, existingEntity);
+
+            await _context.SaveChangesAsync(); ;
         }
 
         public async Task DeleteAsync(Guid id)
@@ -51,6 +56,11 @@ namespace RUSAL.MetalTapping.DAL.Repositories
                 _dbSet.Remove(entity);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
         }
     }
 }

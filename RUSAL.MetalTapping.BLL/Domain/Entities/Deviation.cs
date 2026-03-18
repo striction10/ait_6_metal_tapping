@@ -1,6 +1,8 @@
-﻿namespace RUSAL.MetalTapping.BLL.Domain.Entities
+﻿using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+
+namespace RUSAL.MetalTapping.BLL.Domain.Entities
 {
-    public class Deviation
+    public class Deviation : IDomain
     {
         public Guid Id { get; set; }
         public double? ActualMetalLevel { get; set; }
