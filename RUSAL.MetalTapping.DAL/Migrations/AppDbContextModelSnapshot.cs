@@ -17,491 +17,1014 @@ namespace RUSAL.MetalTapping.DAL.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Entities.Building", b =>
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.Building", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("Name");
 
                     b.HasKey("Id");
 
-                    b.ToTable("buildings");
+                    b.ToTable("Building", (string)null);
                 });
 
-            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Entities.ChemicalElem", b =>
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.CalculatedTask", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<decimal?>("CalculatedTaskForPot")
+                        .IsRequired()
+                        .HasColumnType("numeric(18, 4)")
+                        .HasColumnName("CalculatedTask");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("CreatedAt");
+
+                    b.Property<Guid>("PotId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("PotId");
+
+                    b.Property<decimal?>("RoundCalculatedTaskForPot")
+                        .IsRequired()
+                        .HasColumnType("numeric(18, 4)")
+                        .HasColumnName("RoundCalculatedTask");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PotId");
+
+                    b.ToTable("CalculatedTasks");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.ChemicalElem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("Name");
 
                     b.HasKey("Id");
 
-                    b.ToTable("chemicalElems");
+                    b.ToTable("ChemicalElem", (string)null);
                 });
 
-            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Entities.Deviation", b =>
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.Deviation", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<decimal?>("ActualMetalLevel")
+                        .HasColumnType("numeric(4, 0)")
+                        .HasColumnName("ActualMetalLevel");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool?>("IsValid")
+                        .HasColumnType("bit")
+                        .HasColumnName("IsValid");
 
-                    b.Property<int>("PotReglamentId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PotReglamentId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<double>("TargetMetalLevel")
-                        .HasColumnType("float");
+                    b.Property<decimal>("TargetMetalLevel")
+                        .HasColumnType("numeric(4, 0)")
+                        .HasColumnName("TargetMetalLevel");
 
                     b.HasKey("Id");
 
-                    b.ToTable("deviations");
+                    b.HasIndex("PotReglamentId");
+
+                    b.ToTable("Deviation", (string)null);
                 });
 
-            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Entities.DeviationValues", b =>
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.DeviationValues", b =>
                 {
-                    b.Property<double>("CastingRatio")
-                        .HasColumnType("float");
-
-                    b.Property<int>("DeviationId")
-                        .HasColumnType("int");
-
-                    b.Property<double>("Value")
-                        .HasColumnType("float");
-
-                    b.ToTable("deviationValues");
-                });
-
-            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Entities.ExternalData", b =>
-                {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<int>("CastingRatio")
+                        .HasColumnType("int")
+                        .HasColumnName("CastingRatio");
+
+                    b.Property<Guid>("DeviationId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("DeviationID");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("int")
+                        .HasColumnName("Value");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeviationId");
+
+                    b.ToTable("DeviationValues", (string)null);
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.ExternalData", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateOfReceipt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date")
+                        .HasColumnName("DateOfReceipt");
 
-                    b.Property<int>("PotId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PotId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("PotParametersId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PotParametersGroupId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.ToTable("externalDatas");
+                    b.HasIndex("PotId");
+
+                    b.HasIndex("PotParametersGroupId");
+
+                    b.ToTable("ExternalData", (string)null);
                 });
 
-            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Entities.MetalMark", b =>
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.MetalMark", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("Name");
 
                     b.HasKey("Id");
 
-                    b.ToTable("metalMarks");
+                    b.ToTable("MetalMark", (string)null);
                 });
 
-            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Entities.MetalMarkAnalysis", b =>
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.MetalMarkAnalysis", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("MetalMarkAnalysisValueId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("metalMarkAnalyses");
-                });
-
-            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Entities.MetalMarkAnalysisValue", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ChemicalElemId")
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateOfReceipt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date")
+                        .HasColumnName("DateOfReceipt");
 
-                    b.Property<double>("Value")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("metalMarkAnalysisValues");
-                });
-
-            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Entities.Order", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("MetalmarkId")
-                        .HasColumnType("int");
-
-                    b.Property<double>("WeightOfMetal")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("orders");
-                });
-
-            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Entities.Pot", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BuildingId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StateId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("pots");
-                });
-
-            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Entities.PotParameters", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("MetalMarkId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("MetalMarkId");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("Name");
 
-                    b.Property<double>("Value")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("potParameters");
-                });
-
-            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Entities.PotReglament", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("PotId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ReglamentId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PotId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("PotId");
 
                     b.HasKey("Id");
 
-                    b.ToTable("potReglaments");
+                    b.HasIndex("MetalMarkId");
+
+                    b.HasIndex("PotId");
+
+                    b.ToTable("MetalMarkAnalysis", (string)null);
                 });
 
-            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Entities.PotState", b =>
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.MetalMarkAnalysisValue", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("ChemicalElemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("MetalMarkAnalysisId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("MetalMarkAnalysisID");
+
+                    b.Property<decimal>("Value")
+                        .HasColumnType("numeric(10, 0)")
+                        .HasColumnName("Value");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChemicalElemId");
+
+                    b.HasIndex("MetalMarkAnalysisId");
+
+                    b.ToTable("MetalMarkAnalysisValues", (string)null);
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.Order", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
+
+                    b.Property<DateTime>("DateOfOrder")
+                        .HasColumnType("datetime")
+                        .HasColumnName("DateOfOrder");
+
+                    b.Property<Guid>("MetalMarkId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("WeightOfMetal")
+                        .HasColumnType("numeric(10, 0)")
+                        .HasColumnName("WeightOfMetal");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MetalMarkId");
+
+                    b.ToTable("Order", (string)null);
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.Pot", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
+
+                    b.Property<Guid>("BuildingId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("Name");
+
+                    b.Property<Guid>("StateId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.ToTable("potStates");
+                    b.HasIndex("BuildingId");
+
+                    b.HasIndex("StateId");
+
+                    b.ToTable("Pot", (string)null);
                 });
 
-            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Entities.Reglament", b =>
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.PotParameter", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("Name");
+
+                    b.Property<Guid>("PotParametersGroupId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Value")
+                        .HasColumnType("numeric(10, 0)")
+                        .HasColumnName("Value");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PotParametersGroupId");
+
+                    b.ToTable("PotParameters", (string)null);
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.PotParametersGroup", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PotParametersGroup", (string)null);
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.PotReglament", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
+
+                    b.Property<Guid>("PotId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ReglamentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PotId");
+
+                    b.HasIndex("ReglamentId");
+
+                    b.ToTable("PotReglament", (string)null);
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.PotState", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PotState", (string)null);
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.Reglament", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
 
                     b.Property<DateTime>("DateStart")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime")
+                        .HasColumnName("DateStart");
 
                     b.Property<DateTime>("DateStop")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime")
+                        .HasColumnName("DateStop");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("Name");
 
                     b.HasKey("Id");
 
-                    b.ToTable("reglaments");
+                    b.ToTable("Reglament", (string)null);
                 });
 
-            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Entities.Role", b =>
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.Role", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("Name");
 
                     b.HasKey("Id");
 
-                    b.ToTable("roles");
+                    b.ToTable("Roles", (string)null);
                 });
 
-            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Entities.Scoop", b =>
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.Scoop", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BuildingId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("BuildingId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("Name");
 
-                    b.Property<int>("StateId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("StateId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.ToTable("scoops");
+                    b.HasIndex("BuildingId");
+
+                    b.HasIndex("StateId");
+
+                    b.ToTable("Scoop", (string)null);
                 });
 
-            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Entities.ScoopState", b =>
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.ScoopState", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("Name");
 
                     b.HasKey("Id");
 
-                    b.ToTable("scoopStates");
+                    b.ToTable("ScoopState", (string)null);
                 });
 
-            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Entities.Shift", b =>
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.Shift", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
 
                     b.Property<DateTime>("BeginDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime")
+                        .HasColumnName("BeginDate");
 
                     b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime")
+                        .HasColumnName("EndDate");
 
-                    b.Property<int>("WorkGroupId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("shifts");
-                });
-
-            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Entities.ShiftTask", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ShiftId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TapTaskId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("WorkGroupId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.ToTable("tasks");
+                    b.HasIndex("WorkGroupId");
+
+                    b.ToTable("Shift", (string)null);
                 });
 
-            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Entities.TapTask", b =>
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.ShiftTask", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("ShiftId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("BuildingId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ScoopId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("TapTaskId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.ToTable("tapTasks");
+                    b.ToTable("Tasks");
                 });
 
-            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Entities.TapTaskPot", b =>
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.TapTask", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id")
+                        .HasDefaultValueSql("NEWID()");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("BuildingId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("MetalMarkAnalysisId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("PotId")
-                        .HasColumnType("int");
-
-                    b.Property<double>("PotMetalWeigth")
-                        .HasColumnType("float");
-
-                    b.Property<int>("TapTaskId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ScoopId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.ToTable("tapTaskPots");
+                    b.HasIndex("BuildingId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ScoopId");
+
+                    b.ToTable("TapTasks", (string)null);
                 });
 
-            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Entities.User", b =>
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.TapTaskPot", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("MetalMarkAnalysisId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PotId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("PotMetalWeigth")
+                        .HasColumnType("numeric(10, 0)")
+                        .HasColumnName("PotMetalWeight");
+
+                    b.Property<Guid>("TapTaskId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MetalMarkAnalysisId");
+
+                    b.HasIndex("PotId");
+
+                    b.HasIndex("TapTaskId");
+
+                    b.ToTable("TapTaskPot", (string)null);
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("Email");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("FirstName");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("LastName");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("Password");
 
                     b.HasKey("Id");
 
-                    b.ToTable("users");
+                    b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Entities.UserRoleMembers", b =>
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.UserRoleMembers", b =>
                 {
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("UserId");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("RoleId");
 
-                    b.ToTable("UserRoleMembers");
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("UserRoleMembers", (string)null);
                 });
 
-            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Entities.WorkGroup", b =>
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.WorkGroup", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("Name");
 
                     b.HasKey("Id");
 
-                    b.ToTable("workGroups");
+                    b.ToTable("WorkGroup", (string)null);
                 });
 
-            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Entities.WorkGroupMembers", b =>
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.WorkGroupMembers", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
 
-                    b.Property<int>("WorkGroupId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("UserId");
 
-                    b.ToTable("workGroupMembers");
+                    b.Property<Guid>("WorkGroupId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("WorkGroupId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("WorkGroupId");
+
+                    b.ToTable("WorkGroupMembers", (string)null);
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.CalculatedTask", b =>
+                {
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.Pot", "Pot")
+                        .WithMany("calculatedTasks")
+                        .HasForeignKey("PotId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pot");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.Deviation", b =>
+                {
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.PotReglament", "PotReglament")
+                        .WithMany("Deviations")
+                        .HasForeignKey("PotReglamentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PotReglament");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.DeviationValues", b =>
+                {
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.Deviation", "Deviation")
+                        .WithMany("DeviationValues")
+                        .HasForeignKey("DeviationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Deviation");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.ExternalData", b =>
+                {
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.Pot", "Pot")
+                        .WithMany("ExternalDatas")
+                        .HasForeignKey("PotId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.PotParametersGroup", "Parameters")
+                        .WithMany()
+                        .HasForeignKey("PotParametersGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Parameters");
+
+                    b.Navigation("Pot");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.MetalMarkAnalysis", b =>
+                {
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.MetalMark", "MetalMark")
+                        .WithMany("Analyses")
+                        .HasForeignKey("MetalMarkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.Pot", "Pot")
+                        .WithMany("metalMarkAnalyses")
+                        .HasForeignKey("PotId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MetalMark");
+
+                    b.Navigation("Pot");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.MetalMarkAnalysisValue", b =>
+                {
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.ChemicalElem", "ChemicalElem")
+                        .WithMany("Values")
+                        .HasForeignKey("ChemicalElemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.MetalMarkAnalysis", "Analysis")
+                        .WithMany("Values")
+                        .HasForeignKey("MetalMarkAnalysisId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Analysis");
+
+                    b.Navigation("ChemicalElem");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.Order", b =>
+                {
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.MetalMark", "MetalMark")
+                        .WithMany("Orders")
+                        .HasForeignKey("MetalMarkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MetalMark");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.Pot", b =>
+                {
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.Building", "Building")
+                        .WithMany("Pots")
+                        .HasForeignKey("BuildingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.PotState", "State")
+                        .WithMany("Pots")
+                        .HasForeignKey("StateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Building");
+
+                    b.Navigation("State");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.PotParameter", b =>
+                {
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.PotParametersGroup", "Group")
+                        .WithMany("Parameters")
+                        .HasForeignKey("PotParametersGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Group");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.PotReglament", b =>
+                {
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.Pot", "Pot")
+                        .WithMany("Reglaments")
+                        .HasForeignKey("PotId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.Reglament", "Reglament")
+                        .WithMany("Reglaments")
+                        .HasForeignKey("ReglamentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pot");
+
+                    b.Navigation("Reglament");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.Scoop", b =>
+                {
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.Building", "Building")
+                        .WithMany("Scoops")
+                        .HasForeignKey("BuildingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.ScoopState", "ScoopState")
+                        .WithMany("Scoops")
+                        .HasForeignKey("StateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Building");
+
+                    b.Navigation("ScoopState");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.Shift", b =>
+                {
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.WorkGroup", "WorkGroup")
+                        .WithMany("Shifts")
+                        .HasForeignKey("WorkGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("WorkGroup");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.TapTask", b =>
+                {
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.Building", "Building")
+                        .WithMany("TapTasks")
+                        .HasForeignKey("BuildingId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.Order", "Order")
+                        .WithMany("TapTasks")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.Scoop", "Scoop")
+                        .WithMany("TapTasks")
+                        .HasForeignKey("ScoopId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Building");
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Scoop");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.TapTaskPot", b =>
+                {
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.MetalMarkAnalysis", "Analysis")
+                        .WithMany("TapTaskPots")
+                        .HasForeignKey("MetalMarkAnalysisId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.Pot", "Pot")
+                        .WithMany("TapTaskPots")
+                        .HasForeignKey("PotId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.TapTask", "TapTask")
+                        .WithMany("TapTaskPots")
+                        .HasForeignKey("TapTaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Analysis");
+
+                    b.Navigation("Pot");
+
+                    b.Navigation("TapTask");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.UserRoleMembers", b =>
+                {
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.Role", "Role")
+                        .WithMany("UserRoleMembers")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.User", "User")
+                        .WithMany("UserRoleMembers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.WorkGroupMembers", b =>
+                {
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.User", "User")
+                        .WithMany("WorkGroupMembers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.WorkGroup", "WorkGroup")
+                        .WithMany("WorkGroupMembers")
+                        .HasForeignKey("WorkGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+
+                    b.Navigation("WorkGroup");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.Building", b =>
+                {
+                    b.Navigation("Pots");
+
+                    b.Navigation("Scoops");
+
+                    b.Navigation("TapTasks");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.ChemicalElem", b =>
+                {
+                    b.Navigation("Values");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.Deviation", b =>
+                {
+                    b.Navigation("DeviationValues");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.MetalMark", b =>
+                {
+                    b.Navigation("Analyses");
+
+                    b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.MetalMarkAnalysis", b =>
+                {
+                    b.Navigation("TapTaskPots");
+
+                    b.Navigation("Values");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.Order", b =>
+                {
+                    b.Navigation("TapTasks");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.Pot", b =>
+                {
+                    b.Navigation("ExternalDatas");
+
+                    b.Navigation("Reglaments");
+
+                    b.Navigation("TapTaskPots");
+
+                    b.Navigation("calculatedTasks");
+
+                    b.Navigation("metalMarkAnalyses");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.PotParametersGroup", b =>
+                {
+                    b.Navigation("Parameters");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.PotReglament", b =>
+                {
+                    b.Navigation("Deviations");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.PotState", b =>
+                {
+                    b.Navigation("Pots");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.Reglament", b =>
+                {
+                    b.Navigation("Reglaments");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.Role", b =>
+                {
+                    b.Navigation("UserRoleMembers");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.Scoop", b =>
+                {
+                    b.Navigation("TapTasks");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.ScoopState", b =>
+                {
+                    b.Navigation("Scoops");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.TapTask", b =>
+                {
+                    b.Navigation("TapTaskPots");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.User", b =>
+                {
+                    b.Navigation("UserRoleMembers");
+
+                    b.Navigation("WorkGroupMembers");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.WorkGroup", b =>
+                {
+                    b.Navigation("Shifts");
+
+                    b.Navigation("WorkGroupMembers");
                 });
 #pragma warning restore 612, 618
         }

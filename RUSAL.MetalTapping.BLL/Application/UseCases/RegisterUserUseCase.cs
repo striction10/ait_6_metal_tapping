@@ -1,0 +1,59 @@
+﻿using RUSAL.MetalTapping.BLL.Application.Contracts;
+using RUSAL.MetalTapping.BLL.Domain.Entities;
+using RUSAL.MetalTapping.BLL.Domain.Exceptions;
+using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+
+namespace RUSAL.MetalTapping.BLL.Application.UseCases
+{
+    public class RegisterUserUseCase
+    {
+        private readonly IUserRepository _userRepository;
+        private readonly IRoleRepository _roleRepository;
+        private readonly IPasswordHasher _passwordHasher;
+        private readonly IGenericRepository<UserRoleMembers> _userRoleRepository;
+
+        public RegisterUserUseCase(
+            IUserRepository userRepository,
+            IRoleRepository roleRepository,
+            IPasswordHasher passwordHasher,
+            IGenericRepository<UserRoleMembers> userRoleRepository)
+        {
+            _userRepository = userRepository;
+            _roleRepository = roleRepository;
+            _passwordHasher = passwordHasher;
+            _userRoleRepository = userRoleRepository;
+        }
+
+        public async Task ExecuteAsync(RegisterUserRequest model)
+        {
+            var existingUser = await _userRepository.GetByEmailAsync(model.email);
+            if (existingUser != null)
+                throw new AlreadyExistsException("User already exists");
+
+            var role = await _roleRepository.GetByNameAsync(model.role);
+            if (role == null)
+                throw new NotFoundException($"Role {model.role} not found");
+
+            var hashedPassword = _passwordHasher.Hash(model.password);
+
+            var user = new User
+            {
+                Id = Guid.NewGuid(),
+                FirstName = model.firstName,
+                LastName = model.lastName,
+                Email = model.email,
+                Password = hashedPassword
+            };
+
+            await _userRepository.CreateAsync(user);
+
+            var userRole = new UserRoleMembers
+            {
+                UserId = user.Id,
+                RoleId = role.Id
+            };
+
+            await _userRoleRepository.CreateAsync(userRole);
+        }
+    }
+}

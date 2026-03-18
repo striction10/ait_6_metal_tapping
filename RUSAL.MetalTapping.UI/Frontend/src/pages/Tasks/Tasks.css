@@ -1,0 +1,24 @@
+.tasks-container {
+    max-height: 78vh;
+    position: fixed;
+    left: 0;
+    top: 9.08rem;
+    width: 100%;
+}
+
+.tables-wrapper {
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    gap: 10px;
+}
+
+.tasks-container .main-table {
+    position: static;
+    max-height: none;
+    overflow-y: visible;
+    width: 100%;
+    background-color: white;
+    border-radius: 8px;
+    margin-bottom: 0;
+}

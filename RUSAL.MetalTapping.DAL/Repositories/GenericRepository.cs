@@ -1,46 +1,56 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using RUSAL.MetalTapping.DAL.Contexts;
-using RUSAL.MetalTapping.DAL.Interfaces;
-using System.Linq.Expressions;
+using RUSAL.MetalTapping.BLL.Domain.Interfaces;
 
 namespace RUSAL.MetalTapping.DAL.Repositories
 {
-    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
+    public class GenericRepository<TDomain, TEntity> : IGenericRepository<TDomain>
+        where TEntity : class
     {
         private readonly AppDbContext _context;
-        DbSet<TEntity> _DbSet;
+        private readonly IMapper _mapper;
+        private readonly DbSet<TEntity> _dbSet;
 
-        public GenericRepository(AppDbContext context) {
+        public GenericRepository(AppDbContext context, IMapper mapper) {
             _context = context;
-            _DbSet = context.Set<TEntity>();
+            _dbSet = context.Set<TEntity>();
+            _mapper = mapper;
         }
-        public async Task CreateAsync(TEntity item) 
+        public async Task<TDomain?> GetByIdAsync(Guid id)
         {
-            await _DbSet.AddAsync(item);
-            await _context.SaveChangesAsync();
+            var entity = await _dbSet.FindAsync(id);
+            return _mapper.Map<TDomain>(entity);
         }
-        public async Task<TEntity?> FindByIdAsync(int id)
+
+        public async Task<IEnumerable<TDomain>> GetAllAsync()
         {
-            return await _DbSet.FindAsync(id);
+            var entities = await _dbSet.ToListAsync();
+            return _mapper.Map<IEnumerable<TDomain>>(entities);
         }
-        public async Task<IEnumerable<TEntity>> GetAsync()
+
+        public async Task CreateAsync(TDomain domain)
         {
-            return await _DbSet.ToListAsync();
-        }
-        public async Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate) 
-        {
-            return await _DbSet.Where(predicate).ToListAsync();
-        }
-        public async Task RemoveAsync(TEntity item)
-        {
-            _DbSet.Remove(item);
+            var entity = _mapper.Map<TEntity>(domain);
+            _dbSet.Add(entity);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(TEntity item)
+        public async Task UpdateAsync(TDomain domain)
         {
-            _context.Entry(item).State = EntityState.Modified;
+            var entity = _mapper.Map<TEntity>(domain);
+            _dbSet.Update(entity);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(Guid id)
+        {
+            var entity = await _dbSet.FindAsync(id);
+            if (entity != null)
+            {
+                _dbSet.Remove(entity);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

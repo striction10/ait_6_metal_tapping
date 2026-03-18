@@ -1,0 +1,38 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using RUSAL.MetalTapping.DAL.Models;
+
+namespace RUSAL.MetalTapping.DAL.Configurations;
+
+public class ShiftConfiguration : IEntityTypeConfiguration<ShiftModel>
+{
+    public void Configure(EntityTypeBuilder<ShiftModel> builder)
+    {
+        builder.ToTable("Shift");
+        
+        builder.HasKey(x => x.Id);
+        
+        builder.Property(x => x.Id)
+            .HasColumnName("Id")
+            .HasColumnType("uniqueidentifier")
+            .IsRequired();
+        
+        builder.Property(b => b.BeginDate)
+            .HasColumnName("BeginDate")
+            .HasColumnType("datetime")
+            .IsRequired();
+        
+        builder.Property(b => b.EndDate)
+            .HasColumnName("EndDate")
+            .HasColumnType("datetime")
+            .IsRequired();
+
+        builder.Property(b => b.WorkGroupId)
+            .HasColumnType("uniqueidentifier");
+        
+        builder.HasOne(b => b.WorkGroup)
+            .WithMany(b => b.Shifts)
+            .HasForeignKey(b => b.WorkGroupId)
+            .IsRequired();
+    }
+}
