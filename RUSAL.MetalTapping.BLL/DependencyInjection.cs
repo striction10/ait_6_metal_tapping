@@ -12,7 +12,6 @@ public static class DependencyInjection
         services.AddScoped<CalculatedTaskService>();
         services.AddScoped<PotParametersService>();
         services.AddScoped<PotViewService>();
-        services.AddScoped<GetAllBuildingsUseCase>();
 
         services.AddScoped<ProcessDeviationAndTaskUseCase>();
         services.AddScoped<ProcessCalculatedTaskUseCase>();
@@ -20,6 +19,10 @@ public static class DependencyInjection
         services.AddScoped<RegisterUserUseCase>();
         services.AddScoped<LoginUserUseCase>();
         services.AddScoped<ProcessRoundTaskUseCase>();
+        services.AddScoped<GetAllReglamentsUseCase>();
+        services.AddScoped<GetAllMetalMarksUseCase>();
+        services.AddScoped<GetAllBuildingsUseCase>();
+        services.AddScoped<DeviationValuesUseCase>();
 
         return services;
     }
