@@ -77,8 +77,8 @@ export function useParametersData(selectedCorpus, selectedDate) {
         'Уровень металла, цель',
         'Уровень металла, факт',
         'Отклонение, см',
-        'Сила тока, кА',  // TODO: get db
-        'Выход по току, %', // TODO: get db
+        'Сила тока, кА',
+        'Выход по току, %',
         'Расчетное задание, кг',
         'ЗПР, кг',
         'Марка'
@@ -110,12 +110,12 @@ export function useParametersData(selectedCorpus, selectedDate) {
             }
         },
         { 
-            field: 'current',
-            render: (row) => row.current?.toFixed(0) ?? '-'
+            field: 'amperage',
+            render: (row) => row.amperage?.toFixed(0) ?? '-'
         },
         { 
-            field: 'efficiency',
-            render: (row) => row.efficiency?.toFixed(1) ?? '-'
+            field: 'avgAmperage',
+            render: (row) => row.avgAmperage?.toFixed(0) ?? '-'
         },
         { 
             field: 'calculatedTask',

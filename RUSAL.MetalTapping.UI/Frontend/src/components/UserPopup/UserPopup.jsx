@@ -15,8 +15,7 @@ function UserPopup({ isOpen, onClose, userData }) {
     };
 
     const handleLogout = () => {
-        //TODO: do logout
-        
+        localStorage.removeItem('token')
         onClose()
         navigate('/auth')
     };

@@ -3,6 +3,7 @@ import Header from '../../components/Header/Header'
 import PageTitle from '../../components/PageTitle'
 import Table from '../../components/Table/Table'
 import ActionButtons from '../../components/ActionButton/ActionButton'
+import SendPopup from "../../components/SendPopup/SendPopup"
 import { useReglamentsData } from '../../hooks/useReglamentsData'
 import { useParametersData } from '../../hooks/useParametresData'
 import { exportTableToPDF } from '../../utils/exportToPDFParametres'
@@ -17,66 +18,80 @@ function Parametres() {
     const { buildings } = useReglamentsData()
     const { sortedData, setSortedData, headers, columns } = useParametersData(selectedCorpus, selectedDate)
 
+    const [isUploadOpen, setIsUploadOpen] = useState(false)
+
     const handleCellChange = async (row, field, newValue) => {
         const numValue = parseFloat(newValue)
         if (isNaN(numValue)) return
 
-        try {
-            if (field === 'actualMetalLevel') {
-                const response = await api.post('/api/parameters', null, {
-                    params: {
-                        potId: row.potId,
-                        actualMetalLevel: numValue
-                    }
-                })
-                
-                setSortedData(prev => prev.map(item => 
-                    item.potId === row.potId 
-                        ? { 
-                            ...item, 
-                            actualMetalLevel: numValue,
-                            deviationValue: response.data.deviation,
-                            calculatedTask: response.data.calculatedTask,
-                            roundCalculatedTask: response.data.roundCalculatedTask
-                          }
-                        : item
-                ))
-
-            } else if (field === 'calculatedTask' || field === 'roundCalculatedTask') {
-                const params = {
+        if (field === 'actualMetalLevel') {
+            const response = await api.post('/api/parameters', null, {
+                params: {
                     potId: row.potId,
-                    calculatedTask: field === 'calculatedTask' ? numValue : row.calculatedTask,
-                    roundCalculatedTask: field === 'roundCalculatedTask' ? numValue : row.roundCalculatedTask
+                    actualMetalLevel: numValue
                 }
-
-                const response = await api.post('/api/parameters/calculated', null, { params })
-                
-                setSortedData(prev => prev.map(item => 
-                    item.potId === row.potId 
-                        ? { 
-                            ...item, 
-                            [field]: numValue,
-                            calculatedTask: response.data.calculatedTask,
-                            roundCalculatedTask: response.data.roundCalculatedTask
-                          }
-                        : item
-                ))
-            }
-        } catch (err) {
-            console.error('Ошибка при обновлении:', err)
-            alert('Ошибка при сохранении данных')
+            })
+            
+            setSortedData(prev => prev.map(item => 
+                item.potId === row.potId 
+                    ? { 
+                        ...item, 
+                        actualMetalLevel: numValue,
+                        deviationValue: response.data.deviation,
+                        calculatedTask: response.data.calculatedTask,
+                        roundCalculatedTask: response.data.roundCalculatedTask
+                      }
+                    : item
+            ))
+        } 
+        else if (field === 'calculatedTask') {
+            const response = await api.post(`/api/Parameters/calculated/${row.potId}`, null, {
+                params: {
+                    calculatedTask: numValue
+                }
+            })
+            
+            setSortedData(prev => prev.map(item => 
+                item.potId === row.potId 
+                    ? { 
+                        ...item, 
+                        calculatedTask: numValue,
+                        roundCalculatedTask: response.data.roundCalculatedTask
+                      }
+                    : item
+            ))
+        }
+        else if (field === 'roundCalculatedTask') {
+            const response = await api.post(`/api/parameters/round/${row.potId}`, null, {
+                params: {
+                    roundTask: numValue
+                }
+            })
+            
+            setSortedData(prev => prev.map(item => 
+                item.potId === row.potId 
+                    ? { 
+                        ...item, 
+                        roundCalculatedTask: numValue
+                      }
+                    : item
+            ))
         }
     }
 
     const handleSave = () => {
-        console.log('Сохранение данных...', sortedData) //TODO: save
+        console.log('Сохранение данных...', sortedData)
         exportTableToPDF(sortedData, selectedCorpus)
-        alert('Данные сохранены')
     }
 
-    const handleSubmit = () => {
-        console.log('Отправка данных...', sortedData) //TODO: send
-        alert('Данные отправлены')
+    const handleSubmit = () => {  // TODO: in process
+        console.log('Отправка данных...', sortedData)
+        setIsUploadOpen(true)
+    }
+
+     const handleFileSubmit = (file) => {  //TODO: in process
+        console.log('Файл отправлен:', file)
+        setIsUploadOpen(false)
     }
 
     return (
@@ -120,6 +135,12 @@ function Parametres() {
                     onSubmit={handleSubmit}
                 />
             </div>
+
+            <SendPopup
+                isOpen={isUploadOpen}
+                onClose={() => setIsUploadOpen(false)}
+                onSubmit={handleFileSubmit}
+            />
         </>
     )
 }

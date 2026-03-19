@@ -3,7 +3,9 @@ import Header from '../../components/Header/Header'
 import PageTitle from '../../components/PageTitle'
 import Table from '../../components/Table/Table'
 import ActionButtons from '../../components/ActionButton/ActionButton'
+import SendPopup from "../../components/SendPopup/SendPopup"
 import { useReglamentsData } from '../../hooks/useReglamentsData'
+import { exportReglamentsToPDF } from '../../utils/exportToPDFReglaments'
 import api from '../../services/api'
 
 function Reglaments() {
@@ -13,8 +15,8 @@ function Reglaments() {
         new Date().toISOString().split('T')[0]
     )
     
-    const [tableData, setTableData] = useState([])
     const [sortedData, setSortedData] = useState([])
+    const [isUploadOpen, setIsUploadOpen] = useState(false)
     
     const { reglaments, buildings } = useReglamentsData()
 
@@ -27,7 +29,6 @@ function Reglaments() {
         const fetchTableData = async () => {
             if (!selectedReglament || !selectedCorpus || 
                 selectedReglament === '0' || selectedCorpus === '0') {
-                setTableData([])
                 setSortedData([])
                 return
             }
@@ -47,16 +48,13 @@ function Reglaments() {
                         return numA - numB
                     })
                     
-                    setTableData(response.data.pots)
                     setSortedData(sorted)
                 } else {
-                    setTableData([])
                     setSortedData([])
                 }
                 
             } catch (err) {
                 console.error('Ошибка загрузки данных:', err)
-                setTableData([])
                 setSortedData([])
             }
         }
@@ -98,10 +96,20 @@ function Reglaments() {
 
     const handleSave = () => {
         console.log('Сохранение данных...', sortedData)
+        const corpusName = buildings.find(b => b.value === selectedCorpus)?.label || selectedCorpus
+        const reglamentName = reglaments.find(r => r.value === selectedReglament)?.label || selectedReglament
+        
+        exportReglamentsToPDF(sortedData, corpusName, reglamentName)
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = () => {  // TODO: in process
         console.log('Отправка данных...', sortedData)
+        setIsUploadOpen(true)
+    }
+
+     const handleFileSubmit = (file) => {  //TODO: in process
+        console.log('Файл отправлен:', file)
+        setIsUploadOpen(false)
     }
 
     return (
@@ -153,6 +161,12 @@ function Reglaments() {
                     onSubmit={handleSubmit}
                 />
             </div>
+
+            <SendPopup
+                isOpen={isUploadOpen}
+                onClose={() => setIsUploadOpen(false)}
+                onSubmit={handleFileSubmit}
+            />
         </>
     )
 }
