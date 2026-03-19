@@ -1,4 +1,5 @@
 ﻿using RUSAL.MetalTapping.BLL.Domain.Entities;
+using System.Runtime.CompilerServices;
 
 namespace RUSAL.MetalTapping.BLL.Domain.Interfaces
 {
