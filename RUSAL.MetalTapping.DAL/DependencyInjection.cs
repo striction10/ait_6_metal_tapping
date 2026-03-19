@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RUSAL.MetalTapping.DAL.Contexts;
 using RUSAL.MetalTapping.BLL.Domain.Interfaces;

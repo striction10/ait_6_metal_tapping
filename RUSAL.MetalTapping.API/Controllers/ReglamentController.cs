@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RUSAL.MetalTapping.BLL.Application.Contracts;
+using RUSAL.MetalTapping.BLL.Application.DTOs;
 using RUSAL.MetalTapping.BLL.Application.UseCases;
-using RUSAL.MetalTapping.BLL.Domain.Entities;
-using RUSAL.MetalTapping.BLL.Domain.Interfaces;
 
 namespace RUSAL.MetalTapping.API.Controllers
 {
@@ -11,25 +10,24 @@ namespace RUSAL.MetalTapping.API.Controllers
     [Route("api/[controller]")]
     public class ReglamentController : ControllerBase
     {
-        private readonly IGenericService<Reglament> _genericService;
+        private readonly GetAllReglamentsUseCase _service;
         private readonly DeviationValuesUseCase _deviationValuesService;
 
         public ReglamentController(
-            IGenericService<Reglament> genericService,
+            GetAllReglamentsUseCase service,
             DeviationValuesUseCase deviationValuesService)
         {
-            _genericService = genericService;
+            _service = service;
             _deviationValuesService = deviationValuesService;
         }
 
         [HttpGet]
         [Authorize]
-        [ProducesResponseType(typeof(Reglament), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<ReglamentDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAll()
         {
-            var response = await _genericService.GetAllAsync();
+            var response = await _service.ExecuteAsync();
             return Ok(response);
         }
 

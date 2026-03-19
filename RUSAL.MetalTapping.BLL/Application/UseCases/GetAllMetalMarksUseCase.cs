@@ -1,7 +1,6 @@
 ﻿using RUSAL.MetalTapping.BLL.Application.DTOs;
 using RUSAL.MetalTapping.BLL.Domain.Entities;
 using RUSAL.MetalTapping.BLL.Domain.Interfaces;
-using System.Runtime.CompilerServices;
 
 namespace RUSAL.MetalTapping.BLL.Application.UseCases
 {

@@ -2,9 +2,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RUSAL.MetalTapping.API.Middleware;
+using RUSAL.MetalTapping.BLL.Application.DTOs;
+using RUSAL.MetalTapping.BLL.Domain.Entities;
 using RUSAL.MetalTapping.BLL.Domain.Interfaces;
 using RUSAL.MetalTapping.DAL;
 using RUSAL.MetalTapping.DAL.Auth;
+using RUSAL.MetalTapping.DAL.Repositories;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -103,10 +106,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseMiddleware<ExceptionMiddleware>();
+
+
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.UseMiddleware<ExceptionMiddleware>();
 
 app.MapGet("/swagger", context => {
     context.Response.Redirect("/api/swagger");
