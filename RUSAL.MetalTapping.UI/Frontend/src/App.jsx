@@ -10,6 +10,7 @@ function App() {
   return (
     <UserProvider>
       <Routes>
+        <Route path="/" element={<Auth />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/parametres" element={<Parametres />} />
         <Route path="/reglaments" element={<Reglaments />} />
