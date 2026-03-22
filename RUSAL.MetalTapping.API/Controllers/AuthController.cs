@@ -23,13 +23,17 @@ namespace RUSAL.MetalTapping.API.Controllers
         public async Task<IActionResult> Register(RegisterUserRequest model)
         {
             await _registerUserUseCase.ExecuteAsync(model);
+
             return Ok();
         }
 
         [HttpPost("login")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Login(LoginUserRequest model)
         {
             var token = await _loginUserUseCase.ExecuteAsync(model);
+
             return Ok(token);
         }
     }
