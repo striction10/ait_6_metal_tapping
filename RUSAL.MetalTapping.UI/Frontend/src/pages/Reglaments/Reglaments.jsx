@@ -54,7 +54,6 @@ function Reglaments() {
                 }
                 
             } catch (err) {
-                console.error('Ошибка загрузки данных:', err)
                 setSortedData([])
             }
         }
@@ -102,12 +101,11 @@ function Reglaments() {
         exportReglamentsToPDF(sortedData, corpusName, reglamentName)
     }
 
-    const handleSubmit = () => {  // TODO: in process
-        console.log('Отправка данных...', sortedData)
+    const handleSubmit = () => {
         setIsUploadOpen(true)
     }
 
-     const handleFileSubmit = (file) => {  //TODO: in process
+     const handleFileSubmit = (file) => {
         console.log('Файл отправлен:', file)
         setIsUploadOpen(false)
     }

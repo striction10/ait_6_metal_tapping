@@ -1,8 +1,10 @@
 import './UserPopup.css'
 import { useNavigate } from 'react-router-dom'
+import { getUserData } from '../../utils/auth'
 
 function UserPopup({ isOpen, onClose, userData }) {
     const navigate = useNavigate()
+    const { login, role } = getUserData()
 
     if (!isOpen) {
         return null
@@ -16,6 +18,7 @@ function UserPopup({ isOpen, onClose, userData }) {
 
     const handleLogout = () => {
         localStorage.removeItem('token')
+        localStorage.removeItem('user')
         onClose()
         navigate('/auth')
     };
@@ -25,9 +28,9 @@ function UserPopup({ isOpen, onClose, userData }) {
             <div className="popupContent">
                 <div className="userForm">
                     <label>Логин</label>
-                    <h2 className="userInfo Login">{userData?.login || "Не указан"}</h2>
+                    <h2 className="userInfo Login">{login}</h2>
                     <label>Роль</label>
-                    <h2 className="userInfo Role">{userData?.role || "Не указана"}</h2>
+                    <h2 className="userInfo Role">{role}</h2>
                 </div>
                 <button id="close" onClick={handleLogout}>
                     Выйти

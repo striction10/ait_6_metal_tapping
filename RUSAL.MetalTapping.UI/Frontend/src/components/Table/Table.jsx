@@ -7,7 +7,8 @@ function Table({
     data = [],
     columns = [],
     colspan = 10,
-    onCellChange
+    onCellChange,
+    canEdit
 }) {
     const [editingCell, setEditingCell] = useState(null)
 
@@ -42,7 +43,11 @@ function Table({
         return value !== undefined && value !== null ? value : '-'
     }
 
+    // Проверка, можно ли редактировать поле
     const isEditable = (colField) => {
+        if (canEdit) {
+            return canEdit(colField)
+        }
         return ['actualMetalLevel', 'calculatedTask', 'roundCalculatedTask'].includes(colField)
     }
 
