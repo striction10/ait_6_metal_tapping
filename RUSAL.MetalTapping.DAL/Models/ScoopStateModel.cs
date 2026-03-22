@@ -4,6 +4,6 @@
     {
         public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        public ICollection<ScoopModel> Scoops = new List<ScoopModel>();
+        public ICollection<ScoopModel> Scoops { get; set; } = new List<ScoopModel>();
     }
 }

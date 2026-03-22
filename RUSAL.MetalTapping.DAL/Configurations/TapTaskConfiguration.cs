@@ -15,7 +15,6 @@ public class TapTaskConfiguration : IEntityTypeConfiguration<TapTaskModel>
         builder.Property(x => x.Id)
             .HasColumnName("Id")
             .HasColumnType("uniqueidentifier")
-            .HasDefaultValueSql("NEWID()")
             .IsRequired();
 
         builder.HasOne(t => t.Building)

@@ -73,6 +73,9 @@ namespace RUSAL.MetalTapping.DAL.Mappers
 
             CreateMap<RoleModel, Role>();
             CreateMap<Role, RoleModel>();
+
+            CreateMap<ScoopUsageModel, ScoopUsage>();
+            CreateMap<ScoopUsage, ScoopUsageModel>();
         }
     }
 }
