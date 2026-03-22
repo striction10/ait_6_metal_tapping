@@ -90,7 +90,6 @@ button {
 }
 
 .firstPart > *:last-child {
-    margin-right: 10px;
     transition: all 0.15s ease-in-out;
 }
 

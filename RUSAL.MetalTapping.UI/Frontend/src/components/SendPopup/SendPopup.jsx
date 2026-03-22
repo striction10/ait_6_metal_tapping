@@ -1,10 +1,19 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Input from "../../components/Input/Input"
 import './SendPopup.css'
 
 function SendPopup({ isOpen, onClose, onUpload }) {
     const [selectedFile, setSelectedFile] = useState(null)
     const [fileName, setFileName] = useState('')
+    const [email, setEmail] = useState('')
+
+    useEffect(() => {
+        if (!isOpen) {
+            setSelectedFile(null)
+            setFileName('')
+            setEmail('')
+        }
+    }, [isOpen])
 
     if (!isOpen) return null
 
@@ -23,19 +32,14 @@ function SendPopup({ isOpen, onClose, onUpload }) {
     }
 
     const handleUpload = () => {
-        if (selectedFile) {
+        if (selectedFile && email.includes('@')) {
             onUpload(selectedFile)
-            setSelectedFile(null)
-            setFileName('')
             onClose()
         }
     }
 
-    const handleCancel = () => {
-        setSelectedFile(null)
-        setFileName('')
-        onClose()
-    }
+    const isValidEmail = email.includes('@') && email.split('@')[1]?.includes('.')
+    const isValid = selectedFile && isValidEmail
 
     return (
         <div className="popupContainer" onClick={handleOverlayClick}>
@@ -48,7 +52,7 @@ function SendPopup({ isOpen, onClose, onUpload }) {
                         type="file"
                         onChange={handleFileChange}
                         className="file-input"
-                        accept=".xlsx,.xls,.csv,.txt"
+                        accept=".pdf"
                     />
                     
                     {fileName && (
@@ -57,9 +61,11 @@ function SendPopup({ isOpen, onClose, onUpload }) {
 
                     <Input
                         label="Получатель"
-                        type="text"
+                        type="email"
                         name="email"
-                        placeholder="Введите получателя"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Введите почту"
                     />
                 </div>
                 
@@ -67,7 +73,11 @@ function SendPopup({ isOpen, onClose, onUpload }) {
                     <button 
                         id="close" 
                         onClick={handleUpload}
-                        disabled={!selectedFile}
+                        disabled={!isValid}
+                        style={{
+                            opacity: isValid ? 1 : 0.6,
+                            cursor: isValid ? 'pointer' : 'not-allowed'
+                        }}
                     >
                         Отправить
                     </button>

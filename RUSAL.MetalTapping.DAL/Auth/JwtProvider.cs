@@ -5,8 +5,6 @@ using RUSAL.MetalTapping.BLL.Domain.Entities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.AspNetCore.Mvc.Formatters.Internal;
-using System.Net;
 
 namespace RUSAL.MetalTapping.DAL.Auth
 {

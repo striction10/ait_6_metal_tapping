@@ -27,7 +27,7 @@ namespace RUSAL.MetalTapping.API.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Operator,Technologist")]
+        [Authorize(Roles = "User,Technologist")]
         [ProducesResponseType(typeof(ProcessDeviationAndTaskResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -43,7 +43,7 @@ namespace RUSAL.MetalTapping.API.Controllers
         }
 
         [HttpGet("table")]
-        [Authorize(Roles = "Operator,Technologist")]
+        [Authorize(Roles = "User,Technologist")]
         [ProducesResponseType(typeof(ViewDeviationAndTaskResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

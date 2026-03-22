@@ -79,12 +79,10 @@ function Tasks () {
     ]
 
     const handleSave = () => {
-        console.log('Сохранение данных...')
         alert('Данные сохранены')
     }
 
     const handleSubmit = () => {
-        console.log('Отправка данных...')
         alert('Данные отправлены')
     }
 
