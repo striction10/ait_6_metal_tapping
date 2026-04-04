@@ -34,6 +34,8 @@ namespace RUSAL.MetalTapping.DAL.Contexts
         public DbSet<WorkGroupMembersModel> WorkGroupMembers { get; set; }
         public DbSet<CalculatedTaskModel> CalculatedTasks { get; set; }
         public DbSet<ScoopUsageModel> ScoopUsages { get; set; }
+        public DbSet<PotGroupModel> PotGroupModels { get; set; }
+        public DbSet<PotGroupsHistoryModel> PotGroupsHistoryModels { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);

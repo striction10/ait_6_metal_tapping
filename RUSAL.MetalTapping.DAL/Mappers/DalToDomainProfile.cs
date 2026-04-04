@@ -76,6 +76,12 @@ namespace RUSAL.MetalTapping.DAL.Mappers
 
             CreateMap<ScoopUsageModel, ScoopUsage>();
             CreateMap<ScoopUsage, ScoopUsageModel>();
+
+            CreateMap<PotGroup, PotGroupModel>();
+            CreateMap<PotGroupModel, PotGroup>();
+
+            CreateMap<PotGroupsHistoryModel, PotGroupsHistory>();
+            CreateMap<PotGroupsHistory, PotGroupsHistoryModel>();
         }
     }
 }

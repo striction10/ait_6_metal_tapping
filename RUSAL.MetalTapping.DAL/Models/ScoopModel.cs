@@ -10,5 +10,7 @@
         public ScoopStateModel ScoopState { get; set; } = null!;
         public ICollection<TapTaskModel> TapTasks { get; set; } = new List<TapTaskModel>();
         public ICollection<ScoopUsageModel> ScoopUsageModels { get; set; } = new List<ScoopUsageModel>();
+        public PotGroupModel PotGroup { get; set; }
+
     }
 }

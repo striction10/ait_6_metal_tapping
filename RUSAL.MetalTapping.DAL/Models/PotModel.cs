@@ -13,5 +13,6 @@
         public ICollection<CalculatedTaskModel> calculatedTasks = new List<CalculatedTaskModel>();
         public ICollection<ExternalDataModel> ExternalDatas = new List<ExternalDataModel>();
         public ICollection<TapTaskPotModel> TapTaskPots = new List<TapTaskPotModel>();
+        public ICollection<PotGroupsHistoryModel> GroupsHistory { get; set; } = new List<PotGroupsHistoryModel>();
     }
 }

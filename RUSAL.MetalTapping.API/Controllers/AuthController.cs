@@ -29,7 +29,7 @@ namespace RUSAL.MetalTapping.API.Controllers
 
         [HttpPost("login")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Login(LoginUserRequest model)
         {
             var token = await _loginUserUseCase.ExecuteAsync(model);
