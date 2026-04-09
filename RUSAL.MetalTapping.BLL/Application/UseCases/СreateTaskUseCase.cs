@@ -13,6 +13,7 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
         private readonly IGenericRepository<Building> _buildingRepository;
         private readonly IGenericRepository<Scoop> _scoopRepository;
         private readonly IGenericRepository<ScoopState> _scoopStateRepository;
+        private readonly IGenericRepository<PotState> _potStateRepository;
         private readonly IMetalMarkRepository _metalMarkRepository;
         private readonly IPotGroupRepository _potGroupRepository;
         private readonly IPotGroupHistoryRepository _potGroupHistoryRepository;
@@ -26,6 +27,7 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
             IGenericRepository<Building> buildingRepository,
             IGenericRepository<Scoop> scoopRepository,
             IGenericRepository<ScoopState> scoopStateRepository,
+            IGenericRepository <PotState> potStateRepository,
             IMetalMarkRepository metalMarkRepository,
             IPotGroupRepository potGroupRepository,
             IPotGroupHistoryRepository potGroupHistoryRepository,
@@ -37,6 +39,8 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
             _buildingRepository = buildingRepository;
             _scoopRepository = scoopRepository;
             _scoopStateRepository = scoopStateRepository;
+            _potStateRepository = potStateRepository;
+            _potGroupRepository = potGroupRepository;
             _metalMarkRepository = metalMarkRepository;
             _potGroupRepository = potGroupRepository;
             _potGroupHistoryRepository = potGroupHistoryRepository;
@@ -115,20 +119,27 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
 
                     var marksByPot = metalMarks.ToDictionary(ct => ct.PotId);
 
-                    var potDtos = pots.Select(p =>
+                    var potDtos = new List<PotDto>();
+
+                    foreach (var p in pots)
                     {
                         var calc = calculatedByPot[p.Id];
                         var marks = marksByPot[p.Id];
 
-                        return new PotDto
+                        var potState = EnsureFound(
+                            await _potStateRepository.GetByIdAsync(p.StateId),
+                            $"Pot state for pot {p.Name} not found");
+
+                        potDtos.Add(new PotDto
                         {
                             Id = p.Id,
                             Name = p.Name,
-                            MetalLevel = calc.RoundCalculatedTaskForPot 
-                            ?? throw new BusinessException($"CalculatedMetalLevel is null for pot {p.Name}"),
-                            MetalMarkId = marks.MetalMarkId
-                        };
-                    }).ToList();
+                            MetalLevel = calc.RoundCalculatedTaskForPot
+                                ?? throw new BusinessException($"CalculatedMetalLevel is null for pot {p.Name}"),
+                            MetalMarkId = marks.MetalMarkId,
+                            State = potState.Name
+                        });
+                    }
 
                     var groupDto = new PotGroupDto
                     {

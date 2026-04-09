@@ -49,6 +49,7 @@ namespace RUSAL.MetalTapping.DAL.Mappers
                            opt => opt.MapFrom(src => src.Deviations));
 
             CreateMap<PotStateModel, PotState>();
+            CreateMap<PotState, PotStateModel>();
 
             CreateMap<ScoopModel, Scoop>();
             CreateMap<ScoopStateModel, ScoopState>();
