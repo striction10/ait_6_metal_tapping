@@ -16,7 +16,7 @@ namespace RUSAL.MetalTapping.API.Controllers
             _service = service;
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         [Authorize]
         [ProducesResponseType(typeof(IEnumerable<BuildingDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]

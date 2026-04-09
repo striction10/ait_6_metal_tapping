@@ -17,6 +17,15 @@ namespace RUSAL.MetalTapping.API.Middleware
             {
                 await _next(context);
             }
+            catch (BusinessException ex)
+            {
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                await context.Response.WriteAsJsonAsync(
+                    new
+                    {
+                        message = ex.Message
+                    });
+            }
             catch (AuthentificationException ex)
             {
                 context.Response.StatusCode = StatusCodes.Status401Unauthorized;

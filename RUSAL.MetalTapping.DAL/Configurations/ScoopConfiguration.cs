@@ -25,14 +25,6 @@ public class ScoopConfiguration : IEntityTypeConfiguration<ScoopModel>
         builder.Property(b => b.StateId)
             .HasColumnType("uniqueidentifier");
         
-        builder.Property(b => b.BuildingId)
-            .HasColumnType("uniqueidentifier");
-        
-        builder.HasOne(b => b.Building)
-            .WithMany(b => b.Scoops)
-            .HasForeignKey(b => b.BuildingId)
-            .IsRequired();
-        
         builder.HasOne(b => b.ScoopState)
             .WithMany(b => b.Scoops)
             .HasForeignKey(b => b.StateId)

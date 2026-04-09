@@ -33,8 +33,8 @@ namespace RUSAL.MetalTapping.DAL.Configurations
                 .IsRequired();
 
             builder.HasOne(x => x.Scoop)
-                .WithOne(x => x.PotGroup)
-                .HasForeignKey<PotGroupModel>(x => x.ScoopId)
+                .WithMany()
+                .HasForeignKey(x => x.ScoopId)
                 .IsRequired();
 
             builder.HasMany(x => x.History)

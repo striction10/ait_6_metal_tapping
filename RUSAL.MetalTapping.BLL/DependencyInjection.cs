@@ -12,6 +12,7 @@ public static class DependencyInjection
         services.AddScoped<CalculatedTaskService>();
         services.AddScoped<PotParametersService>();
         services.AddScoped<PotViewService>();
+        services.AddScoped<BuildingMetalInfoService>();
         
 
         services.AddScoped<ProcessDeviationAndTaskUseCase>();

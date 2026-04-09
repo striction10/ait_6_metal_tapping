@@ -1,5 +1,6 @@
 ﻿using RUSAL.MetalTapping.BLL.Application.Contracts;
 using RUSAL.MetalTapping.BLL.Application.DTOs;
+using RUSAL.MetalTapping.BLL.Application.Services;
 using RUSAL.MetalTapping.BLL.Domain.Entities;
 using RUSAL.MetalTapping.BLL.Domain.Exceptions;
 using RUSAL.MetalTapping.BLL.Domain.Interfaces;
@@ -19,6 +20,8 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
         private readonly ICalculatedTaskRepository _calculatedTaskRepository;
         private readonly IMetalMarkAnalysisRepository _metalMarkAnalysisRepository;
 
+        private readonly BuildingMetalInfoService _buildingService;
+
         public CreateTaskUseCase(
             IGenericRepository<Building> buildingRepository,
             IGenericRepository<Scoop> scoopRepository,
@@ -28,7 +31,8 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
             IPotGroupHistoryRepository potGroupHistoryRepository,
             IScoopUsageRepository scoopUsageRepository,
             ICalculatedTaskRepository calculatedTaskRepository,
-            IMetalMarkAnalysisRepository metalMarkAnalysisRepository)
+            IMetalMarkAnalysisRepository metalMarkAnalysisRepository,
+            BuildingMetalInfoService buldingService)
         {
             _buildingRepository = buildingRepository;
             _scoopRepository = scoopRepository;
@@ -39,9 +43,10 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
             _scoopUsageRepository = scoopUsageRepository;
             _calculatedTaskRepository = calculatedTaskRepository;
             _metalMarkAnalysisRepository = metalMarkAnalysisRepository;
+            _buildingService = buldingService;
         }
 
-        public async Task ExecuteAsync(OrderRequest model)
+        public async Task<IEnumerable<BuildingMetalInfo>> ExecuteAsync(OrderRequest model)
         {
             var buildings = EnsureFound(
                 await _buildingRepository.GetAllAsync(),
@@ -134,7 +139,20 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
 
                     groupDtos.Add(groupDto);
                 }
+
+                var buildingDto = new BuildingDto
+                {
+                    Id = building.Id,
+                    Name = building.Name,
+                    Groups = groupDtos
+                };
+
+                var builidingMetalInfo = _buildingService.AnalyzeBuilding(buildingDto, metalMark.Id);
+
+                buildingInfos.Add(builidingMetalInfo);
             }
+
+            return buildingInfos;
         }
     }
 }
