@@ -22,6 +22,7 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
         private readonly IMetalMarkAnalysisRepository _metalMarkAnalysisRepository;
 
         private readonly BuildingMetalInfoService _buildingService;
+        private readonly CastingExecutionPlanService _executionPlanSelector;
 
         public CreateTaskUseCase(
             IGenericRepository<Building> buildingRepository,
@@ -34,7 +35,8 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
             IScoopUsageRepository scoopUsageRepository,
             ICalculatedTaskRepository calculatedTaskRepository,
             IMetalMarkAnalysisRepository metalMarkAnalysisRepository,
-            BuildingMetalInfoService buldingService)
+            BuildingMetalInfoService buldingService,
+            CastingExecutionPlanService executionPlanSelector)
         {
             _buildingRepository = buildingRepository;
             _scoopRepository = scoopRepository;
@@ -48,9 +50,10 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
             _calculatedTaskRepository = calculatedTaskRepository;
             _metalMarkAnalysisRepository = metalMarkAnalysisRepository;
             _buildingService = buldingService;
+            _executionPlanSelector = executionPlanSelector;
         }
 
-        public async Task<IEnumerable<BuildingMetalInfo>> ExecuteAsync(OrderRequest model)
+        public async Task<ExecutionPlan> ExecuteAsync(OrderRequest model)
         {
             var buildings = EnsureFound(
                 await _buildingRepository.GetAllAsync(),
@@ -163,7 +166,9 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
                 buildingInfos.Add(builidingMetalInfo);
             }
 
-            return buildingInfos;
+            var result = _executionPlanSelector.SelectExecutionPlan(buildingInfos, model.requiredMetalWeight);
+
+            return result;
         }
     }
 }

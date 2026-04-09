@@ -1,7 +1,58 @@
-﻿namespace RUSAL.MetalTapping.BLL.Application.Services
+﻿using RUSAL.MetalTapping.BLL.Application.DTOs;
+
+namespace RUSAL.MetalTapping.BLL.Application.Services
 {
     public class CastingBuildingSelectorService
     {
+        private readonly CastingGroupSelectorService _groupSelector;
+        public CastingBuildingSelectorService(CastingGroupSelectorService groupSelector)
+        {
+            _groupSelector = groupSelector;
+        }
+
+        public List<(BuildingMetalInfo building, List<(PotGroupDto group, List<PotDto> pots)> groups)>? SelectGlobalPots(
+            List<BuildingMetalInfo> buildings,
+            double requiredWeight)
+        {
+            var allPots = buildings
+                .SelectMany(b => b.Groups
+                    .Where(g => g.Scoop.State == "Активен" && !g.Scoop.IsBusy)
+                    .SelectMany(g => g.Pots
+                        .Where(p => p.State == "Активен")
+                        .Select(p => (building: b, group: g, pot: p))))
+                .OrderByDescending(x => x.pot.MetalLevel)
+                .ToList();
+
+            double sum = 0;
+
+            var selected = new List<(BuildingMetalInfo building, PotGroupDto group, PotDto pot)>();
+
+            foreach (var item in allPots)
+            {
+                selected.Add(item);
+                sum += item.pot.MetalLevel;
+
+                if (sum >= requiredWeight)
+                    break;
+            }
+
+            if (sum < requiredWeight)
+                return null;
+
+            var result = selected
+                .GroupBy(x => x.building)
+                .Select(b => (
+                    building: b.Key,
+                    groups: b.GroupBy(x => x.group)
+                             .Select(g => (
+                                 group: g.Key,
+                                 pots: g.Select(x => x.pot).ToList()
+                             )).ToList()
+                ))
+                .ToList();
+
+            return result;
+        }
 
     }
 }
