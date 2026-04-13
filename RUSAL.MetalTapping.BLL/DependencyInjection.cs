@@ -17,6 +17,10 @@ public static class DependencyInjection
         services.AddScoped<CastingGroupSelectorService>();
         services.AddScoped<CastingExecutionPlanService>();
         services.AddScoped<CastingPotsService>();
+        services.AddScoped<TapTaskService>();
+        services.AddScoped<PotService>();
+        services.AddScoped<BuildingService>();
+        services.AddScoped<GroupService>();
 
         services.AddScoped<ProcessDeviationAndTaskUseCase>();
         services.AddScoped<ProcessCalculatedTaskUseCase>();

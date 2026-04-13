@@ -7,6 +7,6 @@ namespace RUSAL.MetalTapping.BLL.Domain.Entities
         public Guid Id { get; set; }
         public double WeightOfMetal { get; set; }
         public Guid MetalmarkId { get; set; }
-        DateTime DateOfOrder { get; set; }
+        public DateTime DateOfOrder { get; set; }
     }
 }

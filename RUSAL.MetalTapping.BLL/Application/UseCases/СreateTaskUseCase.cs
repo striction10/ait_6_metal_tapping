@@ -11,164 +11,124 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
     public class CreateTaskUseCase
     {
         private readonly IGenericRepository<Building> _buildingRepository;
-        private readonly IGenericRepository<Scoop> _scoopRepository;
-        private readonly IGenericRepository<ScoopState> _scoopStateRepository;
-        private readonly IGenericRepository<PotState> _potStateRepository;
-        private readonly IMetalMarkRepository _metalMarkRepository;
         private readonly IPotGroupRepository _potGroupRepository;
         private readonly IPotGroupHistoryRepository _potGroupHistoryRepository;
+        private readonly IGenericRepository<Scoop> _scoopRepository;
+        private readonly IGenericRepository<ScoopState> _scoopStateRepository;
         private readonly IScoopUsageRepository _scoopUsageRepository;
         private readonly ICalculatedTaskRepository _calculatedTaskRepository;
         private readonly IMetalMarkAnalysisRepository _metalMarkAnalysisRepository;
+        private readonly IMetalMarkRepository _metalMarkRepository;
 
-        private readonly BuildingMetalInfoService _buildingService;
-        private readonly CastingExecutionPlanService _executionPlanSelector;
+        private readonly PotService _potService;
+        private readonly GroupService _groupService;
+        private readonly BuildingService _buildingInfoService;
+        private readonly CastingExecutionPlanService _planSelector;
+        private readonly TapTaskService _tapTaskService;
 
         public CreateTaskUseCase(
             IGenericRepository<Building> buildingRepository,
-            IGenericRepository<Scoop> scoopRepository,
-            IGenericRepository<ScoopState> scoopStateRepository,
-            IGenericRepository <PotState> potStateRepository,
-            IMetalMarkRepository metalMarkRepository,
             IPotGroupRepository potGroupRepository,
             IPotGroupHistoryRepository potGroupHistoryRepository,
+            IGenericRepository<Scoop> scoopRepository,
+            IGenericRepository<ScoopState> scoopStateRepository,
             IScoopUsageRepository scoopUsageRepository,
+            IGenericRepository<PotState> potStateRepository,
             ICalculatedTaskRepository calculatedTaskRepository,
             IMetalMarkAnalysisRepository metalMarkAnalysisRepository,
-            BuildingMetalInfoService buldingService,
-            CastingExecutionPlanService executionPlanSelector)
+            IMetalMarkRepository metalMarkRepository,
+            PotService potService,
+            GroupService groupService,
+            BuildingService buildingInfoService,
+            CastingExecutionPlanService planSelector,
+            TapTaskService tapTaskService)
         {
             _buildingRepository = buildingRepository;
-            _scoopRepository = scoopRepository;
-            _scoopStateRepository = scoopStateRepository;
-            _potStateRepository = potStateRepository;
-            _potGroupRepository = potGroupRepository;
-            _metalMarkRepository = metalMarkRepository;
             _potGroupRepository = potGroupRepository;
             _potGroupHistoryRepository = potGroupHistoryRepository;
+            _scoopRepository = scoopRepository;
+            _scoopStateRepository = scoopStateRepository;
             _scoopUsageRepository = scoopUsageRepository;
             _calculatedTaskRepository = calculatedTaskRepository;
             _metalMarkAnalysisRepository = metalMarkAnalysisRepository;
-            _buildingService = buldingService;
-            _executionPlanSelector = executionPlanSelector;
+            _metalMarkRepository = metalMarkRepository;
+
+            _potService = potService;
+            _groupService = groupService;
+            _buildingInfoService = buildingInfoService;
+            _planSelector = planSelector;
+            _tapTaskService = tapTaskService;
         }
 
         public async Task<ExecutionPlan> ExecuteAsync(OrderRequest model)
         {
-            var buildings = EnsureFound(
-                await _buildingRepository.GetAllAsync(),
-                $"Builidngs not found");
-
             var metalMark = EnsureFound(
                 await _metalMarkRepository.GetByNameAsync(model.metalMarkName),
-                $"Metal mark with name {model.metalMarkName} not found");
+                $"Metal mark {model.metalMarkName} not found");
+
+            var buildings = EnsureFound(
+                await _buildingRepository.GetAllAsync(),
+                "Buildings not found");
+
+            var marksByPot = new Dictionary<Guid, MetalMarkAnalysis>();
+            var metalLevelByPot = new Dictionary<Guid, double>();
 
             var buildingInfos = new List<BuildingMetalInfo>();
 
             foreach (var building in buildings)
             {
                 var groups = await _potGroupRepository.GetByBuildingIdAsync(building.Id);
-
                 var groupDtos = new List<PotGroupDto>();
 
                 foreach (var group in groups)
                 {
                     var scoop = EnsureFound(
                         await _scoopRepository.GetByIdAsync(group.ScoopId),
-                        $"Scoop with id {group.ScoopId} not found");
+                        $"Scoop {group.ScoopId} not found");
 
                     var scoopState = EnsureFound(
                         await _scoopStateRepository.GetByIdAsync(scoop.StateId),
-                        $"Scoop state with id {scoop.StateId} not found");
+                        $"Scoop state {scoop.StateId} not found");
 
                     var scoopUsages = await _scoopUsageRepository.GetByScoopIdAsync(scoop.Id);
 
-                    var isBusy = scoopUsages?.Any(u => u.BusyUntil > DateTime.UtcNow) ?? false;
-
-                    var scoopDto = new ScoopDto
-                    {
-                        Id = scoop.Id,
-                        State = scoopState.Name,
-                        IsBusy = isBusy
-                    };
-
                     var pots = await _potGroupHistoryRepository.GetPotsByGroupIdAsync(group.Id);
-
                     var potIds = pots.Select(p => p.Id).ToList();
 
-                    var calculatedTasks = await _calculatedTaskRepository.GetByPotIdsAsync(potIds);
+                    var calculated = await _calculatedTaskRepository.GetByPotIdsAsync(potIds);
+                    if (calculated.Count() != potIds.Count())
+                        throw new BusinessException("Missing calculated tasks");
 
-                    if (calculatedTasks.Count() != potIds.Count())
-                    {
-                        var missing = potIds.Except(calculatedTasks.Select(ct => ct.PotId));
-                        var missingNames = pots.Where(p => missing.Contains(p.Id)).Select(p => p.Name);
+                    var analysis = await _metalMarkAnalysisRepository.GetMetalMarkAnalysisWithPotIdsAsync(potIds);
+                    if (analysis.Count() != potIds.Count())
+                        throw new BusinessException("Missing metal mark analysis");
 
-                        throw new BusinessException(
-                            $"Calculated tasks missing for pots: {string.Join(", ", missingNames)}");
-                    }
+                    var potDtos = await _potService.CreateAsync(
+                        pots,
+                        calculated,
+                        analysis,
+                        marksByPot,
+                        metalLevelByPot);
 
-                    var calculatedByPot = calculatedTasks.ToDictionary(ct => ct.PotId);
-
-                    var metalMarks = await _metalMarkAnalysisRepository.GetMetalMarkAnalysisWithPotIdsAsync(potIds);
-
-                    if (metalMarks.Count() != potIds.Count())
-                    {
-                        var missing = potIds.Except(metalMarks.Select(ma => ma.PotId));
-                        var missingNames = pots.Where(p => missing.Contains(p.Id)).Select(p => p.Name);
-
-                        throw new BusinessException(
-                            $"MetalMarks missing for pots: {string.Join(", ", missingNames)}");
-                    }
-
-                    var marksByPot = metalMarks.ToDictionary(ct => ct.PotId);
-
-                    var potDtos = new List<PotDto>();
-
-                    foreach (var p in pots)
-                    {
-                        var calc = calculatedByPot[p.Id];
-                        var marks = marksByPot[p.Id];
-
-                        var potState = EnsureFound(
-                            await _potStateRepository.GetByIdAsync(p.StateId),
-                            $"Pot state for pot {p.Name} not found");
-
-                        potDtos.Add(new PotDto
-                        {
-                            Id = p.Id,
-                            Name = p.Name,
-                            MetalLevel = calc.RoundCalculatedTaskForPot
-                                ?? throw new BusinessException($"CalculatedMetalLevel is null for pot {p.Name}"),
-                            MetalMarkId = marks.MetalMarkId,
-                            State = potState.Name
-                        });
-                    }
-
-                    var groupDto = new PotGroupDto
-                    {
-                        Id = group.Id,
-                        Scoop = scoopDto,
-                        Pots = potDtos
-                    };
+                    var groupDto = _groupService.Create(
+                        group,
+                        scoop,
+                        scoopState,
+                        scoopUsages,
+                        potDtos);
 
                     groupDtos.Add(groupDto);
                 }
 
-                var buildingDto = new BuildingDto
-                {
-                    Id = building.Id,
-                    Name = building.Name,
-                    Groups = groupDtos
-                };
-
-                var builidingMetalInfo = _buildingService.AnalyzeBuilding(buildingDto, metalMark.Id);
-
-                buildingInfos.Add(builidingMetalInfo);
+                var buildingInfo = _buildingInfoService.Create(building, groupDtos, metalMark.Id);
+                buildingInfos.Add(buildingInfo);
             }
 
-            var result = _executionPlanSelector.SelectExecutionPlan(buildingInfos, model.requiredMetalWeight);
+            var plan = _planSelector.SelectExecutionPlan(buildingInfos, model.requiredMetalWeight);
 
-            return result;
+            await _tapTaskService.CreateAsync(plan, model, metalMark.Id, marksByPot, metalLevelByPot);
+
+            return plan;
         }
     }
 }

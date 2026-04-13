@@ -4,12 +4,6 @@ namespace RUSAL.MetalTapping.BLL.Application.Services
 {
     public class CastingBuildingSelectorService
     {
-        private readonly CastingGroupSelectorService _groupSelector;
-        public CastingBuildingSelectorService(CastingGroupSelectorService groupSelector)
-        {
-            _groupSelector = groupSelector;
-        }
-
         public List<(BuildingMetalInfo building, List<(PotGroupDto group, List<PotDto> pots)> groups)>? SelectGlobalPots(
             List<BuildingMetalInfo> buildings,
             double requiredWeight)

@@ -33,6 +33,7 @@ namespace RUSAL.MetalTapping.DAL.Mappers
 
             CreateMap<MetalMarkModel, MetalMark>();
 
+            CreateMap<Order, OrderModel>();
             CreateMap<OrderModel, Order>();
 
             CreateMap<PotModel, Pot>();
@@ -83,6 +84,12 @@ namespace RUSAL.MetalTapping.DAL.Mappers
 
             CreateMap<PotGroupsHistoryModel, PotGroupsHistory>();
             CreateMap<PotGroupsHistory, PotGroupsHistoryModel>();
+
+            CreateMap<TapTask, TapTaskModel>();
+            CreateMap<TapTaskModel, TapTask>();
+
+            CreateMap<TapTaskPot, TapTaskPotModel>();
+            CreateMap<TapTaskPotModel, TapTaskPot>();
         }
     }
 }
