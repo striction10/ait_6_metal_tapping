@@ -3,63 +3,66 @@ using RUSAL.MetalTapping.BLL.Application.DTOs;
 using RUSAL.MetalTapping.BLL.Domain.Entities;
 using RUSAL.MetalTapping.BLL.Domain.Interfaces;
 
-public class TapTaskService
+namespace RUSAL.MetalTapping.BLL.Application.Services
 {
-    private readonly IGenericRepository<Order> _orderRepository;
-    private readonly IGenericRepository<TapTask> _tapTaskRepository;
-    private readonly IGenericRepository<TapTaskPot> _tapTaskPotRepository;
-
-    public TapTaskService(
-        IGenericRepository<Order> orderRepository,
-        IGenericRepository<TapTask> tapTaskRepository,
-        IGenericRepository<TapTaskPot> tapTaskPotRepository)
+    public class TapTaskService
     {
-        _orderRepository = orderRepository;
-        _tapTaskRepository = tapTaskRepository;
-        _tapTaskPotRepository = tapTaskPotRepository;
-    }
+        private readonly IGenericRepository<Order> _orderRepository;
+        private readonly IGenericRepository<TapTask> _tapTaskRepository;
+        private readonly IGenericRepository<TapTaskPot> _tapTaskPotRepository;
 
-    public async Task CreateAsync(
-        ExecutionPlan plan,
-        OrderRequest orderRequest,
-        Guid metalMarkId,
-        Dictionary<Guid, MetalMarkAnalysis> marksByPot,
-        Dictionary<Guid, double> metalLevelByPot)
-    {
-        var order = new Order
+        public TapTaskService(
+            IGenericRepository<Order> orderRepository,
+            IGenericRepository<TapTask> tapTaskRepository,
+            IGenericRepository<TapTaskPot> tapTaskPotRepository)
         {
-            Id = Guid.NewGuid(),
-            WeightOfMetal = orderRequest.requiredMetalWeight,
-            MetalmarkId = metalMarkId,
-            DateOfOrder = DateTime.UtcNow
-        };
+            _orderRepository = orderRepository;
+            _tapTaskRepository = tapTaskRepository;
+            _tapTaskPotRepository = tapTaskPotRepository;
+        }
 
-        await _orderRepository.CreateAsync(order);
-
-        foreach (var segment in plan.Segments)
+        public async Task CreateAsync(
+            ExecutionPlan plan,
+            OrderRequest orderRequest,
+            Guid metalMarkId,
+            Dictionary<Guid, MetalMarkAnalysis> marksByPot,
+            Dictionary<Guid, double> metalLevelByPot)
         {
-            var tapTask = new TapTask
+            var order = new Order
             {
                 Id = Guid.NewGuid(),
-                BuildingId = segment.BuildingId,
-                OrderId = order.Id,
-                ScoopId = segment.ScoopId
+                WeightOfMetal = orderRequest.requiredMetalWeight,
+                MetalmarkId = metalMarkId,
+                DateOfOrder = DateTime.UtcNow
             };
 
-            await _tapTaskRepository.CreateAsync(tapTask);
+            await _orderRepository.CreateAsync(order);
 
-            foreach (var potId in segment.PotIds)
+            foreach (var segment in plan.Segments)
             {
-                var tapTaskPot = new TapTaskPot
+                var tapTask = new TapTask
                 {
                     Id = Guid.NewGuid(),
-                    TapTaskId = tapTask.Id,
-                    PotId = potId,
-                    MetalMarkAnalysisId = marksByPot[potId].Id,
-                    PotMetalWeigth = metalLevelByPot[potId]
+                    BuildingId = segment.BuildingId,
+                    OrderId = order.Id,
+                    ScoopId = segment.ScoopId
                 };
 
-                await _tapTaskPotRepository.CreateAsync(tapTaskPot);
+                await _tapTaskRepository.CreateAsync(tapTask);
+
+                foreach (var potId in segment.PotIds)
+                {
+                    var tapTaskPot = new TapTaskPot
+                    {
+                        Id = Guid.NewGuid(),
+                        TapTaskId = tapTask.Id,
+                        PotId = potId,
+                        MetalMarkAnalysisId = marksByPot[potId].Id,
+                        PotMetalWeigth = metalLevelByPot[potId]
+                    };
+
+                    await _tapTaskPotRepository.CreateAsync(tapTaskPot);
+                }
             }
         }
     }

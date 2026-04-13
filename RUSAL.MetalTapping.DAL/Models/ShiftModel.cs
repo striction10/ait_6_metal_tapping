@@ -7,5 +7,6 @@
         public DateTime BeginDate { get; set; }
         public DateTime EndDate { get; set; }
         public WorkGroupModel WorkGroup { get; set; } = null!;
+        public ICollection<TaskModel> Tasks { get; set; } = null!;
     }
 }
