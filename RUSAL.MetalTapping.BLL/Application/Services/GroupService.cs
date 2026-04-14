@@ -9,10 +9,10 @@ namespace RUSAL.MetalTapping.BLL.Application.Services
             PotGroup group,
             Scoop scoop,
             ScoopState scoopState,
-            IEnumerable<ScoopUsage> scoopUsages,
+            ScoopUsage scoopUsage,
             List<PotDto> pots)
         {
-            var isBusy = scoopUsages.Any(u => u.BusyUntil > DateTime.UtcNow);
+            var isBusy = scoopUsage != null && scoopUsage.BusyUntil > DateTime.UtcNow;
 
             var scoopDto = new ScoopDto
             {

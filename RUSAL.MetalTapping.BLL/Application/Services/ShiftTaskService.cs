@@ -9,13 +9,17 @@ namespace RUSAL.MetalTapping.BLL.Application.Services
     {
         private readonly IShiftRepository _shiftRepository;
         private readonly ITasksRepository _tasksRepository;
+        private readonly ScoopReservationService _scoopReservationService;
 
         public ShiftTaskService(
             IShiftRepository shiftRepository,
-            ITasksRepository tasksRepository)
+            ITasksRepository tasksRepository,
+            IScoopUsageRepository scoopUsageRepository,
+            ScoopReservationService scoopReservationService)
         {
             _shiftRepository = shiftRepository;
             _tasksRepository = tasksRepository;
+            _scoopReservationService = scoopReservationService;
         }
 
         public async Task<ShiftTask> CreateAsync(TapTask tapTask, Shift shift, DateTime? leadTime, int countOfPots)
@@ -39,6 +43,12 @@ namespace RUSAL.MetalTapping.BLL.Application.Services
 
                 finalLeadTime = nextShift.BeginDate;
             }
+
+            await _scoopReservationService.ReservateScoop(
+                tapTask.ScoopId,
+                finalLeadTime,
+                finalLeadTime.Add(duration)
+            );
 
             var task = new ShiftTask
             {

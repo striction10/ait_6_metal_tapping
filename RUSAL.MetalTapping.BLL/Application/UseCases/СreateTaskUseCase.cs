@@ -93,7 +93,7 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
                         await _scoopStateRepository.GetByIdAsync(scoop.StateId),
                         $"Scoop state {scoop.StateId} not found");
 
-                    var scoopUsages = await _scoopUsageRepository.GetByScoopIdAsync(scoop.Id);
+                    var scoopUsage = await _scoopUsageRepository.GetByScoopIdAsync(scoop.Id);
 
                     var pots = await _potGroupHistoryRepository.GetPotsByGroupIdAsync(group.Id);
                     var potIds = pots.Select(p => p.Id).ToList();
@@ -117,7 +117,7 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
                         group,
                         scoop,
                         scoopState,
-                        scoopUsages,
+                        scoopUsage,
                         potDtos);
 
                     groupDtos.Add(groupDto);

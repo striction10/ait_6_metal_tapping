@@ -1,6 +1,4 @@
-﻿using System.Runtime;
-
-namespace RUSAL.MetalTapping.BLL.Application.DTOs
+﻿namespace RUSAL.MetalTapping.BLL.Application.DTOs
 {
     public class PotGroupDto
     {
