@@ -29,7 +29,7 @@ namespace RUSAL.MetalTapping.DAL.Configurations
 
             builder.Property(x => x.LeadTime)
                 .HasColumnName("LeadTime")
-                .HasColumnType("timestamp")
+                .HasColumnType("datetime")
                 .IsRequired();
 
             builder.HasOne(x => x.Shift)

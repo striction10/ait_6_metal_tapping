@@ -19,7 +19,19 @@ namespace RUSAL.MetalTapping.DAL.Repositories
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<Shift?>> GetCurrentShift()
+        public async Task<Shift?> GetByBuildingId(Guid buildingId)
+        {
+            var now = DateTime.UtcNow;
+
+            var entity = await _context.Shifts
+                .Where(s => s.BeginDate <= now && s.EndDate >= now)
+                .Where(s => s.BuildingId == buildingId)
+                .FirstOrDefaultAsync();
+
+            return _mapper.Map<Shift>(entity);
+        }
+
+        public async Task<IEnumerable<Shift?>> GetCurrentShifts()
         {
             var now = DateTime.UtcNow;
 
@@ -30,7 +42,18 @@ namespace RUSAL.MetalTapping.DAL.Repositories
             return _mapper.Map<IEnumerable<Shift?>>(entities);
         }
 
-        public async Task<IEnumerable<Shift?>> GetNextShift()
+        public async Task<Shift?> GetNextShiftForBuilding(Guid buildingId, DateTime fromDate)
+        {
+            var entity = await _context.Shifts
+                .Where(s => s.BuildingId == buildingId)
+                .Where(s => s.BeginDate > fromDate)
+                .OrderBy(s => s.BeginDate)
+                .FirstOrDefaultAsync();
+
+            return _mapper.Map<Shift?>(entity);
+        }
+
+        public async Task<IEnumerable<Shift?>> GetNextShifts()
         {
             var now = DateTime.UtcNow;
 
@@ -38,11 +61,12 @@ namespace RUSAL.MetalTapping.DAL.Repositories
                 .Where(s => s.BeginDate <= now && s.EndDate >= now)
                 .FirstOrDefaultAsync();
 
-            var nextShifts = await _context.Shifts
-                .Where(s => s.BeginDate == currentShift.EndDate)
+            var entities = await _context.Shifts
+                .Where(s => s.BeginDate > currentShift.EndDate)
+                .OrderBy(s => s.BeginDate)
                 .ToListAsync();
 
-            return _mapper.Map<IEnumerable<Shift>>(nextShifts);
+            return _mapper.Map<IEnumerable<Shift>>(entities);
         }
     }
 }

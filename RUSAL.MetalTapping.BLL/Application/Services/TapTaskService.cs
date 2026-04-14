@@ -21,7 +21,7 @@ namespace RUSAL.MetalTapping.BLL.Application.Services
             _tapTaskPotRepository = tapTaskPotRepository;
         }
 
-        public async Task CreateAsync(
+        public async Task<IEnumerable<TapTask>> CreateAsync(
             ExecutionPlan plan,
             OrderRequest orderRequest,
             Guid metalMarkId,
@@ -38,6 +38,8 @@ namespace RUSAL.MetalTapping.BLL.Application.Services
 
             await _orderRepository.CreateAsync(order);
 
+            var tapTasks = new List<TapTask>();
+
             foreach (var segment in plan.Segments)
             {
                 var tapTask = new TapTask
@@ -47,6 +49,8 @@ namespace RUSAL.MetalTapping.BLL.Application.Services
                     OrderId = order.Id,
                     ScoopId = segment.ScoopId
                 };
+
+                tapTasks.Add(tapTask);
 
                 await _tapTaskRepository.CreateAsync(tapTask);
 
@@ -64,6 +68,8 @@ namespace RUSAL.MetalTapping.BLL.Application.Services
                     await _tapTaskPotRepository.CreateAsync(tapTaskPot);
                 }
             }
+
+            return tapTasks;
         }
     }
 }

@@ -25,6 +25,7 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
         private readonly BuildingService _buildingInfoService;
         private readonly CastingExecutionPlanService _planSelector;
         private readonly TapTaskService _tapTaskService;
+        private readonly ShiftAssignmentService _shiftAssignmentService;
 
         public CreateTaskUseCase(
             IGenericRepository<Building> buildingRepository,
@@ -41,7 +42,8 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
             GroupService groupService,
             BuildingService buildingInfoService,
             CastingExecutionPlanService planSelector,
-            TapTaskService tapTaskService)
+            TapTaskService tapTaskService,
+            ShiftAssignmentService shiftAssignmentService)
         {
             _buildingRepository = buildingRepository;
             _potGroupRepository = potGroupRepository;
@@ -58,6 +60,7 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
             _buildingInfoService = buildingInfoService;
             _planSelector = planSelector;
             _tapTaskService = tapTaskService;
+            _shiftAssignmentService = shiftAssignmentService;
         }
 
         public async Task<ExecutionPlan> ExecuteAsync(OrderRequest model)
@@ -77,7 +80,7 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
 
             foreach (var building in buildings)
             {
-                var groups = await _potGroupRepository.GetByBuildingIdAsync(building.Id);
+                var groups = await _potGroupRepository.GetByBuildingIdsAsync(building.Id);
                 var groupDtos = new List<PotGroupDto>();
 
                 foreach (var group in groups)
@@ -126,7 +129,9 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
 
             var plan = _planSelector.SelectExecutionPlan(buildingInfos, model.requiredMetalWeight);
 
-            await _tapTaskService.CreateAsync(plan, model, metalMark.Id, marksByPot, metalLevelByPot);
+            var tasks = await _tapTaskService.CreateAsync(plan, model, metalMark.Id, marksByPot, metalLevelByPot);
+
+            await _shiftAssignmentService.AssignTaskAsync(tasks);
 
             return plan;
         }

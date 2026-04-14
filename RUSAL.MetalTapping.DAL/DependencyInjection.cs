@@ -35,6 +35,8 @@ namespace RUSAL.MetalTapping.DAL
             services.AddScoped<IPotGroupRepository, PotGroupRepository>();
             services.AddScoped<IScoopUsageRepository, ScoopUsageRepository>();
             services.AddScoped<IShiftRepository, ShiftRepository>();
+            services.AddScoped<ITasksRepository, TaskRepository>();
+            services.AddScoped<ITapTaskPotRepository, TapTaskPotRepository>();
 
             return services;
         }

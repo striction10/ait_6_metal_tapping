@@ -7,25 +7,25 @@ using RUSAL.MetalTapping.DAL.Models;
 
 namespace RUSAL.MetalTapping.DAL.Repositories
 {
-    public class PotGroupRepository : GenericRepository<PotGroup, PotGroupModel>, IPotGroupRepository
+    public class TaskRepository : GenericRepository<ShiftTask, TaskModel>, ITasksRepository
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
 
-        public PotGroupRepository(AppDbContext context, IMapper mapper)
+        public TaskRepository(AppDbContext context, IMapper mapper)
             : base(context, mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<PotGroup>> GetByBuildingIdsAsync(Guid buildingId)
+        public async Task<IEnumerable<ShiftTask?>> GetByShiftIdAsync(Guid shiftId)
         {
-            var entities = await _context.PotGroupModels
-                .Where(pg => pg.BuildingId == buildingId)
+            var entities = await _context.Tasks
+                .Where(t => t.ShiftId == shiftId)
                 .ToListAsync();
 
-            return _mapper.Map<IEnumerable<PotGroup>>(entities);
+            return _mapper.Map<IEnumerable<ShiftTask?>>(entities);
         }
     }
 }
