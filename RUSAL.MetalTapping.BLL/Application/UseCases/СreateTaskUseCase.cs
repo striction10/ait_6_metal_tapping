@@ -63,7 +63,7 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
             _shiftAssignmentService = shiftAssignmentService;
         }
 
-        public async Task<ExecutionPlan> ExecuteAsync(OrderRequest model)
+        public async Task ExecuteAsync(OrderRequest model)
         {
             var metalMark = EnsureFound(
                 await _metalMarkRepository.GetByNameAsync(model.metalMarkName),
@@ -132,10 +132,6 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
             var tasks = await _tapTaskService.CreateAsync(plan, model, metalMark.Id, marksByPot, metalLevelByPot);
 
             await _shiftAssignmentService.AssignTaskAsync(tasks);
-
-
-
-            return plan;
         }
     }
 }

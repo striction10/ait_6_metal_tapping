@@ -24,6 +24,7 @@ public static class DependencyInjection
         services.AddScoped<ShiftTaskService>();
         services.AddScoped<ShiftAssignmentService>();
         services.AddScoped<ScoopReservationService>();
+        services.AddScoped<ViewTaskService>();
 
         services.AddScoped<ProcessDeviationAndTaskUseCase>();
         services.AddScoped<ProcessCalculatedTaskUseCase>();

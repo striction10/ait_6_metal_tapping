@@ -27,5 +27,20 @@ namespace RUSAL.MetalTapping.DAL.Repositories
 
             return _mapper.Map<IEnumerable<ShiftTask?>>(entities);
         }
+
+        public async Task<IEnumerable<ShiftTask>> GetByBuildingAndDateRange(
+            Guid buildingId,
+            DateTime from,
+            DateTime to)
+        {
+            var entities = await _context.Tasks
+                .Where(t =>
+                    t.Shift.BuildingId == buildingId &&
+                    t.LeadTime >= from &&
+                    t.LeadTime < to)
+                .ToListAsync();
+
+            return _mapper.Map<IEnumerable<ShiftTask>>(entities);
+        }
     }
 }

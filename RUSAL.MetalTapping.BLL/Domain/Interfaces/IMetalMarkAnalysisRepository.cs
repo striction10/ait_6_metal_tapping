@@ -6,5 +6,6 @@ namespace RUSAL.MetalTapping.BLL.Domain.Interfaces
     {
         Task<MetalMarkAnalysis?> GetMetalMarkAnalysisWithPotIdAsync(Guid id);
         Task<IEnumerable<MetalMarkAnalysis?>> GetMetalMarkAnalysisWithPotIdsAsync(IEnumerable<Guid> potIds);
+        Task<IEnumerable<MetalMarkAnalysisValue>> GetValuesByAnalysisIdAsync(Guid analysisId);
     }
 }
