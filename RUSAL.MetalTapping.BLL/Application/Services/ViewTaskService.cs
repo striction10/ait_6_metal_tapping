@@ -91,6 +91,9 @@ namespace RUSAL.MetalTapping.BLL.Application.Services
 
                 var pots = await _tapTaskPotRepository.GetByTapTaskId(task.TapTaskId);
 
+                var startLeadTime = task.LeadTime;
+                var currentTime = startLeadTime;
+
                 foreach (var pot in pots)
                 {
                     var analysis = EnsureFound(
@@ -109,7 +112,7 @@ namespace RUSAL.MetalTapping.BLL.Application.Services
 
                     block.Items.Add(new ShiftTaskItem
                     {
-                        Time = task.LeadTime,
+                        Time = currentTime,
                         Weight = pot.PotMetalWeigth,
                         PotName = potEntity.Name,
                         ScoopName = scoop.Name,
@@ -118,12 +121,15 @@ namespace RUSAL.MetalTapping.BLL.Application.Services
                     });
 
                     total += pot.PotMetalWeigth;
+
+                    currentTime += TimeSpan.FromHours(1);
                 }
+
+                block.TotalWeight = total;
             }
 
             return block;
         }
-
 
         private async Task<List<ChemicalElemDto>> BuildChemicalElements(Guid metalMarkAnalysisId)
         {
