@@ -33,7 +33,7 @@ namespace RUSAL.MetalTapping.DAL.Repositories
 
         public async Task<IEnumerable<Shift?>> GetCurrentShifts()
         {
-            var now = DateTime.UtcNow;
+            var now = DateTime.Now;
 
             var entities = await _context.Shifts
                 .Where(s => s.BeginDate <= now && s.EndDate >= now)
@@ -55,7 +55,7 @@ namespace RUSAL.MetalTapping.DAL.Repositories
 
         public async Task<IEnumerable<Shift?>> GetNextShifts()
         {
-            var now = DateTime.UtcNow;
+            var now = DateTime.Now;
 
             var currentShift = await _context.Shifts
                 .Where(s => s.BeginDate <= now && s.EndDate >= now)

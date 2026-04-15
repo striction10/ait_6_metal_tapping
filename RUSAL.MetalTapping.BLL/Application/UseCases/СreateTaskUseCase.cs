@@ -133,6 +133,8 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
 
             await _shiftAssignmentService.AssignTaskAsync(tasks);
 
+
+
             return plan;
         }
     }

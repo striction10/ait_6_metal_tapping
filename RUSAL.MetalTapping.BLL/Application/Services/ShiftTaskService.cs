@@ -27,21 +27,24 @@ namespace RUSAL.MetalTapping.BLL.Application.Services
             if (tapTask.BuildingId != shift.BuildingId)
                 throw new BusinessException($"Cannot create task for shift {shift.Id} with tapTask {tapTask.Id}");
 
-            var now = DateTime.UtcNow;
-            var nextHour = new DateTime(now.Year, now.Month, now.Day, now.Hour, 0, 0, DateTimeKind.Utc)
+            var now = DateTime.Now;
+            var nextHour = new DateTime(now.Year, now.Month, now.Day, now.Hour, 0, 0, DateTimeKind.Local)
                 .AddHours(1);
+
+            var shiftBegin = shift.BeginDate;
+            var shiftEnd = shift.EndDate;
 
             DateTime finalLeadTime = leadTime ?? nextHour;
 
             var duration = TimeSpan.FromHours(countOfPots);
 
-            if (finalLeadTime + duration > shift.EndDate)
+            if (finalLeadTime + duration > shiftEnd)
             {
                 var nextShift = EnsureFound(
                     await _shiftRepository.GetNextShiftForBuilding(shift.BuildingId, shift.EndDate),
                     $"Next shift from shift {shift.Id} not found");
 
-                finalLeadTime = nextShift.BeginDate;
+                finalLeadTime = DateTime.SpecifyKind(nextShift.BeginDate, DateTimeKind.Local);
             }
 
             await _scoopReservationService.ReservateScoop(
