@@ -23,8 +23,8 @@ export const exportTableToPDF = (data, corpusId) => {
             (row.targetMetalLevel?.toFixed(1) ?? '-').toString(),
             (row.actualMetalLevel?.toFixed(1) ?? '-').toString(),
             (row.deviationValue?.toFixed(1) ?? '-').toString(),
-            (row.current?.toFixed(0) ?? '-').toString(),
-            (row.efficiency?.toFixed(1) ?? '-').toString(),
+            (row.amperage?.toFixed(0) ?? '-').toString(),
+            (row.avgAmperage?.toFixed(1) ?? '-').toString(),
             (row.calculatedTask?.toFixed(0) ?? '-').toString(),
             (row.roundCalculatedTask?.toFixed(0) ?? '-').toString(),
             row.metalMarkName || '-'
