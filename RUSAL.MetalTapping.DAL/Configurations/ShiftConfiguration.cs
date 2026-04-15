@@ -28,11 +28,23 @@ public class ShiftConfiguration : IEntityTypeConfiguration<ShiftModel>
             .IsRequired();
 
         builder.Property(b => b.WorkGroupId)
-            .HasColumnType("uniqueidentifier");
-        
+            .HasColumnName("WorkGroupId")
+            .HasColumnType("uniqueidentifier")
+            .IsRequired();
+
+        builder.Property(b => b.BuildingId)
+            .HasColumnName("BuildingId")
+            .HasColumnType("uniqueidentifier")
+            .IsRequired();
+
         builder.HasOne(b => b.WorkGroup)
             .WithMany(b => b.Shifts)
             .HasForeignKey(b => b.WorkGroupId)
+            .IsRequired();
+
+        builder.HasOne(b => b.Building)
+            .WithMany(b => b.Shifts)
+            .HasForeignKey(b => b.BuildingId)
             .IsRequired();
     }
 }

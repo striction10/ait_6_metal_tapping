@@ -25,6 +25,7 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
         private readonly BuildingService _buildingInfoService;
         private readonly CastingExecutionPlanService _planSelector;
         private readonly TapTaskService _tapTaskService;
+        private readonly ShiftAssignmentService _shiftAssignmentService;
 
         public CreateTaskUseCase(
             IGenericRepository<Building> buildingRepository,
@@ -41,7 +42,8 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
             GroupService groupService,
             BuildingService buildingInfoService,
             CastingExecutionPlanService planSelector,
-            TapTaskService tapTaskService)
+            TapTaskService tapTaskService,
+            ShiftAssignmentService shiftAssignmentService)
         {
             _buildingRepository = buildingRepository;
             _potGroupRepository = potGroupRepository;
@@ -58,9 +60,10 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
             _buildingInfoService = buildingInfoService;
             _planSelector = planSelector;
             _tapTaskService = tapTaskService;
+            _shiftAssignmentService = shiftAssignmentService;
         }
 
-        public async Task<ExecutionPlan> ExecuteAsync(OrderRequest model)
+        public async Task ExecuteAsync(OrderRequest model)
         {
             var metalMark = EnsureFound(
                 await _metalMarkRepository.GetByNameAsync(model.metalMarkName),
@@ -77,7 +80,7 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
 
             foreach (var building in buildings)
             {
-                var groups = await _potGroupRepository.GetByBuildingIdAsync(building.Id);
+                var groups = await _potGroupRepository.GetByBuildingIdsAsync(building.Id);
                 var groupDtos = new List<PotGroupDto>();
 
                 foreach (var group in groups)
@@ -90,7 +93,7 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
                         await _scoopStateRepository.GetByIdAsync(scoop.StateId),
                         $"Scoop state {scoop.StateId} not found");
 
-                    var scoopUsages = await _scoopUsageRepository.GetByScoopIdAsync(scoop.Id);
+                    var scoopUsage = await _scoopUsageRepository.GetByScoopIdAsync(scoop.Id);
 
                     var pots = await _potGroupHistoryRepository.GetPotsByGroupIdAsync(group.Id);
                     var potIds = pots.Select(p => p.Id).ToList();
@@ -114,7 +117,7 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
                         group,
                         scoop,
                         scoopState,
-                        scoopUsages,
+                        scoopUsage,
                         potDtos);
 
                     groupDtos.Add(groupDto);
@@ -126,9 +129,9 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
 
             var plan = _planSelector.SelectExecutionPlan(buildingInfos, model.requiredMetalWeight);
 
-            await _tapTaskService.CreateAsync(plan, model, metalMark.Id, marksByPot, metalLevelByPot);
+            var tasks = await _tapTaskService.CreateAsync(plan, model, metalMark.Id, marksByPot, metalLevelByPot);
 
-            return plan;
+            await _shiftAssignmentService.AssignTaskAsync(tasks);
         }
     }
 }

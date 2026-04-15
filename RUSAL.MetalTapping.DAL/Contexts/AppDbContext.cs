@@ -27,7 +27,7 @@ namespace RUSAL.MetalTapping.DAL.Contexts
         public DbSet<ShiftModel> Shifts { get; set; }
         public DbSet<TapTaskModel> TapTasks { get; set; }
         public DbSet<TapTaskPotModel> TapTaskPots { get; set; }
-        public DbSet<ShiftTaskModel> Tasks { get; set; }
+        public DbSet<TaskModel> Tasks { get; set; }
         public DbSet<UserModel> Users { get; set; }
         public DbSet<UserRoleMembersModel> UserRoleMembers { get; set; }
         public DbSet<WorkGroupModel> WorkGroups { get; set; }

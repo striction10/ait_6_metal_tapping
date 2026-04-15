@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RUSAL.MetalTapping.DAL.Contexts;
 
@@ -11,9 +12,11 @@ using RUSAL.MetalTapping.DAL.Contexts;
 namespace RUSAL.MetalTapping.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260413102735_AddTasksRelations")]
+    partial class AddTasksRelations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -535,21 +538,14 @@ namespace RUSAL.MetalTapping.DAL.Migrations
                         .HasColumnType("datetime")
                         .HasColumnName("BeginDate");
 
-                    b.Property<Guid>("BuildingId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("BuildingId");
-
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime")
                         .HasColumnName("EndDate");
 
                     b.Property<Guid>("WorkGroupId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("WorkGroupId");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BuildingId");
 
                     b.HasIndex("WorkGroupId");
 
@@ -621,8 +617,9 @@ namespace RUSAL.MetalTapping.DAL.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("Id");
 
-                    b.Property<DateTime>("LeadTime")
-                        .HasColumnType("datetime")
+                    b.Property<byte[]>("LeadTime")
+                        .IsRequired()
+                        .HasColumnType("timestamp")
                         .HasColumnName("LeadTime");
 
                     b.Property<Guid>("ShiftId")
@@ -952,19 +949,11 @@ namespace RUSAL.MetalTapping.DAL.Migrations
 
             modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.ShiftModel", b =>
                 {
-                    b.HasOne("RUSAL.MetalTapping.DAL.Models.BuildingModel", "Building")
-                        .WithMany("Shifts")
-                        .HasForeignKey("BuildingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("RUSAL.MetalTapping.DAL.Models.WorkGroupModel", "WorkGroup")
                         .WithMany("Shifts")
                         .HasForeignKey("WorkGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Building");
 
                     b.Navigation("WorkGroup");
                 });
@@ -1085,8 +1074,6 @@ namespace RUSAL.MetalTapping.DAL.Migrations
                     b.Navigation("PotGroupModels");
 
                     b.Navigation("Pots");
-
-                    b.Navigation("Shifts");
 
                     b.Navigation("TapTasks");
                 });

@@ -19,13 +19,13 @@ namespace RUSAL.MetalTapping.DAL.Repositories
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<ScoopUsage?>> GetByScoopIdAsync(Guid scoopId)
+        public async Task<ScoopUsage?> GetByScoopIdAsync(Guid scoopId)
         {
             var entities = await _context.ScoopUsages
                 .Where(su => su.ScoopId == scoopId)
-                .ToListAsync();
+                .FirstOrDefaultAsync();
 
-            return _mapper.Map<IEnumerable<ScoopUsage?>>(entities);
+            return _mapper.Map<ScoopUsage?>(entities);
         }
     }
 }

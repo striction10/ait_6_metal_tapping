@@ -4,6 +4,6 @@ namespace RUSAL.MetalTapping.BLL.Domain.Interfaces
 {
     public interface IPotGroupRepository : IGenericRepository<PotGroup>
     {
-        Task<IEnumerable<PotGroup>> GetByBuildingIdAsync(Guid buildingId);
+        Task<IEnumerable<PotGroup>> GetByBuildingIdsAsync(Guid buildingId);
     }
 }

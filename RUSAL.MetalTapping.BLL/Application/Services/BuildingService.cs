@@ -2,27 +2,31 @@
 using RUSAL.MetalTapping.BLL.Application.Services;
 using RUSAL.MetalTapping.BLL.Domain.Entities;
 
-public class BuildingService
+namespace RUSAL.MetalTapping.BLL.Application.Services
 {
-    private readonly BuildingMetalInfoService _buildingService;
-
-    public BuildingService(BuildingMetalInfoService buildingService)
+    public class BuildingService
     {
-        _buildingService = buildingService;
-    }
+        private readonly BuildingMetalInfoService _buildingService;
 
-    public BuildingMetalInfo Create(
-        Building building,
-        List<PotGroupDto> groups,
-        Guid metalMarkId)
-    {
-        var dto = new BuildingDto
+        public BuildingService(BuildingMetalInfoService buildingService)
         {
-            Id = building.Id,
-            Name = building.Name,
-            Groups = groups
-        };
+            _buildingService = buildingService;
+        }
 
-        return _buildingService.AnalyzeBuilding(dto, metalMarkId);
+        public BuildingMetalInfo Create(
+            Building building,
+            List<PotGroupDto> groups,
+            Guid metalMarkId)
+        {
+            var dto = new BuildingDto
+            {
+                Id = building.Id,
+                Name = building.Name,
+                Groups = groups
+            };
+
+            return _buildingService.AnalyzeBuilding(dto, metalMarkId);
+        }
     }
+
 }

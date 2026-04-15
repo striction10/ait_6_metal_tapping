@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RUSAL.MetalTapping.DAL.Contexts;
 
@@ -11,9 +12,11 @@ using RUSAL.MetalTapping.DAL.Contexts;
 namespace RUSAL.MetalTapping.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260414105458_AddShiftsToBuildingForeignKey")]
+    partial class AddShiftsToBuildingForeignKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -535,7 +538,7 @@ namespace RUSAL.MetalTapping.DAL.Migrations
                         .HasColumnType("datetime")
                         .HasColumnName("BeginDate");
 
-                    b.Property<Guid>("BuildingId")
+                    b.Property<Guid?>("BuildingId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("BuildingId");
 
@@ -621,8 +624,9 @@ namespace RUSAL.MetalTapping.DAL.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("Id");
 
-                    b.Property<DateTime>("LeadTime")
-                        .HasColumnType("datetime")
+                    b.Property<byte[]>("LeadTime")
+                        .IsRequired()
+                        .HasColumnType("timestamp")
                         .HasColumnName("LeadTime");
 
                     b.Property<Guid>("ShiftId")

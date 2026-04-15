@@ -56,7 +56,7 @@ namespace RUSAL.MetalTapping.DAL.Mappers
             CreateMap<ScoopStateModel, ScoopState>();
 
             CreateMap<ShiftModel, Shift>();
-            CreateMap<ShiftTaskModel, ShiftTask>();
+            CreateMap<TaskModel, ShiftTask>();
 
             CreateMap<TapTaskModel, TapTask>();
             CreateMap<TapTaskPotModel, TapTaskPot>();
@@ -90,6 +90,9 @@ namespace RUSAL.MetalTapping.DAL.Mappers
 
             CreateMap<TapTaskPot, TapTaskPotModel>();
             CreateMap<TapTaskPotModel, TapTaskPot>();
+
+            CreateMap<ShiftTask, TaskModel>();
+            CreateMap<TaskModel, ShiftTask>();
         }
     }
 }

@@ -24,9 +24,9 @@ namespace RUSAL.MetalTapping.API.Controllers
         {
             var request = new OrderRequest(metalMarkName, requiredMetalWeight);
 
-            var response = await _service.ExecuteAsync(request);
+            await _service.ExecuteAsync(request);
 
-            return Ok(response);
+            return Ok();
         }
     }
 }
