@@ -28,5 +28,24 @@ namespace RUSAL.MetalTapping.DAL.Repositories
 
             return _mapper.Map<MetalMarkAnalysis>(entity);
         }
+
+        public async Task<IEnumerable<MetalMarkAnalysis?>> GetMetalMarkAnalysisWithPotIdsAsync(IEnumerable<Guid> potIds)
+        {
+            var entities = await _context.MetalMarkAnalyses
+                .Include(ma => ma.MetalMark)
+                .Where(ma => potIds.Contains(ma.PotId))
+                .ToListAsync();
+
+            return _mapper.Map<IEnumerable<MetalMarkAnalysis?>>(entities);
+        }
+
+        public async Task<IEnumerable<MetalMarkAnalysisValue>> GetValuesByAnalysisIdAsync(Guid analysisId)
+        {
+            var entities = await _context.MetalMarkAnalysisValues
+                .Where(v => v.MetalMarkAnalysisId == analysisId)
+                .ToListAsync();
+
+            return _mapper.Map<IEnumerable<MetalMarkAnalysisValue>>(entities);
+        }
     }
 }

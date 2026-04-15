@@ -33,6 +33,7 @@ namespace RUSAL.MetalTapping.DAL.Mappers
 
             CreateMap<MetalMarkModel, MetalMark>();
 
+            CreateMap<Order, OrderModel>();
             CreateMap<OrderModel, Order>();
 
             CreateMap<PotModel, Pot>();
@@ -49,12 +50,13 @@ namespace RUSAL.MetalTapping.DAL.Mappers
                            opt => opt.MapFrom(src => src.Deviations));
 
             CreateMap<PotStateModel, PotState>();
+            CreateMap<PotState, PotStateModel>();
 
             CreateMap<ScoopModel, Scoop>();
             CreateMap<ScoopStateModel, ScoopState>();
 
             CreateMap<ShiftModel, Shift>();
-            CreateMap<ShiftTaskModel, ShiftTask>();
+            CreateMap<TaskModel, ShiftTask>();
 
             CreateMap<TapTaskModel, TapTask>();
             CreateMap<TapTaskPotModel, TapTaskPot>();
@@ -76,6 +78,21 @@ namespace RUSAL.MetalTapping.DAL.Mappers
 
             CreateMap<ScoopUsageModel, ScoopUsage>();
             CreateMap<ScoopUsage, ScoopUsageModel>();
+
+            CreateMap<PotGroup, PotGroupModel>();
+            CreateMap<PotGroupModel, PotGroup>();
+
+            CreateMap<PotGroupsHistoryModel, PotGroupsHistory>();
+            CreateMap<PotGroupsHistory, PotGroupsHistoryModel>();
+
+            CreateMap<TapTask, TapTaskModel>();
+            CreateMap<TapTaskModel, TapTask>();
+
+            CreateMap<TapTaskPot, TapTaskPotModel>();
+            CreateMap<TapTaskPotModel, TapTaskPot>();
+
+            CreateMap<ShiftTask, TaskModel>();
+            CreateMap<TaskModel, ShiftTask>();
         }
     }
 }

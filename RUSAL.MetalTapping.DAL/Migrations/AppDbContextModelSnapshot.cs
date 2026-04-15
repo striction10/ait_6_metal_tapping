@@ -261,6 +261,58 @@ namespace RUSAL.MetalTapping.DAL.Migrations
                     b.ToTable("Order", (string)null);
                 });
 
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.PotGroupModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
+
+                    b.Property<Guid>("BuildingId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("BuildingId");
+
+                    b.Property<Guid>("ScoopId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("ScoopId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BuildingId");
+
+                    b.HasIndex("ScoopId");
+
+                    b.ToTable("PotGroup", (string)null);
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.PotGroupsHistoryModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime")
+                        .HasColumnName("Date");
+
+                    b.Property<Guid>("PotGroupId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("PotGroupId");
+
+                    b.Property<Guid>("PotId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("PotId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PotGroupId");
+
+                    b.HasIndex("PotId");
+
+                    b.ToTable("PotGroupsHistory", (string)null);
+                });
+
             modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.PotModel", b =>
                 {
                     b.Property<Guid>("Id")
@@ -414,9 +466,6 @@ namespace RUSAL.MetalTapping.DAL.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("Id");
 
-                    b.Property<Guid>("BuildingId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(20)")
@@ -426,8 +475,6 @@ namespace RUSAL.MetalTapping.DAL.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BuildingId");
 
                     b.HasIndex("StateId");
 
@@ -488,35 +535,25 @@ namespace RUSAL.MetalTapping.DAL.Migrations
                         .HasColumnType("datetime")
                         .HasColumnName("BeginDate");
 
+                    b.Property<Guid>("BuildingId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("BuildingId");
+
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime")
                         .HasColumnName("EndDate");
 
                     b.Property<Guid>("WorkGroupId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("WorkGroupId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BuildingId");
 
                     b.HasIndex("WorkGroupId");
 
                     b.ToTable("Shift", (string)null);
-                });
-
-            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.ShiftTaskModel", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ShiftId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TapTaskId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tasks");
                 });
 
             modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.TapTaskModel", b =>
@@ -575,6 +612,34 @@ namespace RUSAL.MetalTapping.DAL.Migrations
                     b.HasIndex("TapTaskId");
 
                     b.ToTable("TapTaskPot", (string)null);
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.TaskModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
+
+                    b.Property<DateTime>("LeadTime")
+                        .HasColumnType("datetime")
+                        .HasColumnName("LeadTime");
+
+                    b.Property<Guid>("ShiftId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("ShiftId");
+
+                    b.Property<Guid>("TapTaskId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("TapTaskId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ShiftId");
+
+                    b.HasIndex("TapTaskId");
+
+                    b.ToTable("Tasks", (string)null);
                 });
 
             modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.UserModel", b =>
@@ -776,6 +841,44 @@ namespace RUSAL.MetalTapping.DAL.Migrations
                     b.Navigation("MetalMark");
                 });
 
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.PotGroupModel", b =>
+                {
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.BuildingModel", "Building")
+                        .WithMany("PotGroupModels")
+                        .HasForeignKey("BuildingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.ScoopModel", "Scoop")
+                        .WithMany()
+                        .HasForeignKey("ScoopId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Building");
+
+                    b.Navigation("Scoop");
+                });
+
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.PotGroupsHistoryModel", b =>
+                {
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.PotGroupModel", "PotGroup")
+                        .WithMany("History")
+                        .HasForeignKey("PotGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.PotModel", "Pot")
+                        .WithMany("GroupsHistory")
+                        .HasForeignKey("PotId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pot");
+
+                    b.Navigation("PotGroup");
+                });
+
             modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.PotModel", b =>
                 {
                     b.HasOne("RUSAL.MetalTapping.DAL.Models.BuildingModel", "Building")
@@ -827,19 +930,11 @@ namespace RUSAL.MetalTapping.DAL.Migrations
 
             modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.ScoopModel", b =>
                 {
-                    b.HasOne("RUSAL.MetalTapping.DAL.Models.BuildingModel", "Building")
-                        .WithMany("Scoops")
-                        .HasForeignKey("BuildingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("RUSAL.MetalTapping.DAL.Models.ScoopStateModel", "ScoopState")
                         .WithMany("Scoops")
                         .HasForeignKey("StateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Building");
 
                     b.Navigation("ScoopState");
                 });
@@ -857,11 +952,19 @@ namespace RUSAL.MetalTapping.DAL.Migrations
 
             modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.ShiftModel", b =>
                 {
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.BuildingModel", "Building")
+                        .WithMany("Shifts")
+                        .HasForeignKey("BuildingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("RUSAL.MetalTapping.DAL.Models.WorkGroupModel", "WorkGroup")
                         .WithMany("Shifts")
                         .HasForeignKey("WorkGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Building");
 
                     b.Navigation("WorkGroup");
                 });
@@ -920,6 +1023,25 @@ namespace RUSAL.MetalTapping.DAL.Migrations
                     b.Navigation("TapTask");
                 });
 
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.TaskModel", b =>
+                {
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.ShiftModel", "Shift")
+                        .WithMany("Tasks")
+                        .HasForeignKey("ShiftId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RUSAL.MetalTapping.DAL.Models.TapTaskModel", "TapTask")
+                        .WithMany("Tasks")
+                        .HasForeignKey("TapTaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Shift");
+
+                    b.Navigation("TapTask");
+                });
+
             modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.UserRoleMembersModel", b =>
                 {
                     b.HasOne("RUSAL.MetalTapping.DAL.Models.RoleModel", "Role")
@@ -960,9 +1082,11 @@ namespace RUSAL.MetalTapping.DAL.Migrations
 
             modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.BuildingModel", b =>
                 {
+                    b.Navigation("PotGroupModels");
+
                     b.Navigation("Pots");
 
-                    b.Navigation("Scoops");
+                    b.Navigation("Shifts");
 
                     b.Navigation("TapTasks");
                 });
@@ -996,9 +1120,16 @@ namespace RUSAL.MetalTapping.DAL.Migrations
                     b.Navigation("TapTasks");
                 });
 
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.PotGroupModel", b =>
+                {
+                    b.Navigation("History");
+                });
+
             modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.PotModel", b =>
                 {
                     b.Navigation("ExternalDatas");
+
+                    b.Navigation("GroupsHistory");
 
                     b.Navigation("Reglaments");
 
@@ -1046,9 +1177,16 @@ namespace RUSAL.MetalTapping.DAL.Migrations
                     b.Navigation("Scoops");
                 });
 
+            modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.ShiftModel", b =>
+                {
+                    b.Navigation("Tasks");
+                });
+
             modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.TapTaskModel", b =>
                 {
                     b.Navigation("TapTaskPots");
+
+                    b.Navigation("Tasks");
                 });
 
             modelBuilder.Entity("RUSAL.MetalTapping.DAL.Models.UserModel", b =>

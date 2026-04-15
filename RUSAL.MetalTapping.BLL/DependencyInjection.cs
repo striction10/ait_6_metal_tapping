@@ -12,6 +12,19 @@ public static class DependencyInjection
         services.AddScoped<CalculatedTaskService>();
         services.AddScoped<PotParametersService>();
         services.AddScoped<PotViewService>();
+        services.AddScoped<BuildingMetalInfoService>();
+        services.AddScoped<CastingBuildingSelectorService>();
+        services.AddScoped<CastingGroupSelectorService>();
+        services.AddScoped<CastingExecutionPlanService>();
+        services.AddScoped<CastingPotsService>();
+        services.AddScoped<TapTaskService>();
+        services.AddScoped<PotService>();
+        services.AddScoped<BuildingService>();
+        services.AddScoped<GroupService>();
+        services.AddScoped<ShiftTaskService>();
+        services.AddScoped<ShiftAssignmentService>();
+        services.AddScoped<ScoopReservationService>();
+        services.AddScoped<ViewTaskService>();
 
         services.AddScoped<ProcessDeviationAndTaskUseCase>();
         services.AddScoped<ProcessCalculatedTaskUseCase>();
@@ -23,6 +36,7 @@ public static class DependencyInjection
         services.AddScoped<GetAllMetalMarksUseCase>();
         services.AddScoped<GetAllBuildingsUseCase>();
         services.AddScoped<DeviationValuesUseCase>();
+        services.AddScoped<CreateTaskUseCase>();
 
         return services;
     }

@@ -19,6 +19,15 @@ namespace RUSAL.MetalTapping.DAL.Repositories
             _mapper = mapper;
         }
 
+        public async Task<IEnumerable<CalculatedTask?>> GetByPotIdsAsync(IEnumerable<Guid> potIds)
+        {
+            var entities = await _context.CalculatedTasks
+                .Where(ct => potIds.Contains(ct.PotId))
+                .ToListAsync();
+
+            return _mapper.Map<IEnumerable<CalculatedTask?>>(entities);
+        }
+
         public async Task<CalculatedTask?> GetCalculatedTaskWithPotIdAsync(Guid id)
         {
             var entity = await _context.CalculatedTasks

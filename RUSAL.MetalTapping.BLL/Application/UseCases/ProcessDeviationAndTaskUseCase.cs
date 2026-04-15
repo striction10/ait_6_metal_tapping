@@ -59,7 +59,7 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases
             if (castingRatio == null)
             {
                 deviation.IsValid = false;
-                deviation.ActualMetalLevel = deviationAmount;
+                deviation.ActualMetalLevel = model.actualMetalLevel;
 
                 await _deviationRepository.UpdateAsync(deviation);
 

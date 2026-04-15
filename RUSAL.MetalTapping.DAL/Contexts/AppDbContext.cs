@@ -27,13 +27,15 @@ namespace RUSAL.MetalTapping.DAL.Contexts
         public DbSet<ShiftModel> Shifts { get; set; }
         public DbSet<TapTaskModel> TapTasks { get; set; }
         public DbSet<TapTaskPotModel> TapTaskPots { get; set; }
-        public DbSet<ShiftTaskModel> Tasks { get; set; }
+        public DbSet<TaskModel> Tasks { get; set; }
         public DbSet<UserModel> Users { get; set; }
         public DbSet<UserRoleMembersModel> UserRoleMembers { get; set; }
         public DbSet<WorkGroupModel> WorkGroups { get; set; }
         public DbSet<WorkGroupMembersModel> WorkGroupMembers { get; set; }
         public DbSet<CalculatedTaskModel> CalculatedTasks { get; set; }
         public DbSet<ScoopUsageModel> ScoopUsages { get; set; }
+        public DbSet<PotGroupModel> PotGroupModels { get; set; }
+        public DbSet<PotGroupsHistoryModel> PotGroupsHistoryModels { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);

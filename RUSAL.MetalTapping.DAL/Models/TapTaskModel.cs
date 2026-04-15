@@ -9,6 +9,7 @@
         public ScoopModel Scoop { get; set; } = null!;
         public BuildingModel Building { get; set; } = null!;
         public OrderModel Order { get; set; } = null!;
+        public ICollection<TaskModel> Tasks { get; set; } = new List<TaskModel>();
         public ICollection<TapTaskPotModel> TapTaskPots = new List<TapTaskPotModel>();
     }
 }
