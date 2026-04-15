@@ -10,6 +10,7 @@ namespace RUSAL.MetalTapping.BLL.Application.Services
         private readonly IShiftRepository _shiftRepository;
         private readonly ITasksRepository _tasksRepository;
         private readonly ITapTaskPotRepository _tapTaskPotRepository;
+        private readonly IScoopUsageRepository _scoopUsageRepository;
         
         private readonly ShiftTaskService _shiftTaskService;
 
@@ -17,12 +18,14 @@ namespace RUSAL.MetalTapping.BLL.Application.Services
             IShiftRepository shiftRepository,
             ITasksRepository tasksRepository,
             ShiftTaskService shiftTaskService,
-            ITapTaskPotRepository tapTaskPotRepository)
+            ITapTaskPotRepository tapTaskPotRepository,
+            IScoopUsageRepository scoopUsageRepository)
         {
             _shiftRepository = shiftRepository;
             _tasksRepository = tasksRepository;
             _shiftTaskService = shiftTaskService;
             _tapTaskPotRepository = tapTaskPotRepository;
+            _scoopUsageRepository = scoopUsageRepository;
         }
 
         public async Task AssignTaskAsync(IEnumerable<TapTask> tapTasks)
@@ -33,22 +36,19 @@ namespace RUSAL.MetalTapping.BLL.Application.Services
 
             foreach (var tapTask in tapTasks)
             {
-                var shift = currentShifts.FirstOrDefault(cs => cs.BuildingId == tapTask.BuildingId);
+                var shift = currentShifts.FirstOrDefault(cs => cs.BuildingId == tapTask.BuildingId)
+                    ?? throw new BusinessException($"No current shift found for {tapTask.BuildingId}");
 
-                if (shift == null)
-                {
-                    throw new BusinessException($"No current shift found for {tapTask.BuildingId}");
-                }
+                var pots = await _tapTaskPotRepository.GetByTapTaskId(tapTask.Id);
+                var countOfPots = pots.Count();
 
-                var tapTaskPots = await _tapTaskPotRepository.GetByTapTaskId(tapTask.Id);
+                var suitableShift = await FindSuitableShift(tapTask, shift, countOfPots);
 
-                var suitableShift = await FindSuitableShift(tapTask, shift, tapTaskPots.Count());
-
-                await _shiftTaskService.CreateAsync(tapTask, suitableShift, null, tapTaskPots.Count());
+                await _shiftTaskService.CreateAsync(tapTask, suitableShift, null, countOfPots);
             }
         }
 
-        private async Task<Shift?> FindSuitableShift(TapTask task, Shift currentShift, int countOfPots)
+        private async Task<Shift> FindSuitableShift(TapTask task, Shift currentShift, int countOfPots)
         {
             var shift = currentShift;
 
@@ -65,20 +65,31 @@ namespace RUSAL.MetalTapping.BLL.Application.Services
 
         private async Task<bool> CanFitTaskIntoShift(TapTask tapTask, int countOfPots, Shift shift)
         {
-            var now = DateTime.UtcNow;
-            var nextHour = new DateTime(now.Year, now.Month, now.Day, now.Hour, 0, 0, DateTimeKind.Utc)
-                .AddHours(1);
-
-            var tasks = EnsureFound(await _tasksRepository.GetByShiftIdAsync(shift.Id),
-                $"Task with shift id {shift.Id} was not found");
+            var busyFrom = shift.BeginDate;
 
             var duration = TimeSpan.FromHours(countOfPots);
+            var busyUntil = busyFrom + duration;
 
-            if (shift.EndDate < nextHour + duration)
+            if (busyUntil > shift.EndDate)
                 return false;
 
-            if (tasks.Any(t => t.LeadTime == nextHour))
+            var usage = await _scoopUsageRepository.GetByScoopIdAsync(tapTask.ScoopId);
+            if (usage != null && usage.BusyUntil > busyFrom)
                 return false;
+
+            var tasks = await _tasksRepository.GetByShiftIdAsync(shift.Id);
+
+            foreach (var t in tasks)
+            {
+                var pots = await _tapTaskPotRepository.GetByTapTaskId(t.TapTaskId);
+                var tDuration = TimeSpan.FromHours(pots.Count());
+
+                var tBusyFrom = t.LeadTime;
+                var tBusyUntil = tBusyFrom + tDuration;
+
+                if (tBusyFrom < busyUntil && busyFrom < tBusyUntil)
+                    return false;
+            }
 
             return true;
         }
