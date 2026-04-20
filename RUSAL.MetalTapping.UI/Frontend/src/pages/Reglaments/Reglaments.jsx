@@ -121,6 +121,15 @@ function Reglaments() {
                 selectConfig={{
                     selects: [
                         {
+                            name: "corpus",
+                            options: [
+                                { value: "0", label: "Выбрать корпус" },
+                                ...buildings
+                            ],
+                            value: selectedCorpus,
+                            onChange: (e) => setSelectedCorpus(e.target.value)
+                        },
+                        {
                             name: "reglament",
                             options: [
                                 { value: "0", label: "Выбрать регламент" },
@@ -129,34 +138,25 @@ function Reglaments() {
                             value: selectedReglament,
                             onChange: (e) => setSelectedReglament(e.target.value)
                         },
-                        {
-                            name: "corpus",
-                            options: [
-                                { value: "0", label: "Выбрать корпус" },
-                                ...buildings
-                            ],
-                            value: selectedCorpus,
-                            onChange: (e) => setSelectedCorpus(e.target.value)
-                        }
                     ],
                     showDate: true,
                     dateValue: selectedDate,
                     onDateChange: (e) => setSelectedDate(e.target.value)
                 }}
             />
-            
-            <div className="tasks-container">
-                <Table 
-                    title="Таблица выливки, %"
-                    headers={headers}
-                    data={sortedData}
-                    columns={columns}
-                    colspan={headers.length}
-                />
-                
+            <div className="table-container">
+                <div className="tables-wrapper">
+                    <Table 
+                        title="Таблица выливки, %"
+                        headers={headers}
+                        data={sortedData}
+                        columns={columns}
+                        colspan={headers.length}
+                    />
+                </div>
                 <ActionButtons 
-                    onSave={handleSave}
-                    onSubmit={handleSubmit}
+                        onSave={handleSave}
+                        onSubmit={handleSubmit}
                 />
             </div>
 

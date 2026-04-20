@@ -148,21 +148,21 @@ function Parametres() {
                     onDateChange: (e) => setSelectedDate(e.target.value)
                 }}
             />
-            
-            <div className="tasks-container">
-                <Table 
-                    title="Таблица параметров"
-                    headers={headers}
-                    data={sortedData}
-                    columns={columns}
-                    colspan={headers.length}
-                    onCellChange={handleCellChange}
-                    canEdit={canEdit}
-                />
-                
+            <div className="table-container">
+                <div className="tables-wrapper">
+                    <Table 
+                        title="Таблица параметров"
+                        headers={headers}
+                        data={sortedData}
+                        columns={columns}
+                        colspan={headers.length}
+                        onCellChange={handleCellChange}
+                        canEdit={canEdit}
+                    />
+                </div>
                 <ActionButtons 
-                    onSave={handleSave}
-                    onSubmit={handleSubmit}
+                        onSave={handleSave}
+                        onSubmit={handleSubmit}
                 />
             </div>
 

@@ -3,6 +3,8 @@ import Header from '../../components/Header/Header'
 import PageTitle from '../../components/PageTitle'
 import Table from '../../components/Table/Table'
 import ActionButtons from '../../components/ActionButton/ActionButton'
+import { useReglamentsData } from '../../hooks/useReglamentsData'
+import { useTasksData } from '../../hooks/useTasksData'
 import './Tasks.css'
 
 function Tasks () {
@@ -12,71 +14,19 @@ function Tasks () {
     const [selectedSort, setSelectedSort] = useState('0')
     const [selectedCorpus, setSelectedCorpus] = useState('0')
     const [selectedShift, setSelectedShift] = useState('all')
+    const { buildings } = useReglamentsData()
+    const { 
+        totalTaskData, 
+        headers, 
+        columns,
+        getFilteredShiftData,
+        getSortOptions,
+        availableMarks
+    } = useTasksData(selectedCorpus, selectedDate)
 
-    const shiftTaskData = [
-        { 
-            shift1Kg: 1200, shift1Time: '05:00',
-            shift2Kg: 1150, shift2Time: '13:00',
-            shift3Kg: 1180, shift3Time: '21:00',
-            electrolyzerNum: 12, bucketNum: 3,
-            fe: 0.3, si: 0.2, mark: 'A6'
-        },
-        { 
-            shift1Kg: 1250, shift1Time: '05:00',
-            shift2Kg: 1200, shift2Time: '13:00',
-            shift3Kg: 1220, shift3Time: '21:00',
-            electrolyzerNum: 15, bucketNum: 5,
-            fe: 0.4, si: 0.3, mark: 'A7'
-        },
-        { 
-            shift1Kg: 1100, shift1Time: '05:00',
-            shift2Kg: 1080, shift2Time: '13:00',
-            shift3Kg: 1120, shift3Time: '21:00',
-            electrolyzerNum: 8, bucketNum: 2,
-            fe: 0.2, si: 0.1, mark: 'A6'
-        },
-        { 
-            shift1Kg: 1300, shift1Time: '05:00',
-            shift2Kg: 1280, shift2Time: '13:00',
-            shift3Kg: 1320, shift3Time: '21:00',
-            electrolyzerNum: 20, bucketNum: 7,
-            fe: 0.5, si: 0.4, mark: 'A8'
-        },
-    ]
-
-    const shiftTaskHeaders = [
-        'Смена 1, кг | Время',
-        'Смена 2, кг | Время',
-        'Смена 3, кг | Время',
-        '№ Электролиза | № Ковша',
-        'Fe, %',
-        'Si, %',
-        'Марка'
-    ]
-
-    const shiftTaskColumns = [
-        { field: 'shift1Kg' },
-        { field: 'shift2Kg' },
-        { field: 'shift3Kg' },
-        { field: 'electrolyzerNum' },
-        { field: 'fe' },
-        { field: 'si' },
-        { field: 'mark' }
-    ]
-
-    const totalTaskData = [
-        { task: 5000, mark: 'A6' }
-    ]
-
-    const totalTaskHeaders = [
-        'Задание на выливку, кг',
-        'Марка'
-    ]
-
-    const totalTaskColumns = [
-        { field: 'task' },
-        { field: 'mark' }
-    ]
+    const filteredShiftData = getFilteredShiftData(selectedSort, selectedShift)
+    const isCorpusSelected = selectedCorpus && selectedCorpus !== '0'
+    const sortOptions = getSortOptions()
 
     const handleSave = () => {
         alert('Данные сохранены')
@@ -84,6 +34,11 @@ function Tasks () {
 
     const handleSubmit = () => {
         alert('Данные отправлены')
+    }
+
+    const handleCorpusChange = (e) => {
+        setSelectedCorpus(e.target.value)
+        setSelectedSort('0')
     }
 
     return (
@@ -97,26 +52,20 @@ function Tasks () {
                 selectConfig={{
                     selects: [
                         {
-                            name: "sort",
-                            options: [
-                                { value: "0", label: "Выбрать сортность" },
-                                { value: "A6", label: "А6" },
-                                { value: "A7", label: "А7" },
-                                { value: "A8", label: "А8" }
-                            ],
-                            value: selectedSort,
-                            onChange: (e) => setSelectedSort(e.target.value)
-                        },
-                        {
                             name: "corpus",
                             options: [
                                 { value: "0", label: "Выбрать корпус" },
-                                { value: "1", label: "Корпус 1" },
-                                { value: "2", label: "Корпус 2" },
-                                { value: "3", label: "Корпус 3" }
+                                ...buildings
                             ],
                             value: selectedCorpus,
-                            onChange: (e) => setSelectedCorpus(e.target.value)
+                            onChange: handleCorpusChange
+                        },
+                        {
+                            name: "sort",
+                            options: sortOptions,
+                            value: selectedSort,
+                            onChange: (e) => setSelectedSort(e.target.value),
+                            disabled: !isCorpusSelected || availableMarks.length === 0
                         },
                         {
                             name: "shift",
@@ -127,7 +76,8 @@ function Tasks () {
                                 { value: "3", label: "Смена 3 (21:00-05:00)" }
                             ],
                             value: selectedShift,
-                            onChange: (e) => setSelectedShift(e.target.value)
+                            onChange: (e) => setSelectedShift(e.target.value),
+                            disabled: !isCorpusSelected
                         }
                     ],
                     showDate: true,
@@ -136,31 +86,32 @@ function Tasks () {
                 }}
             />
             
-            <div className="tasks-container">
+            <div className="table-container">
                 <div className="tables-wrapper">
                     <Table 
                         title="Задание по сменам"
-                        headers={shiftTaskHeaders}
-                        data={shiftTaskData}
-                        columns={shiftTaskColumns}
-                        colspan={7}
+                        headers={headers.shiftTaskHeaders}
+                        data={filteredShiftData}
+                        columns={columns.shiftTaskColumns}
+                        colspan={9}
                     />
                         
                     <Table 
                         title="Итоговое задание на смену"
-                        headers={totalTaskHeaders}
+                        headers={headers.totalTaskHeaders}
                         data={totalTaskData}
-                        columns={totalTaskColumns}
+                        columns={columns.totalTaskColumns}
                         colspan={2}
                     />
                 </div>
+                
                 <ActionButtons 
-                onSave={handleSave}
-                onSubmit={handleSubmit}
+                        onSave={handleSave}
+                        onSubmit={handleSubmit}
                 />
             </div>
         </>
-    );
+    )
 }
 
 export default Tasks

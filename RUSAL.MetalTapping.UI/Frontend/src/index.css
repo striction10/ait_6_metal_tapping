@@ -37,3 +37,27 @@ h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
+
+.table-container {
+    position: fixed;
+    left: 0;
+    top: 9.08rem;
+    width: 100%;
+}
+
+.tables-wrapper {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    gap: 10px;
+}
+
+.table-container .main-table {
+    position: static;
+    overflow: visible;
+    max-height: 73.05vh;
+    width: 100%;
+    background-color: white;
+    border-radius: 8px;
+    margin-bottom: 0;
+}
