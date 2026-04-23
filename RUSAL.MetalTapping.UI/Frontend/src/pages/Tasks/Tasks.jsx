@@ -40,8 +40,7 @@ function Tasks () {
         setIsUploadOpen(true)
     }
 
-     const handleFileSubmit = (file) => {
-        console.log('Файл отправлен:', file)
+    const handleFileSubmit = () => {
         setIsUploadOpen(false)
     }
 

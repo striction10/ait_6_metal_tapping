@@ -4,7 +4,7 @@ import Header from '../../components/Header/Header'
 import AuthBox from '../../components/AuthBox/AuthBox'
 import AuthForm from '../../components/AuthForm/AuthForm'
 import PageTitle from '../../components/PageTitle'
-import api from '../../services/api'
+import { authApi } from '../../services/auth'
 import { saveUserFromToken } from '../../utils/auth'
 import './Auth.css'
 
@@ -14,10 +14,7 @@ function Auth() {
 
     const handleLogin = async (formData) => {
         try {
-            const response = await api.post('/api/auth/login', {
-                email: formData.username,
-                password: formData.password
-            })
+            const response = await authApi.login(formData.username, formData.password)
             
             const token = response.data
             localStorage.setItem('token', token)
@@ -47,7 +44,7 @@ function Auth() {
                 </AuthBox>
             </div>
         </>
-    );
+    )
 }
 
 export default Auth
