@@ -1,8 +1,7 @@
-﻿namespace RUSAL.MetalTapping.BLL.Domain.Enums
+﻿namespace RUSAL.MetalTapping.BLL.Domain.Enums;
+
+public class CalculateConstants
 {
-    public class CalculateConstants
-    {
-        public const double K = 0.336;
-        public const int hoursCount = 24;
-    }
+    public const double K = 0.336;
+    public const int hoursCount = 24;
 }

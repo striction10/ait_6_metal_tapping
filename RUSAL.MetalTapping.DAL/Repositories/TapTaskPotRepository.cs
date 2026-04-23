@@ -4,28 +4,22 @@ using RUSAL.MetalTapping.BLL.Domain.Entities;
 using RUSAL.MetalTapping.BLL.Domain.Interfaces;
 using RUSAL.MetalTapping.DAL.Contexts;
 using RUSAL.MetalTapping.DAL.Models;
+namespace RUSAL.MetalTapping.DAL.Repositories;
 
-namespace RUSAL.MetalTapping.DAL.Repositories
+public class TapTaskPotRepository(
+    AppDbContext context, IMapper mapper) 
+        : GenericRepository<TapTaskPot, TapTaskPotModel>(context, mapper), 
+        ITapTaskPotRepository
 {
-    public class TapTaskPotRepository : GenericRepository<TapTaskPot, TapTaskPotModel>, ITapTaskPotRepository
+    private readonly AppDbContext _context = context;
+    private readonly IMapper _mapper = mapper;
+
+    public async Task<IEnumerable<TapTaskPot?>> GetByTapTaskId(Guid tapTaskId)
     {
-        private readonly AppDbContext _context;
-        private readonly IMapper _mapper;
+        var entities = await _context.TapTaskPots
+            .Where(ttp => ttp.TapTaskId == tapTaskId)
+            .ToListAsync();
 
-        public TapTaskPotRepository(AppDbContext context, IMapper mapper)
-            : base(context, mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
-
-        public async Task<IEnumerable<TapTaskPot?>> GetByTapTaskId(Guid tapTaskId)
-        {
-            var entities = await _context.TapTaskPots
-                .Where(ttp => ttp.TapTaskId == tapTaskId)
-                .ToListAsync();
-
-            return _mapper.Map<IEnumerable<TapTaskPot?>>(entities);
-        }
+        return _mapper.Map<IEnumerable<TapTaskPot?>>(entities);
     }
 }

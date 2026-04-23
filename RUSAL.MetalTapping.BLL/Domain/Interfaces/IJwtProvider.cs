@@ -1,9 +1,7 @@
 ﻿using RUSAL.MetalTapping.BLL.Domain.Entities;
+namespace RUSAL.MetalTapping.BLL.Domain.Interfaces;
 
-namespace RUSAL.MetalTapping.BLL.Domain.Interfaces
+public interface IJwtProvider
 {
-    public interface IJwtProvider
-    {
-        public string GenerateJwtToken(User user, IEnumerable<string> roles);
-    }
+    public string GenerateJwtToken(User user, IEnumerable<string> roles);
 }

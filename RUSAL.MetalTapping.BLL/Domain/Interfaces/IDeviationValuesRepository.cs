@@ -1,9 +1,7 @@
 ﻿using RUSAL.MetalTapping.BLL.Domain.Entities;
+namespace RUSAL.MetalTapping.BLL.Domain.Interfaces;
 
-namespace RUSAL.MetalTapping.BLL.Domain.Interfaces
+public interface IDeviationValuesRepository : IGenericRepository<DeviationValues>
 {
-    public interface IDeviationValuesRepository : IGenericRepository<DeviationValues>
-    {
-        Task<IEnumerable<DeviationValues>> GetDeviationValuesWithDeviationId(Guid id);
-    }
+    Task<IEnumerable<DeviationValues>> GetDeviationValuesWithDeviationId(Guid id);
 }

@@ -1,7 +1,6 @@
-﻿namespace RUSAL.MetalTapping.BLL.Application.DTOs
+﻿namespace RUSAL.MetalTapping.BLL.Application.DTOs;
+
+public class ExecutionPlan
 {
-    public class ExecutionPlan
-    {
-        public List<ExecutionSegment> Segments { get; set; }
-    }
+    public List<ExecutionSegment> Segments { get; set; }
 }

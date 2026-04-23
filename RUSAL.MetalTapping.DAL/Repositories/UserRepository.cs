@@ -4,26 +4,20 @@ using RUSAL.MetalTapping.BLL.Domain.Entities;
 using RUSAL.MetalTapping.DAL.Contexts;
 using RUSAL.MetalTapping.DAL.Models;
 using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+namespace RUSAL.MetalTapping.DAL.Repositories;
 
-namespace RUSAL.MetalTapping.DAL.Repositories
+public class UserRepository(
+    AppDbContext context, IMapper mapper) 
+        : GenericRepository<User, UserModel>(context, mapper), 
+        IUserRepository
 {
-    public class UserRepository : GenericRepository<User, UserModel>, IUserRepository
+    private readonly AppDbContext _context = context;
+    private readonly IMapper _mapper = mapper;
+
+    public async Task<User?> GetByEmailAsync(string email)
     {
-        private readonly AppDbContext _context;
-        private readonly IMapper _mapper;
+        var entity = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
 
-        public UserRepository(AppDbContext context, IMapper mapper) 
-            : base(context, mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
-
-        public async Task<User?> GetByEmailAsync(string email)
-        {
-            var entity = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
-
-            return _mapper.Map<User>(entity);
-        }
+        return _mapper.Map<User>(entity);
     }
 }

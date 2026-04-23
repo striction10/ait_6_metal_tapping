@@ -2,12 +2,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RUSAL.MetalTapping.API.Middleware;
-using RUSAL.MetalTapping.BLL.Application.DTOs;
-using RUSAL.MetalTapping.BLL.Domain.Entities;
 using RUSAL.MetalTapping.BLL.Domain.Interfaces;
 using RUSAL.MetalTapping.DAL;
 using RUSAL.MetalTapping.DAL.Auth;
-using RUSAL.MetalTapping.DAL.Repositories;
+using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +21,10 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1",
         Description = "API for RUSAL.MetalTapping"
     });
+
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {

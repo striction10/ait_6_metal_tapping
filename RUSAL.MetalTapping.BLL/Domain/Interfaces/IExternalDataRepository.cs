@@ -1,9 +1,7 @@
 ﻿using RUSAL.MetalTapping.BLL.Domain.Entities;
+namespace RUSAL.MetalTapping.BLL.Domain.Interfaces;
 
-namespace RUSAL.MetalTapping.BLL.Domain.Interfaces
+public interface IExternalDataRepository : IGenericRepository<ExternalData>
 {
-    public interface IExternalDataRepository : IGenericRepository<ExternalData>
-    {
-        Task<ExternalData?> GetExternalDataWithPotId(Guid id);
-    }
+    Task<ExternalData?> GetExternalDataWithPotId(Guid id);
 }

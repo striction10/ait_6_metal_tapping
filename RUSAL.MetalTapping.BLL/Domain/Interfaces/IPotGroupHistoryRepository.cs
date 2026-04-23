@@ -1,9 +1,8 @@
 ﻿using RUSAL.MetalTapping.BLL.Domain.Entities;
 
-namespace RUSAL.MetalTapping.BLL.Domain.Interfaces
+namespace RUSAL.MetalTapping.BLL.Domain.Interfaces;
+
+public interface IPotGroupHistoryRepository : IGenericRepository<PotGroupsHistory>
 {
-    public interface IPotGroupHistoryRepository : IGenericRepository<PotGroupsHistory>
-    {
-        Task<IEnumerable<Pot>> GetPotsByGroupIdAsync(Guid groupId);
-    }
+    Task<IEnumerable<Pot>> GetPotsByGroupIdAsync(Guid groupId);
 }

@@ -1,8 +1,7 @@
-﻿namespace RUSAL.MetalTapping.BLL.Domain.Enums
+﻿namespace RUSAL.MetalTapping.BLL.Domain.Enums;
+
+public enum PotParametersType
 {
-    public enum PotParametersType
-    {
-        Amperage,
-        AverageAmperage
-    }
+    Amperage,
+    AverageAmperage
 }

@@ -1,9 +1,8 @@
-﻿namespace RUSAL.MetalTapping.BLL.Application.DTOs
+﻿namespace RUSAL.MetalTapping.BLL.Application.DTOs;
+
+public class ScoopDto
 {
-    public class ScoopDto
-    {
-        public Guid Id { get; set; }
-        public string State { get; set; }
-        public bool IsBusy { get; set; }
-    }
+    public Guid Id { get; set; }
+    public string State { get; set; }
+    public bool IsBusy { get; set; }
 }

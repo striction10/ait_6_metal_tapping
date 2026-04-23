@@ -1,8 +1,7 @@
-﻿namespace RUSAL.MetalTapping.BLL.Application.DTOs
+﻿namespace RUSAL.MetalTapping.BLL.Application.DTOs;
+
+public class DailySummary
 {
-    public class DailySummary
-    {
-        public double TotalWeight { get; init; }
-        public string MetalGrade { get; init; }
-    }
+    public double TotalWeight { get; init; }
+    public string MetalGrade { get; init; }
 }

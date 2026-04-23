@@ -1,7 +1,6 @@
-﻿namespace RUSAL.MetalTapping.BLL.Domain.Interfaces
+﻿namespace RUSAL.MetalTapping.BLL.Domain.Interfaces;
+
+public interface IDomain
 {
-    public interface IDomain
-    {
-        Guid Id { get; set; }
-    }
+    Guid Id { get; set; }
 }
