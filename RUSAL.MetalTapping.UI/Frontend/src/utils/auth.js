@@ -1,4 +1,8 @@
 export const decodeToken = (token) => {
+    if (typeof token !== 'string') {
+        return null
+    }
+    
     try {
         const base64Url = token.split('.')[1]
         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
@@ -8,12 +12,15 @@ export const decodeToken = (token) => {
         
         return JSON.parse(jsonPayload)
     } catch (error) {
-        console.error('Ошибка декодирования токена:', error)
         return null
     }
 }
 
 export const saveUserFromToken = (token) => {
+    if (!token || typeof token !== 'string') {
+        return false
+    }
+    
     const userData = decodeToken(token)
     if (userData) {
         localStorage.setItem('user', JSON.stringify({
