@@ -1,4 +1,3 @@
-﻿namespace RUSAL.MetalTapping.BLL.Application.Contracts
-{
-    public record OrderRequest(string metalMarkName, double requiredMetalWeight);
-}
+﻿namespace RUSAL.MetalTapping.BLL.Application.Contracts;
+
+public record OrderRequest(string metalMarkName, double requiredMetalWeight);

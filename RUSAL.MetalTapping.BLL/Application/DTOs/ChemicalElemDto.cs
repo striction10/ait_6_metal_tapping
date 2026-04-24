@@ -1,8 +1,7 @@
-﻿namespace RUSAL.MetalTapping.BLL.Application.DTOs
+﻿namespace RUSAL.MetalTapping.BLL.Application.DTOs;
+
+public class ChemicalElemDto
 {
-    public class ChemicalElemDto
-    {
-        public string Name { get; init; }
-        public double Value { get; init; }
-    }
+    public string Name { get; init; }
+    public double Value { get; init; }
 }

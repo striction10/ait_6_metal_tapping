@@ -1,4 +1,4 @@
-﻿namespace RUSAL.MetalTapping.DAL.Auth
+﻿namespace RUSAL.MetalTapping.BLL.Domain.Auth
 {
     public class JwtOptions
     {

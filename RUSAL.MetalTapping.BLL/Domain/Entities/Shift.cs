@@ -1,13 +1,11 @@
 ﻿using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+namespace RUSAL.MetalTapping.BLL.Domain.Entities;
 
-namespace RUSAL.MetalTapping.BLL.Domain.Entities
+public class Shift : IDomain
 {
-    public class Shift : IDomain
-    {
-        public Guid Id { get; set; }
-        public Guid WorkGroupId { get; set; }
-        public Guid BuildingId { get; set; }
-        public DateTime BeginDate { get; set; }
-        public DateTime EndDate { get; set; }
-    }
+    public Guid Id { get; set; }
+    public Guid WorkGroupId { get; set; }
+    public Guid BuildingId { get; set; }
+    public DateTime BeginDate { get; set; }
+    public DateTime EndDate { get; set; }
 }

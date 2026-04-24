@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RUSAL.MetalTapping.DAL.Models;
-
 namespace RUSAL.MetalTapping.DAL.Configurations;
 
 public class PotReglamentConfiguration : IEntityTypeConfiguration<PotReglamentModel>

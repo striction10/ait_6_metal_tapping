@@ -1,12 +1,10 @@
 ﻿using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+namespace RUSAL.MetalTapping.BLL.Domain.Entities;
 
-namespace RUSAL.MetalTapping.BLL.Domain.Entities
+public class Order : IDomain
 {
-    public class Order : IDomain
-    {
-        public Guid Id { get; set; }
-        public double WeightOfMetal { get; set; }
-        public Guid MetalmarkId { get; set; }
-        public DateTime DateOfOrder { get; set; }
-    }
+    public Guid Id { get; set; }
+    public double WeightOfMetal { get; set; }
+    public Guid MetalmarkId { get; set; }
+    public DateTime DateOfOrder { get; set; }
 }

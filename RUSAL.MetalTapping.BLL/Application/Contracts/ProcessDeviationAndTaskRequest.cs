@@ -1,4 +1,3 @@
-﻿namespace RUSAL.MetalTapping.BLL.Application.Contracts
-{
-    public record ProcessDeviationAndTaskRequest(Guid potId, double actualMetalLevel);
-}
+﻿namespace RUSAL.MetalTapping.BLL.Application.Contracts;
+
+public record ProcessDeviationAndTaskRequest(Guid potId, double actualMetalLevel);

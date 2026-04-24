@@ -1,10 +1,13 @@
 ﻿using RUSAL.MetalTapping.BLL.Domain.Entities;
+namespace RUSAL.MetalTapping.BLL.Application.Services;
 
-namespace RUSAL.MetalTapping.BLL.Application.Services
+public class MetalMarkService
 {
-    public class MetalMarkService
-    {
-        public string ResolveMetalMarkName(MetalMark? metalMark)
-            => metalMark?.Name ?? "N/A";
-    }
+    /// <summary>
+    /// Получить имя марки металла
+    /// </summary>
+    /// <param name="metalMark"> Марка металла </param>
+    /// <returns> Имя марки металла, иначе стандартное значение для отображения на клиенте </returns>
+    public string ResolveMetalMarkName(MetalMark? metalMark)
+        => metalMark?.Name ?? "N/A";
 }

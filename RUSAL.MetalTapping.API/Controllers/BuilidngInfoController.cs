@@ -2,31 +2,29 @@
 using Microsoft.AspNetCore.Mvc;
 using RUSAL.MetalTapping.BLL.Application.Contracts;
 using RUSAL.MetalTapping.BLL.Application.UseCases;
+namespace RUSAL.MetalTapping.API.Controllers;
 
-namespace RUSAL.MetalTapping.API.Controllers
+[ApiController]
+[Route("api/[controller]")]
+public class BuilidngInfoController(CreateTaskUseCase service) : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class BuilidngInfoController : ControllerBase
+    private readonly CreateTaskUseCase _service = service;
+
+    /// <summary>
+    /// Регистрация запроса и расчёт оптимального маршрута выливки
+    /// </summary>
+    /// <param name="metalMarkName"> Заказанная марка металла </param>
+    /// <param name="requiredMetalWeight"> Заказанное количество металла </param>
+    [HttpGet]
+    [Authorize]
+    public async Task<IActionResult> Get(
+       [FromQuery] string metalMarkName,
+       [FromQuery] double requiredMetalWeight)
     {
-        private readonly CreateTaskUseCase _service;
+        var request = new OrderRequest(metalMarkName, requiredMetalWeight);
 
-        public BuilidngInfoController(CreateTaskUseCase service)
-        {
-            _service = service;
-        }
+        await _service.ExecuteAsync(request);
 
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> Get(
-           [FromQuery] string metalMarkName,
-           [FromQuery] double requiredMetalWeight)
-        {
-            var request = new OrderRequest(metalMarkName, requiredMetalWeight);
-
-            await _service.ExecuteAsync(request);
-
-            return Ok();
-        }
+        return Ok();
     }
 }

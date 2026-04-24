@@ -1,12 +1,10 @@
 ﻿using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+namespace RUSAL.MetalTapping.BLL.Domain.Entities;
 
-namespace RUSAL.MetalTapping.BLL.Domain.Entities
+public class PotReglament : IDomain
 {
-    public class PotReglament : IDomain
-    {
-        public Guid Id { get; set; }
-        public Guid ReglamentId { get; set; }
-        public Guid PotId { get; set; }
-        public List<Deviation> Deviations { get; set; } = new();
-    }
+    public Guid Id { get; set; }
+    public Guid ReglamentId { get; set; }
+    public Guid PotId { get; set; }
+    public List<Deviation> Deviations { get; set; } = new();
 }

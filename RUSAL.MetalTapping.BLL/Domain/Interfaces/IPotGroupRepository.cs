@@ -1,9 +1,7 @@
 ﻿using RUSAL.MetalTapping.BLL.Domain.Entities;
+namespace RUSAL.MetalTapping.BLL.Domain.Interfaces;
 
-namespace RUSAL.MetalTapping.BLL.Domain.Interfaces
+public interface IPotGroupRepository : IGenericRepository<PotGroup>
 {
-    public interface IPotGroupRepository : IGenericRepository<PotGroup>
-    {
-        Task<IEnumerable<PotGroup>> GetByBuildingIdsAsync(Guid buildingId);
-    }
+    Task<IEnumerable<PotGroup>> GetByBuildingIdsAsync(Guid buildingId);
 }

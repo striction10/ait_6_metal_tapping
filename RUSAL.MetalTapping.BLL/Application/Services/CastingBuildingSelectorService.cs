@@ -1,52 +1,56 @@
 ﻿using RUSAL.MetalTapping.BLL.Application.DTOs;
+namespace RUSAL.MetalTapping.BLL.Application.Services;
 
-namespace RUSAL.MetalTapping.BLL.Application.Services
+public class CastingBuildingSelectorService
 {
-    public class CastingBuildingSelectorService
+    /// <summary>
+    /// Выбор электролизёров для выливки из всех корпусов
+    /// </summary>
+    /// <param name="buildings"> Корпусы </param>
+    /// <param name="requiredWeight"> Заданное количество металла </param>
+    /// <returns> Список электролизёров для задания на выливку </returns>
+    public List<(BuildingMetalInfo building, List<(PotGroupDto group, List<PotDto> pots)> groups)>? SelectGlobalPots(
+        List<BuildingMetalInfo> buildings,
+        double requiredWeight)
     {
-        public List<(BuildingMetalInfo building, List<(PotGroupDto group, List<PotDto> pots)> groups)>? SelectGlobalPots(
-            List<BuildingMetalInfo> buildings,
-            double requiredWeight)
+        var allPots = buildings
+            .SelectMany(b => b.Groups
+                .Where(g => g.Scoop.State == "Активен" && !g.Scoop.IsBusy)
+                .SelectMany(g => g.Pots
+                    .Where(p => p.State == "Активен")
+                    .Select(p => (building: b, group: g, pot: p))))
+            .OrderByDescending(x => x.pot.MetalLevel)
+            .ToList();
+
+        double sum = 0;
+
+        var selected = new List<(BuildingMetalInfo building, PotGroupDto group, PotDto pot)>();
+
+        foreach (var item in allPots)
         {
-            var allPots = buildings
-                .SelectMany(b => b.Groups
-                    .Where(g => g.Scoop.State == "Активен" && !g.Scoop.IsBusy)
-                    .SelectMany(g => g.Pots
-                        .Where(p => p.State == "Активен")
-                        .Select(p => (building: b, group: g, pot: p))))
-                .OrderByDescending(x => x.pot.MetalLevel)
-                .ToList();
+            selected.Add(item);
+            sum += item.pot.MetalLevel;
 
-            double sum = 0;
-
-            var selected = new List<(BuildingMetalInfo building, PotGroupDto group, PotDto pot)>();
-
-            foreach (var item in allPots)
-            {
-                selected.Add(item);
-                sum += item.pot.MetalLevel;
-
-                if (sum >= requiredWeight)
-                    break;
-            }
-
-            if (sum < requiredWeight)
-                return null;
-
-            var result = selected
-                .GroupBy(x => x.building)
-                .Select(b => (
-                    building: b.Key,
-                    groups: b.GroupBy(x => x.group)
-                             .Select(g => (
-                                 group: g.Key,
-                                 pots: g.Select(x => x.pot).ToList()
-                             )).ToList()
-                ))
-                .ToList();
-
-            return result;
+            if (sum >= requiredWeight)
+                break;
         }
 
+        if (sum < requiredWeight)
+            return null;
+
+        var result = selected
+            .GroupBy(x => x.building)
+            .Select(b => (
+                building: b.Key,
+                groups: b.GroupBy(x => x.group)
+                         .Select(g => (
+                             group: g.Key,
+                             pots: g.Select(x => x.pot).ToList()
+                         )).ToList()
+            ))
+            .ToList();
+
+        return result;
     }
+
 }

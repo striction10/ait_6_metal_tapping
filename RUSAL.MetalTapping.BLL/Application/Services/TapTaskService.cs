@@ -2,74 +2,74 @@
 using RUSAL.MetalTapping.BLL.Application.DTOs;
 using RUSAL.MetalTapping.BLL.Domain.Entities;
 using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+namespace RUSAL.MetalTapping.BLL.Application.Services;
 
-namespace RUSAL.MetalTapping.BLL.Application.Services
+public class TapTaskService(
+    IGenericRepository<Order> orderRepository,
+    IGenericRepository<TapTask> tapTaskRepository,
+    IGenericRepository<TapTaskPot> tapTaskPotRepository)
 {
-    public class TapTaskService
+    private readonly IGenericRepository<Order> _orderRepository = orderRepository;
+    private readonly IGenericRepository<TapTask> _tapTaskRepository = tapTaskRepository;
+    private readonly IGenericRepository<TapTaskPot> _tapTaskPotRepository = tapTaskPotRepository;
+
+    /// <summary>
+    /// Создание задания на выливку
+    /// </summary>
+    /// <param name="plan"> План выливки </param>
+    /// <param name="orderRequest"> Заказ на выливку </param>
+    /// <param name="metalMarkId"> Идентификатор марки металла </param>
+    /// <param name="marksByPot"> Распределение анализов марки металла по электролизёрам </param>
+    /// <param name="metalLevelByPot"> Распределение уровня металла по электролизёрам </param>
+    /// <returns> Задания на выливку </returns>
+    public async Task<IEnumerable<TapTask>> CreateAsync(
+        ExecutionPlan plan,
+        OrderRequest orderRequest,
+        Guid metalMarkId,
+        Dictionary<Guid, MetalMarkAnalysis> marksByPot,
+        Dictionary<Guid, double> metalLevelByPot)
     {
-        private readonly IGenericRepository<Order> _orderRepository;
-        private readonly IGenericRepository<TapTask> _tapTaskRepository;
-        private readonly IGenericRepository<TapTaskPot> _tapTaskPotRepository;
-
-        public TapTaskService(
-            IGenericRepository<Order> orderRepository,
-            IGenericRepository<TapTask> tapTaskRepository,
-            IGenericRepository<TapTaskPot> tapTaskPotRepository)
+        var order = new Order
         {
-            _orderRepository = orderRepository;
-            _tapTaskRepository = tapTaskRepository;
-            _tapTaskPotRepository = tapTaskPotRepository;
-        }
+            Id = Guid.NewGuid(),
+            WeightOfMetal = orderRequest.requiredMetalWeight,
+            MetalmarkId = metalMarkId,
+            DateOfOrder = DateTime.UtcNow
+        };
 
-        public async Task<IEnumerable<TapTask>> CreateAsync(
-            ExecutionPlan plan,
-            OrderRequest orderRequest,
-            Guid metalMarkId,
-            Dictionary<Guid, MetalMarkAnalysis> marksByPot,
-            Dictionary<Guid, double> metalLevelByPot)
+        await _orderRepository.CreateAsync(order);
+
+        var tapTasks = new List<TapTask>();
+
+        foreach (var segment in plan.Segments)
         {
-            var order = new Order
+            var tapTask = new TapTask
             {
                 Id = Guid.NewGuid(),
-                WeightOfMetal = orderRequest.requiredMetalWeight,
-                MetalmarkId = metalMarkId,
-                DateOfOrder = DateTime.UtcNow
+                BuildingId = segment.BuildingId,
+                OrderId = order.Id,
+                ScoopId = segment.ScoopId
             };
 
-            await _orderRepository.CreateAsync(order);
+            tapTasks.Add(tapTask);
 
-            var tapTasks = new List<TapTask>();
+            await _tapTaskRepository.CreateAsync(tapTask);
 
-            foreach (var segment in plan.Segments)
+            foreach (var potId in segment.PotIds)
             {
-                var tapTask = new TapTask
+                var tapTaskPot = new TapTaskPot
                 {
                     Id = Guid.NewGuid(),
-                    BuildingId = segment.BuildingId,
-                    OrderId = order.Id,
-                    ScoopId = segment.ScoopId
+                    TapTaskId = tapTask.Id,
+                    PotId = potId,
+                    MetalMarkAnalysisId = marksByPot[potId].Id,
+                    PotMetalWeigth = metalLevelByPot[potId]
                 };
 
-                tapTasks.Add(tapTask);
-
-                await _tapTaskRepository.CreateAsync(tapTask);
-
-                foreach (var potId in segment.PotIds)
-                {
-                    var tapTaskPot = new TapTaskPot
-                    {
-                        Id = Guid.NewGuid(),
-                        TapTaskId = tapTask.Id,
-                        PotId = potId,
-                        MetalMarkAnalysisId = marksByPot[potId].Id,
-                        PotMetalWeigth = metalLevelByPot[potId]
-                    };
-
-                    await _tapTaskPotRepository.CreateAsync(tapTaskPot);
-                }
+                await _tapTaskPotRepository.CreateAsync(tapTaskPot);
             }
-
-            return tapTasks;
         }
+
+        return tapTasks;
     }
 }
