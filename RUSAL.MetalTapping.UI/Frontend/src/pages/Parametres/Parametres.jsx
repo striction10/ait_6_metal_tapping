@@ -3,69 +3,153 @@ import Header from '../../components/Header/Header'
 import PageTitle from '../../components/PageTitle'
 import Table from '../../components/Table/Table'
 import ActionButtons from '../../components/ActionButton/ActionButton'
+import SendPopup from "../../components/SendPopup/SendPopup"
+import { useReglamentsData } from '../../hooks/useReglamentsData'
+import { useParametersData } from '../../hooks/useParametresData'
+import { exportTableToPDF } from '../../utils/exportToPDFParametres'
+import { getUserData } from '../../utils/auth'
+import { parametersApi } from '../../services/parameters'
 
 function Parametres() {
-    const [selectedCorpus, setSelectedCorpus] = useState('0')
+    const [selectedCorpus, setSelectedCorpus] = useState('')
     const [selectedDate, setSelectedDate] = useState(
         new Date().toISOString().split('T')[0]
     )
-    const headers = [
-        '№ Электролиза',
-        'Уровень металла, цель',
-        'Уровень металла, факт',
-        'Отклонение',
-        'Сила тока, кА',
-        'Выход по току, %',
-        'Расчетное задание, кг',
-        'ЗПР, кг',
-        'Марка'
-    ]
+    
+    const { buildings } = useReglamentsData()
+    const { sortedData, setSortedData, headers, columns } = useParametersData(selectedCorpus, selectedDate)
 
-    const data = [
-        { id: 1, levelTarget: 10, levelFact: 9.5, deviation: -0.5, current: 150, efficiency: 95, task: 1000, zpr: 950, mark: 'A6' },
-        { id: 2, levelTarget: 10, levelFact: 9.5, deviation: -0.5, current: 150, efficiency: 95, task: 1000, zpr: 950, mark: 'A6' },
-    ]
+    const [isUploadOpen, setIsUploadOpen] = useState(false)
+    const { role } = getUserData()
 
-    const columns = [
-        { field: 'id' },
-        { field: 'levelTarget' },
-        { field: 'levelFact' },
-        { field: 'deviation' },
-        { field: 'current' },
-        { field: 'efficiency' },
-        { field: 'task' },
-        { field: 'zpr' },
-        { field: 'mark' }
-    ]
+    const validateNumberInput = (value) => {
+        let cleaned = value.replace(/[^\d.-]/g, '')
+        
+        const minusCount = (cleaned.match(/-/g) || []).length
+        if (minusCount > 1) {
+            cleaned = cleaned.replace(/-/g, '')
+        }
+        if (cleaned.indexOf('-') > 0) {
+            cleaned = cleaned.replace(/-/g, '')
+        }
+        
+        const dotCount = (cleaned.match(/\./g) || []).length
+        if (dotCount > 1) {
+            cleaned = cleaned.replace(/\./g, '')
+        }
+        
+        return cleaned
+    }
+
+    const canEdit = (field) => {
+        if (role === 'Technologist') {
+            return true
+        }
+        return field === 'actualMetalLevel'
+    }
+
+    const getCellClassName = (row, col, rowIndex, colIndex) => {
+        const deviation = parseFloat(row.deviationValue)
+        const isDeviationOutOfRange = !isNaN(deviation) && deviation <= -5 //TODO: get value from db
+        
+        if (role === 'Technologist') {
+            if (isDeviationOutOfRange && (
+                col.field === 'deviationValue' || 
+                col.field === 'calculatedTask' || 
+                col.field === 'roundCalculatedTask'
+            )) {
+                return 'technologist-blue'
+            }
+            return ''
+        }
+        
+        if (isDeviationOutOfRange && (
+            col.field === 'deviationValue' || 
+            col.field === 'calculatedTask' || 
+            col.field === 'roundCalculatedTask'
+        )) {
+            return 'red-item'
+        }
+        
+        return ''
+    }
+
+    const handleCellChange = async (row, field, newValue) => {
+        if (!canEdit(field)) return 
+        
+        const validatedValue = validateNumberInput(newValue)
+        const numValue = parseFloat(validatedValue)
+        if (isNaN(numValue)) return
+
+        if (field === 'actualMetalLevel') {
+            const response = await parametersApi.updateMetalLevel(row.potId, numValue)
+            
+            setSortedData(prev => prev.map(item => 
+                item.potId === row.potId 
+                    ? { 
+                        ...item, 
+                        actualMetalLevel: numValue,
+                        deviationValue: response.data.deviation,
+                        calculatedTask: response.data.calculatedTask,
+                        roundCalculatedTask: response.data.roundCalculatedTask
+                      }
+                    : item
+            ))
+        } 
+        else if (field === 'calculatedTask') {
+            const response = await parametersApi.updateCalculatedTask(row.potId, numValue)
+            
+            setSortedData(prev => prev.map(item => 
+                item.potId === row.potId 
+                    ? { 
+                        ...item, 
+                        calculatedTask: numValue,
+                        roundCalculatedTask: response.data.roundCalculatedTask
+                      }
+                    : item
+            ))
+        }
+        else if (field === 'roundCalculatedTask') {
+            const response = await parametersApi.updateRoundTask(row.potId, numValue)
+            
+            setSortedData(prev => prev.map(item => 
+                item.potId === row.potId 
+                    ? { 
+                        ...item, 
+                        roundCalculatedTask: numValue
+                      }
+                    : item
+            ))
+        }
+    }
 
     const handleSave = () => {
-        console.log('Сохранение данных...')
-        alert('Данные сохранены')
+        exportTableToPDF(sortedData, selectedCorpus)
     }
 
     const handleSubmit = () => {
-        console.log('Отправка данных...')
-        alert('Данные отправлены')
+        setIsUploadOpen(true)
+    }
+
+    const handleFileSubmit = (file) => {
+        setIsUploadOpen(false)
     }
 
     return (
         <>
-            <PageTitle title={"Параметры"} />
+            <PageTitle title="Параметры" />
             <Header 
                 title="Параметры"
                 showNav={true}
                 showUserBtn={true}
-                onUserClick={() => setIsPopupOpen(true)}
                 activeNav="parametres"
                 selectConfig={{
                     selects: [
                         {
                             name: "corpus",
                             options: [
-                                { value: "", label: "Выбрать корпус" },
-                                { value: "1", label: "Корпус 1" },
-                                { value: "2", label: "Корпус 2" },
-                                { value: "3", label: "Корпус 3" }
+                                { value: "0", label: "Выбрать корпус" },
+                                ...buildings
                             ],
                             value: selectedCorpus,
                             onChange: (e) => setSelectedCorpus(e.target.value)
@@ -76,14 +160,17 @@ function Parametres() {
                     onDateChange: (e) => setSelectedDate(e.target.value)
                 }}
             />
-            <div className="tasks-container">
+            <div className="table-container">
                 <div className="tables-wrapper">
                     <Table 
                         title="Таблица параметров"
                         headers={headers}
-                        data={data}
+                        data={sortedData}
                         columns={columns}
-                        colspan={10}
+                        colspan={headers.length}
+                        onCellChange={handleCellChange}
+                        canEdit={canEdit}
+                        getCellClassName={getCellClassName}
                     />
                 </div>
                 <ActionButtons 
@@ -91,6 +178,12 @@ function Parametres() {
                     onSubmit={handleSubmit}
                 />
             </div>
+
+            <SendPopup
+                isOpen={isUploadOpen}
+                onClose={() => setIsUploadOpen(false)}
+                onSubmit={handleFileSubmit}
+            />
         </>
     )
 }

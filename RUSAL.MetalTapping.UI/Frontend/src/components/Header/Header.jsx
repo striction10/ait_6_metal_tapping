@@ -4,7 +4,6 @@ import logo from '../../assets/rusalLogoGrey.svg'
 import userLogo from '../../assets/userLogo.svg'
 import SelectGroup from "../SelectGroup/SelectGroup"
 import UserPopup from "../UserPopup/UserPopup"
-import { useUser } from '../../contexts/UserContext'
 
 function Header ({ 
     title = "Выливка металла",
@@ -14,7 +13,6 @@ function Header ({
     selectConfig = null
 }) {
     const [isPopupOpen, setIsPopupOpen] = useState(false)
-    const { userData } = useUser()
 
     return (
         <header id="header">
@@ -58,7 +56,6 @@ function Header ({
             <UserPopup 
                 isOpen={isPopupOpen}
                 onClose={() => setIsPopupOpen(false)}
-                userData={userData}
             />
         </header>
     )

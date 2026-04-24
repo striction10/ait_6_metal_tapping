@@ -90,7 +90,6 @@ button {
 }
 
 .firstPart > *:last-child {
-    margin-right: 10px;
     transition: all 0.15s ease-in-out;
 }
 
@@ -111,7 +110,6 @@ button {
     background-color: white;
     width: 100%;
     align-items: center;
-
 }
 
 .selectPart .select-group {

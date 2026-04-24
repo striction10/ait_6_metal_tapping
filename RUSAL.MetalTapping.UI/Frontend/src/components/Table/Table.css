@@ -19,8 +19,12 @@
     color: black;
 }
 
-.main-table tr:nth-child(even) td {
+.main-table tbody tr:nth-child(odd) td {
     background-color: #F2F2F2;
+}
+
+.main-table tbody tr:nth-child(even) td {
+    background-color: white;
 }
 
 .main-table th {
@@ -35,6 +39,10 @@
 
 #color-item {
     background-color: rgba(242, 242, 242, 1) !important;
+}
+
+.technologist-blue {
+    background-color: rgba(182, 215, 253, 1) !important;
 }
 
 .red-item {

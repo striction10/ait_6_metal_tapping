@@ -16,9 +16,10 @@ function AuthForm({ onSubmit }) {
 
     function handleChange(e) {
         const { name, value } = e.target;
+        const lettersOnly = value.replace(/[^a-zA-Zа-яА-Я]/g, '');
         setFormData(prev => ({
             ...prev,
-            [name]: value
+            [name]: lettersOnly
         }));
         
         if (errors[name]) {
