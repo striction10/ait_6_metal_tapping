@@ -16,9 +16,9 @@ public class MetalMarkController(GetAllMetalMarksUseCase service) : ControllerBa
     /// <returns> Список марок металла </returns>
     [HttpGet("all")]
     [Authorize]
-    [ProducesResponseType(typeof(IEnumerable<BuildingDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<MetalMarkDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<IEnumerable<BuildingDto>>> GetAll()
+    public async Task<ActionResult<IEnumerable<MetalMarkDto>>> GetAll()
     {
         var response = await _service.ExecuteAsync();
         return Ok(response);

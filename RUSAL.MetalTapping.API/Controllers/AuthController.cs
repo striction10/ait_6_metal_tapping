@@ -30,12 +30,13 @@ public class AuthController(
     /// <param name="model"> Параметры регистрации </param>
     /// <returns> Токен </returns>
     [HttpPost("login")]
-    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<string>> Login(LoginUserRequest model)
+    [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest, "application/json")]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound, "application/json")]
+    public async Task<ActionResult<LoginResponse>> Login(LoginUserRequest model)
     {
         var token = await _loginUserUseCase.ExecuteAsync(model);
 
-        return Ok(token);
+        return Ok(new LoginResponse { Token = token });
     }
 }

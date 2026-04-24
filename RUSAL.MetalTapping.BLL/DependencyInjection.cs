@@ -2,6 +2,8 @@
 using RUSAL.MetalTapping.BLL.Application.Services;
 using RUSAL.MetalTapping.BLL.Application.UseCases;
 using RUSAL.MetalTapping.BLL.Application.UseCases.Buildings;
+using RUSAL.MetalTapping.BLL.Domain.Auth;
+using RUSAL.MetalTapping.BLL.Domain.Interfaces;
 
 public static class DependencyInjection
 {
@@ -37,6 +39,9 @@ public static class DependencyInjection
         services.AddScoped<GetAllBuildingsUseCase>();
         services.AddScoped<DeviationValuesUseCase>();
         services.AddScoped<CreateTaskUseCase>();
+
+        services.AddScoped<IJwtProvider, JwtProvider>();
+        services.AddScoped<IPasswordHasher, PasswordHasher>();
 
         return services;
     }
