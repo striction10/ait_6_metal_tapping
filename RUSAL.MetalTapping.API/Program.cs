@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using RUSAL.MetalTapping.API.Extensions;
-using RUSAL.MetalTapping.BLL.Domain.Auth;
 using RUSAL.MetalTapping.DAL;
 
 var builder = WebApplication.CreateBuilder(args);

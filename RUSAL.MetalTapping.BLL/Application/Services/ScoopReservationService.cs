@@ -35,7 +35,5 @@ public class ScoopReservationService(IScoopUsageRepository scoopUsageRepository)
         currentUsage.BusyUntil = busyUntil;
 
         await _scoopUsageRepository.UpdateAsync(currentUsage);
-
-        return;
     }
 }
