@@ -7,9 +7,8 @@
   display: flex;
   flex-direction: column;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color-scheme: light only;
+  color: black;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -27,6 +26,7 @@ a:hover {
 
 body {
   margin: 0;
+  padding: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
@@ -38,16 +38,26 @@ h1 {
   line-height: 1.1;
 }
 
+.table-container {
+    position: fixed;
+    left: 0;
+    top: 9.08rem;
+    width: 100%;
+}
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.tables-wrapper {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    gap: 10px;
+}
+
+.table-container .main-table {
+    position: static;
+    overflow: visible;
+    max-height: 73.05vh;
+    width: 100%;
+    background-color: white;
+    border-radius: 8px;
+    margin-bottom: 0;
 }
