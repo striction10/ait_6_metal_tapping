@@ -1,7 +1,7 @@
 ﻿using RUSAL.MetalTapping.BLL.Domain.Interfaces;
 namespace RUSAL.MetalTapping.BLL.Domain.Entities;
 
-public class Shift : IDomain
+public class ShiftDto : IDomain
 {
     public Guid Id { get; set; }
     public Guid WorkGroupId { get; set; }

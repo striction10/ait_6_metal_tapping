@@ -1,35 +1,37 @@
 ﻿using RUSAL.MetalTapping.BLL.Application.Contracts;
-using RUSAL.MetalTapping.BLL.Application.DTOs;
-using RUSAL.MetalTapping.BLL.Domain.Entities;
+using RUSAL.MetalTapping.BLL.Application.ViewModels;
+using RUSAL.MetalTapping.BLL.Domain.DTOs;
 using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+using RUSAL.MetalTapping.DAL.Interfaces;
+
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 
 public class TapTaskService(
-    IGenericRepository<Order> orderRepository,
-    IGenericRepository<TapTask> tapTaskRepository,
-    IGenericRepository<TapTaskPot> tapTaskPotRepository)
+    IGenericRepository<OrderDto> orderRepository,
+    IGenericRepository<TapTaskDto> tapTaskRepository,
+    IGenericRepository<TapTaskPotDto> tapTaskPotRepository)
 {
-    private readonly IGenericRepository<Order> _orderRepository = orderRepository;
-    private readonly IGenericRepository<TapTask> _tapTaskRepository = tapTaskRepository;
-    private readonly IGenericRepository<TapTaskPot> _tapTaskPotRepository = tapTaskPotRepository;
+    private readonly IGenericRepository<OrderDto> _orderRepository = orderRepository;
+    private readonly IGenericRepository<TapTaskDto> _tapTaskRepository = tapTaskRepository;
+    private readonly IGenericRepository<TapTaskPotDto> _tapTaskPotRepository = tapTaskPotRepository;
 
     /// <summary>
     /// Создание задания на выливку
     /// </summary>
-    /// <param name="plan"> План выливки </param>
+    /// <param name="planViewModel"> План выливки </param>
     /// <param name="orderRequest"> Заказ на выливку </param>
     /// <param name="metalMarkId"> Идентификатор марки металла </param>
     /// <param name="marksByPot"> Распределение анализов марки металла по электролизёрам </param>
     /// <param name="metalLevelByPot"> Распределение уровня металла по электролизёрам </param>
     /// <returns> Задания на выливку </returns>
-    public async Task<IEnumerable<TapTask>> CreateAsync(
-        ExecutionPlan plan,
+    public async Task<IEnumerable<TapTaskDto>> CreateAsync(
+        ExecutionPlanViewModel planViewModel,
         OrderRequest orderRequest,
         Guid metalMarkId,
-        Dictionary<Guid, MetalMarkAnalysis> marksByPot,
+        Dictionary<Guid, MetalMarkAnalysisDto> marksByPot,
         Dictionary<Guid, double> metalLevelByPot)
     {
-        var order = new Order
+        var order = new OrderDto
         {
             Id = Guid.NewGuid(),
             WeightOfMetal = orderRequest.requiredMetalWeight,
@@ -39,11 +41,11 @@ public class TapTaskService(
 
         await _orderRepository.CreateAsync(order);
 
-        var tapTasks = new List<TapTask>();
+        var tapTasks = new List<TapTaskDto>();
 
-        foreach (var segment in plan.Segments)
+        foreach (var segment in planViewModel.Segments)
         {
-            var tapTask = new TapTask
+            var tapTask = new TapTaskDto
             {
                 Id = Guid.NewGuid(),
                 BuildingId = segment.BuildingId,
@@ -57,7 +59,7 @@ public class TapTaskService(
 
             foreach (var potId in segment.PotIds)
             {
-                var tapTaskPot = new TapTaskPot
+                var tapTaskPot = new TapTaskPotDto
                 {
                     Id = Guid.NewGuid(),
                     TapTaskId = tapTask.Id,

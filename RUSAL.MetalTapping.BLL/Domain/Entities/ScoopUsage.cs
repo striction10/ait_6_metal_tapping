@@ -1,7 +1,7 @@
 ﻿using RUSAL.MetalTapping.BLL.Domain.Interfaces;
 namespace RUSAL.MetalTapping.BLL.Domain.Entities;
 
-public class ScoopUsage : IDomain
+public class ScoopUsageDto : IDomain
 {
     public Guid Id { get; set; }
     public Guid ScoopId { get; set; }

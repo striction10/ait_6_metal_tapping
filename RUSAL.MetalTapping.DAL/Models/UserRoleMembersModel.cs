@@ -1,6 +1,6 @@
 ﻿namespace RUSAL.MetalTapping.DAL.Models;
 
-public class UserRoleMembersModel
+public class UserRoleMembers
 {
     public Guid Id { get; set; }
     public Guid RoleId { get; set; }

@@ -1,21 +1,24 @@
-﻿using RUSAL.MetalTapping.BLL.Application.DTOs;
-using RUSAL.MetalTapping.BLL.Domain.Entities;
+﻿using RUSAL.MetalTapping.BLL.Application.ViewModels;
+using RUSAL.MetalTapping.BLL.Domain.DTOs;
 using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+using RUSAL.MetalTapping.DAL.Interfaces;
+using BuildingDto = RUSAL.MetalTapping.BLL.Domain.DTOs.BuildingDto;
+
 namespace RUSAL.MetalTapping.BLL.Application.UseCases.Buildings;
 
-public class GetAllBuildingsUseCase(IGenericRepository<Building> repository)
+public class GetAllBuildingsUseCase(IGenericRepository<BuildingDto> repository)
 {
-    private readonly IGenericRepository<Building> _repository = repository;
+    private readonly IGenericRepository<BuildingDto> _repository = repository;
 
     /// <summary>
     /// Получение списка всех корпусов
     /// </summary>
     /// <returns> Список всех корпусов </returns>
-    public async Task<IEnumerable<BuildingDto>> ExecuteAsync()
+    public async Task<IEnumerable<ViewModels.BuildingDto>> ExecuteAsync()
     {
         var buildings = await _repository.GetAllAsync();
 
-        return buildings.Select(b => new BuildingDto
+        return buildings.Select(b => new ViewModels.BuildingDto
         {
             Id = b.Id,
             Name = b.Name

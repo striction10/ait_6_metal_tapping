@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RUSAL.MetalTapping.DAL.Models;
+using RUSAL.MetalTapping.DAL.Entities;
+
 namespace RUSAL.MetalTapping.DAL.Configurations;
 
-public class ExternalDataConfiguration : IEntityTypeConfiguration<ExternalDataModel>
+public class ExternalDataConfiguration : IEntityTypeConfiguration<ExternalData>
 {
-    public void Configure(EntityTypeBuilder<ExternalDataModel> builder)
+    public void Configure(EntityTypeBuilder<ExternalData> builder)
     {
         builder.ToTable("ExternalData");
 

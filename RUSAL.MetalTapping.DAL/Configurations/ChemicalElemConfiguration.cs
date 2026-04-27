@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RUSAL.MetalTapping.DAL.Models;
+using RUSAL.MetalTapping.DAL.Entities;
+
 namespace RUSAL.MetalTapping.DAL.Configurations;
 
-public class ChemicalElemConfiguration : IEntityTypeConfiguration<ChemicalElemModel>
+public class ChemicalElemConfiguration : IEntityTypeConfiguration<ChemicalElem>
 {
-    public void Configure(EntityTypeBuilder<ChemicalElemModel> builder)
+    public void Configure(EntityTypeBuilder<ChemicalElem> builder)
     {
     builder.ToTable("ChemicalElem");
 

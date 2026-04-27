@@ -1,7 +1,8 @@
 ﻿using System.Reflection;
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
-using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+using RUSAL.MetalTapping.DAL.Interfaces;
+
 namespace RUSAL.MetalTapping.DAL.Repositories;
 
 public class GenericRepositoryAdapter<TDomain> : IGenericRepository<TDomain>

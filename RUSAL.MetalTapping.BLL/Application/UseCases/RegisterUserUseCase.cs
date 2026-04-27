@@ -1,19 +1,21 @@
 ﻿using RUSAL.MetalTapping.BLL.Application.Contracts;
-using RUSAL.MetalTapping.BLL.Domain.Entities;
+using RUSAL.MetalTapping.BLL.Domain.DTOs;
 using RUSAL.MetalTapping.BLL.Domain.Exceptions;
 using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+using RUSAL.MetalTapping.DAL.Interfaces;
+
 namespace RUSAL.MetalTapping.BLL.Application.UseCases;
 
 public class RegisterUserUseCase(
     IUserRepository userRepository,
     IRoleRepository roleRepository,
     IPasswordHasher passwordHasher,
-    IGenericRepository<UserRoleMembers> userRoleRepository)
+    IGenericRepository<UserRoleMembersDto> userRoleRepository)
 {
     private readonly IUserRepository _userRepository = userRepository;
     private readonly IRoleRepository _roleRepository = roleRepository;
     private readonly IPasswordHasher _passwordHasher = passwordHasher;
-    private readonly IGenericRepository<UserRoleMembers> _userRoleRepository = userRoleRepository;
+    private readonly IGenericRepository<UserRoleMembersDto> _userRoleRepository = userRoleRepository;
 
     /// <summary>
     /// Регистрация пользователя в системе
@@ -33,7 +35,7 @@ public class RegisterUserUseCase(
 
         var hashedPassword = _passwordHasher.Hash(model.password);
 
-        var user = new User
+        var user = new UserDto
         {
             Id = Guid.NewGuid(),
             FirstName = model.firstName,
@@ -44,7 +46,7 @@ public class RegisterUserUseCase(
 
         await _userRepository.CreateAsync(user);
 
-        var userRole = new UserRoleMembers
+        var userRole = new UserRoleMembersDto
         {
             UserId = user.Id,
             RoleId = role.Id

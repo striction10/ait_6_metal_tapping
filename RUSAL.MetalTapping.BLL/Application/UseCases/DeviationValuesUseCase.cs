@@ -1,19 +1,20 @@
 ﻿using RUSAL.MetalTapping.BLL.Application.Contracts;
-using RUSAL.MetalTapping.BLL.Domain.Entities;
+using RUSAL.MetalTapping.BLL.Domain.DTOs;
 using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+using RUSAL.MetalTapping.DAL.Interfaces;
 using static RUSAL.MetalTapping.BLL.Domain.Guard;
 namespace RUSAL.MetalTapping.BLL.Application.UseCases;
 
 public class DeviationValuesUseCase(
-    IGenericRepository<Building> buildingRepository,
+    IGenericRepository<BuildingDto> buildingRepository,
     IReglamentRepository reglamentRepository,
     IPotReglamentRepository potReglamentRepository,
-    IGenericRepository<Pot> potRepository)
+    IGenericRepository<PotDto> potRepository)
 {
-    private readonly IGenericRepository<Building> _buildingRepository = buildingRepository;
+    private readonly IGenericRepository<BuildingDto> _buildingRepository = buildingRepository;
     private readonly IReglamentRepository _reglamentRepository = reglamentRepository;
     private readonly IPotReglamentRepository _potReglamentRepository = potReglamentRepository;
-    private readonly IGenericRepository<Pot> _potRepository = potRepository;
+    private readonly IGenericRepository<PotDto> _potRepository = potRepository;
 
     /// <summary>
     /// Создание ViewModel таблицы регламентов для клиента 
@@ -32,7 +33,7 @@ public class DeviationValuesUseCase(
             await _potReglamentRepository.GetByReglamentAndBuildingWithDeviationsAsync(
                 model.reglamentId, model.buildingId);
 
-        var pots = new List<PotDeviation>();
+        var pots = new List<PotDeviationDto>();
 
         foreach (var potReglament in potReglaments)
         {
@@ -46,7 +47,7 @@ public class DeviationValuesUseCase(
             var castingRatios = deviation.Values
                 .ToDictionary(v => v.Value, v => v.CastingRatio);
 
-            pots.Add(new PotDeviation(
+            pots.Add(new PotDeviationDto(
                 id: potReglament.PotId,
                 name: pot.Name,
                 castingRatio: castingRatios

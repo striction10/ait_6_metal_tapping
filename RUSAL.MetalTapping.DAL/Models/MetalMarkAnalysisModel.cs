@@ -1,13 +1,13 @@
 ﻿namespace RUSAL.MetalTapping.DAL.Models;
 
-public class MetalMarkAnalysisModel
+public class MetalMarkAnalysis
 {
     public Guid Id { get; set; }
     public Guid PotId { get; set; }
     public Guid MetalMarkId { get; set; }
     public DateTime DateOfReceipt { get; set; }
-    public PotModel Pot { get; set; } = null!;
-    public MetalMarkModel MetalMark { get; set; } = null!;
-    public ICollection<MetalMarkAnalysisValueModel> Values { get; set; } = new List<MetalMarkAnalysisValueModel>();
-    public ICollection<TapTaskPotModel> TapTaskPots { get; set; } = new List<TapTaskPotModel>();
+    public Pot Pot { get; set; } = null!;
+    public MetalMark MetalMark { get; set; } = null!;
+    public ICollection<MetalMarkAnalysisValue> Values { get; set; } = new List<MetalMarkAnalysisValue>();
+    public ICollection<TapTaskPot> TapTaskPots { get; set; } = new List<TapTaskPot>();
 }

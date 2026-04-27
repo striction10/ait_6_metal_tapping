@@ -1,6 +1,6 @@
 ﻿namespace RUSAL.MetalTapping.DAL.Models;
 
-public class MetalMarkAnalysisValueModel
+public class MetalMarkAnalysisValue
 {
     public Guid Id { get; set; }
     public Guid ChemicalElemId { get; set; }

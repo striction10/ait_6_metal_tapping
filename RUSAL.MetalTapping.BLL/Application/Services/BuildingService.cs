@@ -1,5 +1,7 @@
-﻿using RUSAL.MetalTapping.BLL.Application.DTOs;
-using RUSAL.MetalTapping.BLL.Domain.Entities;
+﻿using RUSAL.MetalTapping.BLL.Application.ViewModels;
+using RUSAL.MetalTapping.BLL.Domain.DTOs;
+using BuildingDto = RUSAL.MetalTapping.BLL.Domain.DTOs.BuildingDto;
+
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 
 public class BuildingService(BuildingMetalInfoService buildingService)
@@ -9,19 +11,19 @@ public class BuildingService(BuildingMetalInfoService buildingService)
     /// <summary>
     /// Создание DTO
     /// </summary>
-    /// <param name="building"></param>
+    /// <param name="buildingDto"></param>
     /// <param name="groups"></param>
     /// <param name="metalMarkId"></param>
     /// <returns></returns>
-    public BuildingMetalInfo Create(
-        Building building,
-        List<PotGroupDto> groups,
+    public BuildingMetalInfoViewModel Create(
+        BuildingDto buildingDto,
+        List<PotGroupViewModel> groups,
         Guid metalMarkId)
     {
-        var dto = new BuildingDto
+        var dto = new ViewModels.BuildingDto
         {
-            Id = building.Id,
-            Name = building.Name,
+            Id = buildingDto.Id,
+            Name = buildingDto.Name,
             Groups = groups
         };
 

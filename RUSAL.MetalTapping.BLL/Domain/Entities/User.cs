@@ -1,7 +1,7 @@
 ﻿using RUSAL.MetalTapping.BLL.Domain.Interfaces;
 namespace RUSAL.MetalTapping.BLL.Domain.Entities;
 
-public class User : IDomain
+public class UserDto : IDomain
 {
     public Guid Id { get; set; }
     public string FirstName { get; set; } = string.Empty;

@@ -1,4 +1,4 @@
-﻿using RUSAL.MetalTapping.BLL.Domain.Entities;
+﻿using RUSAL.MetalTapping.BLL.Domain.DTOs;
 using RUSAL.MetalTapping.BLL.Domain.Enums;
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 
@@ -11,7 +11,7 @@ public class PotParametersService
    /// <param name="type"> Нужный тип параметра </param>
    /// <returns> Нужный параметр электролизёра </returns>
    /// <exception cref="Exception"> Параметр не найден </exception>
-    public double GetParameter(IEnumerable<PotParameters> parameters, PotParametersType type)
+    public double GetParameter(IEnumerable<PotParametersDto> parameters, PotParametersType type)
     {
         var param = parameters.FirstOrDefault(p => p.Type == type);
 

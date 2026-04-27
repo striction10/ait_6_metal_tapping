@@ -1,4 +1,5 @@
-﻿using RUSAL.MetalTapping.BLL.Application.DTOs;
+﻿using RUSAL.MetalTapping.BLL.Application.ViewModels;
+
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 
 public class BuildingMetalInfoService
@@ -9,9 +10,9 @@ public class BuildingMetalInfoService
     /// <param name="building"> Корпус </param>
     /// <param name="metalMarkId"> Идентификатор марки металла </param>
     /// <returns></returns>
-    public BuildingMetalInfo AnalyzeBuilding(BuildingDto building, Guid metalMarkId)
+    public BuildingMetalInfoViewModel AnalyzeBuilding(BuildingDto building, Guid metalMarkId)
     {
-        var groupInfos = new List<PotGroupDto>();
+        var groupInfos = new List<PotGroupViewModel>();
 
         foreach (var group in building.Groups)
         {
@@ -24,7 +25,7 @@ public class BuildingMetalInfoService
 
             var groupMetalWeight = pots.Sum(p => p.MetalLevel);
 
-            var groupInfo = new PotGroupDto
+            var groupInfo = new PotGroupViewModel
             {
                 Id = group.Id,
                 Scoop = group.Scoop,
@@ -35,7 +36,7 @@ public class BuildingMetalInfoService
             groupInfos.Add(groupInfo);
         }
 
-        return new BuildingMetalInfo
+        return new BuildingMetalInfoViewModel
         {
             BuildingId = building.Id,
             MetalMarkId = metalMarkId,

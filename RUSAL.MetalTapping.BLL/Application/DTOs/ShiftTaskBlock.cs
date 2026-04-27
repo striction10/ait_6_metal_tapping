@@ -1,7 +1,7 @@
 ﻿namespace RUSAL.MetalTapping.BLL.Application.DTOs;
 
-public class ShiftTaskBlock
+public class ShiftTaskBlockViewModel
 {
-    public List<ShiftTaskItem> Items { get; init; } = new();
+    public List<ShiftTaskItemViewModel> Items { get; init; } = new();
     public double TotalWeight { get; set; }
 }

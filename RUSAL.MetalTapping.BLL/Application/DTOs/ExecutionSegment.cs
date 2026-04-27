@@ -1,6 +1,6 @@
 ﻿namespace RUSAL.MetalTapping.BLL.Application.DTOs;
 
-public class ExecutionSegment
+public class ExecutionSegmentViewModel
 {
     public Guid BuildingId { get; set; }
     public Guid GroupId { get; set; }

@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RUSAL.MetalTapping.DAL.Models;
+using RUSAL.MetalTapping.DAL.Entities;
+
 namespace RUSAL.MetalTapping.DAL.Configurations;
 
-public class DeviationConfiguration : IEntityTypeConfiguration<DeviationModel>
+public class DeviationConfiguration : IEntityTypeConfiguration<Deviation>
 {
-    public void Configure(EntityTypeBuilder<DeviationModel> builder)
+    public void Configure(EntityTypeBuilder<Deviation> builder)
     {
         builder.ToTable("Deviation");
 

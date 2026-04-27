@@ -1,6 +1,6 @@
 ﻿namespace RUSAL.MetalTapping.BLL.Application.DTOs;
 
-public class ScoopDto
+public class ScoopViewModel
 {
     public Guid Id { get; set; }
     public string State { get; set; }

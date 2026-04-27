@@ -1,20 +1,24 @@
 ﻿using RUSAL.MetalTapping.BLL.Application.Contracts;
-using RUSAL.MetalTapping.BLL.Application.DTOs;
 using RUSAL.MetalTapping.BLL.Application.Services;
-using RUSAL.MetalTapping.BLL.Domain.Entities;
+using RUSAL.MetalTapping.BLL.Application.ViewModels;
+using RUSAL.MetalTapping.BLL.Domain.DTOs;
 using RUSAL.MetalTapping.BLL.Domain.Exceptions;
 using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+using RUSAL.MetalTapping.DAL.Interfaces;
 using static RUSAL.MetalTapping.BLL.Domain.Guard;
+using BuildingDto = RUSAL.MetalTapping.BLL.Domain.DTOs.BuildingDto;
+using ScoopDto = RUSAL.MetalTapping.BLL.Domain.DTOs.ScoopDto;
+
 namespace RUSAL.MetalTapping.BLL.Application.UseCases;
 
 public class CreateTaskUseCase(
-    IGenericRepository<Building> buildingRepository,
+    IGenericRepository<BuildingDto> buildingRepository,
     IPotGroupRepository potGroupRepository,
     IPotGroupHistoryRepository potGroupHistoryRepository,
-    IGenericRepository<Scoop> scoopRepository,
-    IGenericRepository<ScoopState> scoopStateRepository,
+    IGenericRepository<ScoopDto> scoopRepository,
+    IGenericRepository<ScoopStateDto> scoopStateRepository,
     IScoopUsageRepository scoopUsageRepository,
-    IGenericRepository<PotState> potStateRepository,
+    IGenericRepository<PotStateDto> potStateRepository,
     ICalculatedTaskRepository calculatedTaskRepository,
     IMetalMarkAnalysisRepository metalMarkAnalysisRepository,
     IMetalMarkRepository metalMarkRepository,
@@ -25,11 +29,11 @@ public class CreateTaskUseCase(
     TapTaskService tapTaskService,
     ShiftAssignmentService shiftAssignmentService)
 {
-    private readonly IGenericRepository<Building> _buildingRepository = buildingRepository;
+    private readonly IGenericRepository<BuildingDto> _buildingRepository = buildingRepository;
     private readonly IPotGroupRepository _potGroupRepository = potGroupRepository;
     private readonly IPotGroupHistoryRepository _potGroupHistoryRepository = potGroupHistoryRepository;
-    private readonly IGenericRepository<Scoop> _scoopRepository = scoopRepository;
-    private readonly IGenericRepository<ScoopState> _scoopStateRepository = scoopStateRepository;
+    private readonly IGenericRepository<ScoopDto> _scoopRepository = scoopRepository;
+    private readonly IGenericRepository<ScoopStateDto> _scoopStateRepository = scoopStateRepository;
     private readonly IScoopUsageRepository _scoopUsageRepository = scoopUsageRepository;
     private readonly ICalculatedTaskRepository _calculatedTaskRepository = calculatedTaskRepository;
     private readonly IMetalMarkAnalysisRepository _metalMarkAnalysisRepository = metalMarkAnalysisRepository;
@@ -58,15 +62,15 @@ public class CreateTaskUseCase(
             await _buildingRepository.GetAllAsync(),
             "Buildings not found");
 
-        var marksByPot = new Dictionary<Guid, MetalMarkAnalysis>();
+        var marksByPot = new Dictionary<Guid, MetalMarkAnalysisDto>();
         var metalLevelByPot = new Dictionary<Guid, double>();
 
-        var buildingInfos = new List<BuildingMetalInfo>();
+        var buildingInfos = new List<BuildingMetalInfoViewModel>();
 
         foreach (var building in buildings)
         {
             var groups = await _potGroupRepository.GetByBuildingIdsAsync(building.Id);
-            var groupDtos = new List<PotGroupDto>();
+            var groupDtos = new List<PotGroupViewModel>();
 
             foreach (var group in groups)
             {

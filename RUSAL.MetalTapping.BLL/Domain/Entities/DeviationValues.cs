@@ -1,7 +1,7 @@
 ﻿using RUSAL.MetalTapping.BLL.Domain.Interfaces;
 namespace RUSAL.MetalTapping.BLL.Domain.Entities;
 
-public class DeviationValues : IDomain
+public class DeviationValuesDto : IDomain
 {
     public Guid Id { get; set; }
     public Guid DeviationId { get; set; }

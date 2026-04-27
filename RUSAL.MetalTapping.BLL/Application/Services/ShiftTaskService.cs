@@ -1,6 +1,7 @@
-﻿using RUSAL.MetalTapping.BLL.Domain.Entities;
+﻿using RUSAL.MetalTapping.BLL.Domain.DTOs;
 using RUSAL.MetalTapping.BLL.Domain.Exceptions;
 using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+using RUSAL.MetalTapping.DAL.Interfaces;
 using static RUSAL.MetalTapping.BLL.Domain.Guard;
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 
@@ -16,23 +17,23 @@ public class ShiftTaskService(
     /// <summary>
     /// Создание задания на выливку и резервация ковша
     /// </summary>
-    /// <param name="tapTask"> Задание на выливку </param>
-    /// <param name="shift"> Текущая смена </param>
+    /// <param name="tapTaskDto"> Задание на выливку </param>
+    /// <param name="shiftDto"> Текущая смена </param>
     /// <param name="leadTime"> Время выполнения </param>
     /// <param name="countOfPots"> Количество электролизёров в задании</param>
     /// <returns> Задание на выливку </returns>
     /// <exception cref="BusinessException"> Нет следующей смены для текущей смены - перенос задания невозможен </exception>
-    public async Task<ShiftTask> CreateAsync(TapTask tapTask, Shift shift, DateTime? leadTime, int countOfPots)
+    public async Task<ShiftTaskDto> CreateAsync(TapTaskDto tapTaskDto, ShiftDto shiftDto, DateTime? leadTime, int countOfPots)
     {
-        if (tapTask.BuildingId != shift.BuildingId)
-            throw new BusinessException($"Cannot create task for shift {shift.Id} with tapTask {tapTask.Id}");
+        if (tapTaskDto.BuildingId != shiftDto.BuildingId)
+            throw new BusinessException($"Cannot create task for shift {shiftDto.Id} with tapTask {tapTaskDto.Id}");
 
         var now = DateTime.Now;
         var nextHour = new DateTime(now.Year, now.Month, now.Day, now.Hour, 0, 0, DateTimeKind.Local)
             .AddHours(1);
 
-        var shiftBegin = shift.BeginDate;
-        var shiftEnd = shift.EndDate;
+        var shiftBegin = shiftDto.BeginDate;
+        var shiftEnd = shiftDto.EndDate;
 
         DateTime finalLeadTime = leadTime ?? nextHour;
 
@@ -41,23 +42,23 @@ public class ShiftTaskService(
         if (finalLeadTime + duration > shiftEnd)
         {
             var nextShift = EnsureFound(
-                await _shiftRepository.GetNextShiftForBuilding(shift.BuildingId, shift.EndDate),
-                $"Next shift from shift {shift.Id} not found");
+                await _shiftRepository.GetNextShiftForBuilding(shiftDto.BuildingId, shiftDto.EndDate),
+                $"Next shift from shift {shiftDto.Id} not found");
 
             finalLeadTime = DateTime.SpecifyKind(nextShift.BeginDate, DateTimeKind.Local);
         }
 
         await _scoopReservationService.ReservateScoop(
-            tapTask.ScoopId,
+            tapTaskDto.ScoopId,
             finalLeadTime,
             finalLeadTime.Add(duration)
         );
 
-        var task = new ShiftTask
+        var task = new ShiftTaskDto
         {
             Id = Guid.NewGuid(),
-            TapTaskId = tapTask.Id,
-            ShiftId = shift.Id,
+            TapTaskId = tapTaskDto.Id,
+            ShiftId = shiftDto.Id,
             LeadTime = finalLeadTime
         };
 

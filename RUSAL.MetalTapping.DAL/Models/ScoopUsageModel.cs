@@ -1,6 +1,6 @@
 ﻿namespace RUSAL.MetalTapping.DAL.Models;
 
-public class ScoopUsageModel
+public class ScoopUsage
 {
     public Guid Id { get; set; }
     public Guid ScoopId { get; set; }

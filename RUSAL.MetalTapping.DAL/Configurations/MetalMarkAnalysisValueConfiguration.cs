@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RUSAL.MetalTapping.DAL.Models;
+using RUSAL.MetalTapping.DAL.Entities;
+
 namespace RUSAL.MetalTapping.DAL.Configurations;
-public class MetalMarkAnalysisValueConfiguration : IEntityTypeConfiguration<MetalMarkAnalysisValueModel>
+public class MetalMarkAnalysisValueConfiguration : IEntityTypeConfiguration<MetalMarkAnalysisValue>
 {
-    public void Configure(EntityTypeBuilder<MetalMarkAnalysisValueModel> builder)
+    public void Configure(EntityTypeBuilder<MetalMarkAnalysisValue> builder)
     {
         builder.ToTable("MetalMarkAnalysisValues");
             

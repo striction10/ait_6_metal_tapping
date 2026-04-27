@@ -1,11 +1,11 @@
 ﻿namespace RUSAL.MetalTapping.DAL.Models;
 
-public class ExternalDataModel
+public class ExternalData
 {
     public Guid Id { get; set; }
     public Guid PotId { get; set; }
     public Guid PotParametersGroupId { get; set; }
     public DateTime DateOfReceipt { get; set; }
-    public PotModel Pot { get; set; } = null!;
-    public PotParametersGroupModel Parameters { get; set; } = null!;
+    public Pot Pot { get; set; } = null!;
+    public PotParametersGroup Parameters { get; set; } = null!;
 }

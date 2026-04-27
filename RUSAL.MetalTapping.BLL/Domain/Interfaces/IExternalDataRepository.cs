@@ -1,5 +1,6 @@
-﻿using RUSAL.MetalTapping.BLL.Domain.Entities;
-namespace RUSAL.MetalTapping.BLL.Domain.Interfaces;
+﻿using RUSAL.MetalTapping.DAL.Entities;
+
+namespace RUSAL.MetalTapping.DAL.Interfaces;
 
 public interface IExternalDataRepository : IGenericRepository<ExternalData>
 {

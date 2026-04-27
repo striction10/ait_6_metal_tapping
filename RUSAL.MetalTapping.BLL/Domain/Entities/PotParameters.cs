@@ -2,7 +2,7 @@
 using RUSAL.MetalTapping.BLL.Domain.Interfaces;
 namespace RUSAL.MetalTapping.BLL.Domain.Entities;
 
-public class PotParameters : IDomain
+public class PotParametersDto : IDomain
 {
     public Guid Id { get; set; }
     public PotParametersType Type { get; set; }

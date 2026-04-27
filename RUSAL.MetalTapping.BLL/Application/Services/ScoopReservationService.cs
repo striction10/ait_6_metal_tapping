@@ -1,5 +1,7 @@
-﻿using RUSAL.MetalTapping.BLL.Domain.Entities;
+﻿using RUSAL.MetalTapping.BLL.Domain.DTOs;
 using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+using RUSAL.MetalTapping.DAL.Interfaces;
+
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 
 public class ScoopReservationService(IScoopUsageRepository scoopUsageRepository)
@@ -18,7 +20,7 @@ public class ScoopReservationService(IScoopUsageRepository scoopUsageRepository)
 
         if (currentUsage == null)
         {
-            var scoopUsage = new ScoopUsage
+            var scoopUsage = new ScoopUsageDto
             {
                 Id = Guid.NewGuid(),
                 ScoopId = scoopId,

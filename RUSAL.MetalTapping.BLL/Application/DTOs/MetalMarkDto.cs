@@ -1,6 +1,6 @@
 ﻿namespace RUSAL.MetalTapping.BLL.Application.DTOs;
 
-public class MetalMarkDto
+public class MetalMarkViewModel
 {
     public Guid Id { get; set; }
     public string Name { get; set; }

@@ -1,8 +1,7 @@
-﻿using RUSAL.MetalTapping.BLL.Domain.Entities;
-namespace RUSAL.MetalTapping.BLL.Domain.Interfaces;
+﻿namespace RUSAL.MetalTapping.DAL.Interfaces;
 
-public interface ITasksRepository : IGenericRepository<ShiftTask>
+public interface ITasksRepository : IGenericRepository<Task>
 {
-    Task<IEnumerable<ShiftTask?>> GetByShiftIdAsync(Guid shiftId);
-    Task<IEnumerable<ShiftTask>> GetByBuildingAndDateRange(Guid buildingId, DateTime from, DateTime to);
+    Task<IEnumerable<Task?>> GetByShiftIdAsync(Guid shiftId);
+    Task<IEnumerable<Task>> GetByBuildingAndDateRange(Guid buildingId, DateTime from, DateTime to);
 }

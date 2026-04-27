@@ -1,5 +1,7 @@
-﻿using RUSAL.MetalTapping.BLL.Application.DTOs;
+﻿using RUSAL.MetalTapping.BLL.Application.ViewModels;
 using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+using RUSAL.MetalTapping.DAL.Interfaces;
+
 namespace RUSAL.MetalTapping.BLL.Application.UseCases;
 
 public class GetAllReglamentsUseCase(IReglamentRepository repository)
@@ -10,11 +12,11 @@ public class GetAllReglamentsUseCase(IReglamentRepository repository)
     /// Получение списка регламентов
     /// </summary>
     /// <returns> Список регламентов </returns>
-    public async Task<IEnumerable<ReglamentDto>> ExecuteAsync()
+    public async Task<IEnumerable<ReglamentViewModel>> ExecuteAsync()
     {
         var reglaments = await _repository.GetAllAsync();
 
-        return reglaments.Select(r => new ReglamentDto
+        return reglaments.Select(r => new ReglamentViewModel
         {
             Id = r.Id,
             Name = r.Name

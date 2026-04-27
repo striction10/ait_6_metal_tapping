@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using RUSAL.MetalTapping.BLL.Domain.Interfaces;
-using RUSAL.MetalTapping.BLL.Domain.Entities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using RUSAL.MetalTapping.BLL.Domain.DTOs;
 
 namespace RUSAL.MetalTapping.BLL.Domain.Auth;
 
@@ -17,12 +17,12 @@ public class JwtProvider : IJwtProvider
         _jwtOptions = jwtOptions.Value;
     }
 
-    public string GenerateJwtToken(User user, IEnumerable<string> roles) 
+    public string GenerateJwtToken(UserDto userDto, IEnumerable<string> roles) 
     {
         var claims = new List<Claim>
         {
-            new Claim("userId", user.Id.ToString()),
-            new Claim(ClaimTypes.Email, user.Email)
+            new Claim("userId", userDto.Id.ToString()),
+            new Claim(ClaimTypes.Email, userDto.Email)
         };
 
         foreach (var role in roles)

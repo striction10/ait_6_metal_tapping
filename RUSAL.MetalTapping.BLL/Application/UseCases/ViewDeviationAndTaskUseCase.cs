@@ -1,27 +1,28 @@
 ﻿using RUSAL.MetalTapping.BLL.Application.Contracts;
 using RUSAL.MetalTapping.BLL.Application.Services;
-using RUSAL.MetalTapping.BLL.Domain.Entities;
+using RUSAL.MetalTapping.BLL.Domain.DTOs;
 using RUSAL.MetalTapping.BLL.Domain.Enums;
 using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+using RUSAL.MetalTapping.DAL.Interfaces;
 using static RUSAL.MetalTapping.BLL.Domain.Guard;
 namespace RUSAL.MetalTapping.BLL.Application.UseCases;
 
 public class ViewDeviationAndTaskUseCase(
-    IGenericRepository<Building> buildingRepository,
+    IGenericRepository<BuildingDto> buildingRepository,
     IReglamentRepository reglamentRepository,
     IPotReglamentRepository potReglamentRepository,
     ICalculatedTaskRepository calculatedTaskRepository,
     IMetalMarkAnalysisRepository metalMarkAnalysisRepository,
-    IGenericRepository<Pot> potRepository,
-    IGenericRepository<MetalMark> metalMarkRepository,
+    IGenericRepository<PotDto> potRepository,
+    IGenericRepository<MetalMarkDto> metalMarkRepository,
     IPotParametersRepository potParametersRepository,
     IExternalDataRepository externalDataRepository,
     PotViewService potViewService,
     PotParametersService potParamService)
 {
-    private readonly IGenericRepository<Building> _buildingRepository = buildingRepository;
-    private readonly IGenericRepository<Pot> _potRepository = potRepository;
-    private readonly IGenericRepository<MetalMark> _metalMarkRepository = metalMarkRepository;
+    private readonly IGenericRepository<BuildingDto> _buildingRepository = buildingRepository;
+    private readonly IGenericRepository<PotDto> _potRepository = potRepository;
+    private readonly IGenericRepository<MetalMarkDto> _metalMarkRepository = metalMarkRepository;
     private readonly IReglamentRepository _reglamentRepository = reglamentRepository;
     private readonly IPotReglamentRepository _potReglamentRepository = potReglamentRepository;
     private readonly ICalculatedTaskRepository _calculatedTaskRepository = calculatedTaskRepository;

@@ -1,7 +1,13 @@
 ﻿using RUSAL.MetalTapping.BLL.Domain.Interfaces;
 namespace RUSAL.MetalTapping.BLL.Domain.Entities;
 
+<<<<<<< Updated upstream:RUSAL.MetalTapping.BLL/Domain/Entities/TapTaskPot.cs
 public class TapTaskPot : IDomain
+=======
+namespace RUSAL.MetalTapping.BLL.Domain.DTOs;
+
+public class TapTaskPotDto : IDomain
+>>>>>>> Stashed changes:RUSAL.MetalTapping.BLL/Domain/DTOs/TapTaskPotDto.cs
 {
     public Guid Id { get; set; }
     public Guid TapTaskId { get; set; }

@@ -1,20 +1,21 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using RUSAL.MetalTapping.BLL.Domain.Entities;
-using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+using RUSAL.MetalTapping.BLL.Domain.DTOs;
 using RUSAL.MetalTapping.DAL.Contexts;
-using RUSAL.MetalTapping.DAL.Models;
+using RUSAL.MetalTapping.DAL.Entities;
+using RUSAL.MetalTapping.DAL.Interfaces;
+
 namespace RUSAL.MetalTapping.DAL.Repositories;
 
 public class ShiftRepository(
     AppDbContext context, IMapper mapper) 
-        : GenericRepository<Shift, ShiftModel>(context, mapper), 
+        : GenericRepository<ShiftDto, Shift>(context, mapper), 
         IShiftRepository
 {
     private readonly AppDbContext _context = context;
     private readonly IMapper _mapper = mapper;
 
-    public async Task<Shift?> GetByBuildingId(Guid buildingId)
+    public async Task<ShiftDto?> GetByBuildingId(Guid buildingId)
     {
         var now = DateTime.UtcNow;
 
@@ -23,10 +24,10 @@ public class ShiftRepository(
             .Where(s => s.BuildingId == buildingId)
             .FirstOrDefaultAsync();
 
-        return _mapper.Map<Shift>(entity);
+        return _mapper.Map<ShiftDto>(entity);
     }
 
-    public async Task<IEnumerable<Shift?>> GetCurrentShifts()
+    public async Task<IEnumerable<ShiftDto?>> GetCurrentShifts()
     {
         var now = DateTime.Now;
 
@@ -34,10 +35,10 @@ public class ShiftRepository(
             .Where(s => s.BeginDate <= now && s.EndDate >= now)
             .ToListAsync();
 
-        return _mapper.Map<IEnumerable<Shift?>>(entities);
+        return _mapper.Map<IEnumerable<ShiftDto?>>(entities);
     }
 
-    public async Task<Shift?> GetNextShiftForBuilding(Guid buildingId, DateTime fromDate)
+    public async Task<ShiftDto?> GetNextShiftForBuilding(Guid buildingId, DateTime fromDate)
     {
         var entity = await _context.Shifts
             .Where(s => s.BuildingId == buildingId)
@@ -45,10 +46,10 @@ public class ShiftRepository(
             .OrderBy(s => s.BeginDate)
             .FirstOrDefaultAsync();
 
-        return _mapper.Map<Shift?>(entity);
+        return _mapper.Map<ShiftDto?>(entity);
     }
 
-    public async Task<IEnumerable<Shift?>> GetNextShifts()
+    public async Task<IEnumerable<ShiftDto?>> GetNextShifts()
     {
         var now = DateTime.Now;
 
@@ -61,6 +62,6 @@ public class ShiftRepository(
             .OrderBy(s => s.BeginDate)
             .ToListAsync();
 
-        return _mapper.Map<IEnumerable<Shift>>(entities);
+        return _mapper.Map<IEnumerable<ShiftDto>>(entities);
     }
 }

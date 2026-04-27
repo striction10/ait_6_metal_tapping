@@ -1,7 +1,7 @@
 ﻿using RUSAL.MetalTapping.BLL.Domain.Interfaces;
 namespace RUSAL.MetalTapping.BLL.Domain.Entities;
 
-public class PotGroupsHistory : IDomain
+public class PotGroupsHistoryDto : IDomain
 {
     public Guid Id { get; set; }
     public Guid PotGroupId { get; set; }

@@ -1,11 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RUSAL.MetalTapping.DAL.Models;
+using RUSAL.MetalTapping.DAL.Entities;
+
 namespace RUSAL.MetalTapping.DAL.Configurations;
 
-public class WorkGroupConfiguration : IEntityTypeConfiguration<WorkGroupModel>
+public class WorkGroupConfiguration : IEntityTypeConfiguration<WorkGroup>
 {
-    public void Configure(EntityTypeBuilder<WorkGroupModel> builder)
+    public void Configure(EntityTypeBuilder<WorkGroup> builder)
     {
         builder.ToTable("WorkGroup");
         

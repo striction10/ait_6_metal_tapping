@@ -1,6 +1,6 @@
 ﻿namespace RUSAL.MetalTapping.BLL.Application.DTOs;
 
-public class PotDto
+public class PotViewModel
 {
     public Guid Id { get; set; }
     public string Name { get; set; }

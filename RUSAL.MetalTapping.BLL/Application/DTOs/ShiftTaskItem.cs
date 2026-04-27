@@ -1,6 +1,6 @@
 ﻿namespace RUSAL.MetalTapping.BLL.Application.DTOs;
 
-public class ShiftTaskItem
+public class ShiftTaskItemViewModel
 {
     public DateTime Time { get; init; }
     public double Weight { get; init; }

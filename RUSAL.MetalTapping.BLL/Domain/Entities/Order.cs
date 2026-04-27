@@ -1,7 +1,7 @@
 ﻿using RUSAL.MetalTapping.BLL.Domain.Interfaces;
 namespace RUSAL.MetalTapping.BLL.Domain.Entities;
 
-public class Order : IDomain
+public class OrderDto : IDomain
 {
     public Guid Id { get; set; }
     public double WeightOfMetal { get; set; }

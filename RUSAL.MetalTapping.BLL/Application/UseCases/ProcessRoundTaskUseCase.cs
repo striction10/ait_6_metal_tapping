@@ -1,6 +1,8 @@
 ﻿using RUSAL.MetalTapping.BLL.Application.Contracts;
-using RUSAL.MetalTapping.BLL.Domain.Entities;
+using RUSAL.MetalTapping.BLL.Domain.DTOs;
 using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+using RUSAL.MetalTapping.DAL.Interfaces;
+
 namespace RUSAL.MetalTapping.BLL.Application.UseCases;
 
 public class ProcessRoundTaskUseCase(ICalculatedTaskRepository calculatedTaskRepository)
@@ -17,7 +19,7 @@ public class ProcessRoundTaskUseCase(ICalculatedTaskRepository calculatedTaskRep
 
         if (existingTask == null)
         {
-            var newTask = new CalculatedTask
+            var newTask = new CalculatedTaskDto
             {
                 Id = Guid.NewGuid(),
                 PotId = model.potId,

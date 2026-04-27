@@ -1,9 +1,11 @@
-﻿using RUSAL.MetalTapping.BLL.Domain.Entities;
-using RUSAL.MetalTapping.BLL.Domain.Enums;
+﻿using RUSAL.MetalTapping.BLL.Domain.Enums;
 using RUSAL.MetalTapping.BLL.Domain.Interfaces;
 using RUSAL.MetalTapping.BLL.Application.Services;
 using static RUSAL.MetalTapping.BLL.Domain.Guard;
 using RUSAL.MetalTapping.BLL.Application.Contracts;
+using RUSAL.MetalTapping.BLL.Domain.DTOs;
+using RUSAL.MetalTapping.DAL.Interfaces;
+
 namespace RUSAL.MetalTapping.BLL.Application.UseCases;
 
 public class ProcessDeviationAndTaskUseCase(
@@ -54,7 +56,7 @@ public class ProcessDeviationAndTaskUseCase(
 
             await _deviationRepository.UpdateAsync(deviation);
 
-            await _calculatedTaskRepository.CreateAsync(new CalculatedTask
+            await _calculatedTaskRepository.CreateAsync(new CalculatedTaskDto
             {
                 Id = Guid.NewGuid(),
                 PotId = model.potId,
@@ -85,7 +87,7 @@ public class ProcessDeviationAndTaskUseCase(
 
         await _deviationRepository.UpdateAsync(deviation);
 
-        await _calculatedTaskRepository.CreateAsync(new CalculatedTask
+        await _calculatedTaskRepository.CreateAsync(new CalculatedTaskDto
         {
             Id = Guid.NewGuid(),
             PotId = model.potId,

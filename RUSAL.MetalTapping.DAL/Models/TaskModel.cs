@@ -1,6 +1,6 @@
 ﻿namespace RUSAL.MetalTapping.DAL.Models;
 
-public class TaskModel
+public class Task
 {
     public Guid Id { get; set; }
     public Guid TapTaskId { get; set; }

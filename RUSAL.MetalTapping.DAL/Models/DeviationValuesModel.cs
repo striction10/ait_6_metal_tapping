@@ -1,6 +1,6 @@
 ﻿namespace RUSAL.MetalTapping.DAL.Models;
 
-public class DeviationValuesModel
+public class DeviationValues
 {
     public Guid Id { get; set; }
     public Guid DeviationId { get; set; }

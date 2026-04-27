@@ -1,9 +1,9 @@
 ﻿namespace RUSAL.MetalTapping.DAL.Models;
 
-public class ChemicalElemModel
+public class ChemicalElem
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
 
-    public ICollection<MetalMarkAnalysisValueModel> Values = new  List<MetalMarkAnalysisValueModel>();
+    public ICollection<MetalMarkAnalysisValue> Values = new  List<MetalMarkAnalysisValue>();
 }

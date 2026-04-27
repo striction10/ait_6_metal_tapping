@@ -1,20 +1,21 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using RUSAL.MetalTapping.BLL.Domain.DTOs;
 using RUSAL.MetalTapping.DAL.Contexts;
-using RUSAL.MetalTapping.BLL.Domain.Entities;
-using RUSAL.MetalTapping.DAL.Models;
-using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+using RUSAL.MetalTapping.DAL.Entities;
+using RUSAL.MetalTapping.DAL.Interfaces;
+
 namespace RUSAL.MetalTapping.DAL.Repositories;
 
 public class PotReglamentRepository(
     AppDbContext context, IMapper mapper) 
-        : GenericRepository<PotReglament, PotReglamentModel>(context, mapper), 
+        : GenericRepository<PotReglamentDto, PotReglament>(context, mapper), 
         IPotReglamentRepository
 {
     private readonly AppDbContext _context = context;
     private readonly IMapper _mapper = mapper;
 
-    public async Task<IEnumerable<PotReglament?>> getByReglamentAndBuildingId(
+    public async Task<IEnumerable<PotReglamentDto?>> getByReglamentAndBuildingId(
         Guid reglamentId, 
         Guid buildingId)
     {
@@ -23,10 +24,10 @@ public class PotReglamentRepository(
             .Where(pr => pr.ReglamentId == reglamentId && pr.Pot.BuildingId == buildingId)
             .ToListAsync();
 
-        return _mapper.Map<IEnumerable<PotReglament>>(entities);
+        return _mapper.Map<IEnumerable<PotReglamentDto>>(entities);
     }
 
-    public async Task<IEnumerable<PotReglament>> GetByReglamentAndBuildingWithDeviationsAsync(
+    public async Task<IEnumerable<PotReglamentDto>> GetByReglamentAndBuildingWithDeviationsAsync(
         Guid reglamentId,
         Guid buildingId)
     {
@@ -38,6 +39,6 @@ public class PotReglamentRepository(
                         pr.Pot.BuildingId == buildingId)
             .ToListAsync();
 
-        return _mapper.Map<IEnumerable<PotReglament>>(entities);
+        return _mapper.Map<IEnumerable<PotReglamentDto>>(entities);
     }
 }

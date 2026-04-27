@@ -1,13 +1,16 @@
-﻿using RUSAL.MetalTapping.BLL.Application.DTOs;
-using RUSAL.MetalTapping.BLL.Domain.Entities;
+﻿using RUSAL.MetalTapping.BLL.Application.ViewModels;
+using RUSAL.MetalTapping.BLL.Domain.DTOs;
 using RUSAL.MetalTapping.BLL.Domain.Exceptions;
 using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+using RUSAL.MetalTapping.DAL.Interfaces;
 using static RUSAL.MetalTapping.BLL.Domain.Guard;
+using PotDto = RUSAL.MetalTapping.BLL.Domain.DTOs.PotDto;
+
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 
-public class PotService(IGenericRepository<PotState> potStateRepository)
+public class PotService(IGenericRepository<PotStateDto> potStateRepository)
 {
-    private readonly IGenericRepository<PotState> _potStateRepository = potStateRepository;
+    private readonly IGenericRepository<PotStateDto> _potStateRepository = potStateRepository;
 
     /// <summary>
     /// Создание DTO
@@ -19,14 +22,14 @@ public class PotService(IGenericRepository<PotState> potStateRepository)
     /// <param name="metalLevelByPot"> Распределение уровня металла по электролизёрам </param>
     /// <returns> Список электролизёров </returns>
     /// <exception cref="BusinessException"> Нет ЗПР для составления списка электролизёров </exception>
-    public async Task<List<PotDto>> CreateAsync(
-        IEnumerable<Pot> pots,
-        IEnumerable<CalculatedTask> calculated,
-        IEnumerable<MetalMarkAnalysis> analysis,
-        Dictionary<Guid, MetalMarkAnalysis> marksByPot,
+    public async Task<List<ViewModels.PotViewModel>> CreateAsync(
+        IEnumerable<PotDto> pots,
+        IEnumerable<CalculatedTaskDto> calculated,
+        IEnumerable<MetalMarkAnalysisDto> analysis,
+        Dictionary<Guid, MetalMarkAnalysisDto> marksByPot,
         Dictionary<Guid, double> metalLevelByPot)
     {
-        var potDtos = new List<PotDto>();
+        var potDtos = new List<ViewModels.PotViewModel>();
 
         var calcByPot = calculated.ToDictionary(c => c.PotId);
         var analysisByPot = analysis.ToDictionary(a => a.PotId);
@@ -46,7 +49,7 @@ public class PotService(IGenericRepository<PotState> potStateRepository)
             metalLevelByPot[pot.Id] = level;
             marksByPot[pot.Id] = metalMarkAnalysis;
 
-            potDtos.Add(new PotDto
+            potDtos.Add(new ViewModels.PotViewModel
             {
                 Id = pot.Id,
                 Name = pot.Name,

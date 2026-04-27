@@ -1,7 +1,8 @@
-﻿using RUSAL.MetalTapping.BLL.Domain.Entities;
-namespace RUSAL.MetalTapping.BLL.Domain.Interfaces;
+﻿using RUSAL.MetalTapping.DAL.Entities;
 
-public interface IPotParametersRepository : IGenericRepository<PotParameters>
+namespace RUSAL.MetalTapping.DAL.Interfaces;
+
+public interface IPotParametersRepository : IGenericRepository<PotParameter>
 {
-    Task<IEnumerable<PotParameters>> GetPotParametersWithGroupId(Guid id);
+    Task<IEnumerable<PotParameter>> GetPotParametersWithGroupId(Guid id);
 }

@@ -1,6 +1,6 @@
 ﻿namespace RUSAL.MetalTapping.DAL.Models;
 
-public class PotStateModel
+public class PotState
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;

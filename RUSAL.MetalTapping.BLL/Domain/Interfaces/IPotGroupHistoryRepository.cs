@@ -1,6 +1,6 @@
-﻿using RUSAL.MetalTapping.BLL.Domain.Entities;
+﻿using RUSAL.MetalTapping.DAL.Entities;
 
-namespace RUSAL.MetalTapping.BLL.Domain.Interfaces;
+namespace RUSAL.MetalTapping.DAL.Interfaces;
 
 public interface IPotGroupHistoryRepository : IGenericRepository<PotGroupsHistory>
 {

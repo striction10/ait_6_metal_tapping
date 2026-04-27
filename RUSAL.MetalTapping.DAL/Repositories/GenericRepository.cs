@@ -1,39 +1,37 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using RUSAL.MetalTapping.DAL.Contexts;
-using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+using RUSAL.MetalTapping.DAL.Interfaces;
+
 namespace RUSAL.MetalTapping.DAL.Repositories;
 
-public class GenericRepository<TDomain, TEntity>(
+public class GenericRepository<TEntity>(
     AppDbContext context, IMapper mapper) 
-        : IGenericRepository<TDomain>
+        : IGenericRepository<TEntity>
         where TEntity : class
-        where TDomain : IDomain
 {
     private readonly AppDbContext _context = context;
     private readonly IMapper _mapper = mapper;
     private readonly DbSet<TEntity> _dbSet = context.Set<TEntity>();
 
-    public async Task<TDomain?> GetByIdAsync(Guid id)
+    public async Task<TEntity?> GetByIdAsync(Guid id)
     {
-        var entity = await _dbSet.FindAsync(id);
-        return _mapper.Map<TDomain>(entity);
+        return await _dbSet.FindAsync(id);
     }
 
-    public async Task<IEnumerable<TDomain>> GetAllAsync()
+    public async Task<IEnumerable<TEntity>> GetAllAsync()
     {
-        var entities = await _dbSet.ToListAsync();
-        return _mapper.Map<IEnumerable<TDomain>>(entities);
+        return await _dbSet.ToListAsync();
     }
 
-    public async Task CreateAsync(TDomain domain)
+    public async Task CreateAsync(TEntity entity)
     {
         var entity = _mapper.Map<TEntity>(domain);
         _dbSet.Add(entity);
         await _context.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(TDomain domain)
+    public async Task UpdateAsync(TEntity domain)
     {
         var existingEntity = await _dbSet.FindAsync(domain.Id);
         if (existingEntity == null)
@@ -41,7 +39,7 @@ public class GenericRepository<TDomain, TEntity>(
 
         _mapper.Map(domain, existingEntity);
 
-        await _context.SaveChangesAsync(); ;
+        await _context.SaveChangesAsync();
     }
 
     public async Task DeleteAsync(Guid id)

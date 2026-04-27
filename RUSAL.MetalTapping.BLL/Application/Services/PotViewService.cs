@@ -1,5 +1,6 @@
 ﻿using RUSAL.MetalTapping.BLL.Application.Contracts;
-using RUSAL.MetalTapping.BLL.Domain.Entities;
+using RUSAL.MetalTapping.BLL.Domain.DTOs;
+
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 
 public class PotViewService
@@ -8,29 +9,29 @@ public class PotViewService
     /// <summary>
     /// Создание ViewModel
     /// </summary>
-    /// <param name="pot"> Электролизёр </param>
-    /// <param name="deviation"> Отклонение</param>
+    /// <param name="potDto"> Электролизёр </param>
+    /// <param name="deviationDto"> Отклонение</param>
     /// <param name="amperage"> Сила тока </param>
     /// <param name="averageAmperage"> Выход по току</param>
     /// <param name="lastTask"> Последнее расчётное задание </param>
     /// <param name="metalMarkName"> Имя марки металла внутри электролизёра </param>
     /// <returns> ViewModel электролизера </returns>
     public ViewDeviationAndTaskPot BuildPotView(
-        Pot pot,
-        Deviation deviation,
+        PotDto potDto,
+        DeviationDto deviationDto,
         double amperage,
         double averageAmperage,
-        CalculatedTask? lastTask,
+        CalculatedTaskDto? lastTask,
         string metalMarkName)
     {
-        var deviationValue = deviation.TargetMetalLevel - deviation.ActualMetalLevel;
+        var deviationValue = deviationDto.TargetMetalLevel - deviationDto.ActualMetalLevel;
 
 
         return new ViewDeviationAndTaskPot(
-            potId: pot.Id,
-            potName: pot.Name,
-            targetMetalLevel: deviation.TargetMetalLevel,
-            actualMetalLevel: deviation.ActualMetalLevel,
+            potId: potDto.Id,
+            potName: potDto.Name,
+            targetMetalLevel: deviationDto.TargetMetalLevel,
+            actualMetalLevel: deviationDto.ActualMetalLevel,
             deviationValue: deviationValue,
             amperage: amperage,
             avgAmperage: averageAmperage,

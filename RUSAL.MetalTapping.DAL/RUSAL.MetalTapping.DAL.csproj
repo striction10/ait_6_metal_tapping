@@ -22,8 +22,4 @@
 		</PackageReference>
 	</ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\RUSAL.MetalTapping.BLL\RUSAL.MetalTapping.BLL.csproj" />
-	</ItemGroup>
-
 </Project>
