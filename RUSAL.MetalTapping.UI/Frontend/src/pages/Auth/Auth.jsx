@@ -16,12 +16,13 @@ function Auth() {
         try {
             const response = await authApi.login(formData.username, formData.password)
             
-            const token = response.data
+            const token = response.data.token
+            
             localStorage.setItem('token', token)
             saveUserFromToken(token)
             navigate('/reglaments')
         } catch (err) {
-            if (err.response?.status === 404) {
+            if (err.response?.status === 401 || err.response?.status === 404) {
                 setError('Неверный логин или пароль')
             } else {
                 setError('Ошибка сервера')
