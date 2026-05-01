@@ -1,4 +1,6 @@
-﻿using RUSAL.MetalTapping.BLL.Domain.Exceptions;
+﻿using Hellang.Middleware.ProblemDetails;
+using Microsoft.AspNetCore.Mvc;
+using RUSAL.MetalTapping.BLL.Domain.Exceptions;
 namespace RUSAL.MetalTapping.API.Extensions;
 
 public static class ProblemDetailsExtension
@@ -7,37 +9,43 @@ public static class ProblemDetailsExtension
     {
         services.AddProblemDetails(options =>
         {
-            options.CustomizeProblemDetails = context =>
+            options.Map<BusinessException>(ex => new ProblemDetails
             {
-                var ex = context.Exception;
+                Status = 400,
+                Title = "Business error",
+                Detail = ex.Message,
+                Instance = null
+            });
 
-                if (ex is null) return;
+            options.Map<NotFoundException>(ex => new ProblemDetails
+            {
+                Status = 404,
+                Title = "Not found",
+                Detail = ex.Message
+            });
 
-                context.ProblemDetails.Instance = context.HttpContext.Request.Path;
+            options.Map<AlreadyExistsException>(ex => new ProblemDetails
+            {
+                Status = 409,
+                Title = "Conflict",
+                Detail = ex.Message
+            });
 
-                context.ProblemDetails.Status = ex switch
-                {
-                    BusinessException => 400,
-                    NotFoundException => 404,
-                    AlreadyExistsException => 409,
-                    AuthentificationException => 401,
-                    _ => 500
-                };
+            options.Map<AuthentificationException>(ex => new ProblemDetails
+            {
+                Status = 401,
+                Title = "Unauthorized",
+                Detail = ex.Message
+            });
 
-                context.ProblemDetails.Title = context.ProblemDetails.Status switch
-                {
-                    400 => "Business error",
-                    404 => "Not found",
-                    409 => "Conflict",
-                    401 => "Unauthorized",
-                    _ => "Internal Server Error"
-                };
+            options.Map<Exception>(ex => new ProblemDetails
+            {
+                Status = 500,
+                Title = "Internal Server Error",
+                Detail = "An unexpected error occurred"
+            });
 
-                context.ProblemDetails.Detail =
-                    context.ProblemDetails.Status == 500
-                        ? "Unexpected error"
-                        : ex.Message;
-            };
+            options.IncludeExceptionDetails = (ctx, ex) => false;
         });
     }
 }

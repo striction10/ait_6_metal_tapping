@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RUSAL.MetalTapping.DAL.Models;
+using RUSAL.MetalTapping.DAL.Entities;
+
 namespace RUSAL.MetalTapping.DAL.Configurations;
 
-public class CalculatedTaskConfiguration : IEntityTypeConfiguration<CalculatedTaskModel>
+public class CalculatedTaskConfiguration : IEntityTypeConfiguration<CalculatedTask>
 {
-    public void Configure(EntityTypeBuilder<CalculatedTaskModel> builder)
+    public void Configure(EntityTypeBuilder<CalculatedTask> builder)
     {
         builder.HasKey(x => x.Id);
 

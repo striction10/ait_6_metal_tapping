@@ -1,4 +1,4 @@
-﻿using RUSAL.MetalTapping.BLL.Application.DTOs;
+﻿using RUSAL.MetalTapping.BLL.Application.ViewModels;
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 
 public class CastingBuildingSelectorService
@@ -9,8 +9,8 @@ public class CastingBuildingSelectorService
     /// <param name="buildings"> Корпусы </param>
     /// <param name="requiredWeight"> Заданное количество металла </param>
     /// <returns> Список электролизёров для задания на выливку </returns>
-    public List<(BuildingMetalInfo building, List<(PotGroupDto group, List<PotDto> pots)> groups)>? SelectGlobalPots(
-        List<BuildingMetalInfo> buildings,
+    public List<(BuildingMetalInfoViewModel building, List<(PotGroupViewModel group, List<PotViewModel> pots)> groups)>? SelectGlobalPots(
+        List<BuildingMetalInfoViewModel> buildings,
         double requiredWeight)
     {
         var allPots = buildings
@@ -24,7 +24,7 @@ public class CastingBuildingSelectorService
 
         double sum = 0;
 
-        var selected = new List<(BuildingMetalInfo building, PotGroupDto group, PotDto pot)>();
+        var selected = new List<(BuildingMetalInfoViewModel building, PotGroupViewModel group, PotViewModel pot)>();
 
         foreach (var item in allPots)
         {

@@ -1,4 +1,4 @@
-﻿using RUSAL.MetalTapping.BLL.Application.DTOs;
+﻿using RUSAL.MetalTapping.BLL.Application.ViewModels;
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 
 public class CastingGroupSelectorService
@@ -8,7 +8,7 @@ public class CastingGroupSelectorService
     /// </summary>
     /// <param name="group"> Группа электролизёров </param>
     /// <returns> Доступна ли группа для выливки (Свободен ли ковш) </returns>
-    private bool IsAvailable(PotGroupDto group)
+    private bool IsAvailable(PotGroupViewModel group)
     {
         if (group.Scoop.State != "Активен")
             return false;
@@ -28,7 +28,7 @@ public class CastingGroupSelectorService
     /// <param name="building"> Корпус </param>
     /// <param name="requiredWeight"> Заданное количество металла </param>
     /// <returns> Группа в корпусе, которая сможет выполнить выливку заданного количества металла </returns>
-    public PotGroupDto? SelectSingleGroup(BuildingMetalInfo building, double requiredWeight)
+    public PotGroupViewModel? SelectSingleGroup(BuildingMetalInfoViewModel building, double requiredWeight)
     {
         return building.Groups
             .Where(g => IsAvailable(g) && g.GroupMetalWeight >= requiredWeight)
@@ -42,8 +42,8 @@ public class CastingGroupSelectorService
     /// <param name="building"> Корпус </param>
     /// <param name="requiredWeight"> Заданное количество металла </param>
     /// <returns> Список групп в корпусе, которые смогут выполнить выливку заданного количества металла </returns>
-    public List<(PotGroupDto group, List<PotDto> pots)> SelectMultiGroupInBuilding(
-        BuildingMetalInfo building, 
+    public List<(PotGroupViewModel group, List<PotViewModel> pots)> SelectMultiGroupInBuilding(
+        BuildingMetalInfoViewModel building, 
         double requiredWeight)
     {
         var allPots = building.Groups
@@ -54,13 +54,13 @@ public class CastingGroupSelectorService
             .OrderByDescending(x => x.pot.MetalLevel)
             .ToList();
 
-        var result = new Dictionary<PotGroupDto, List<PotDto>>();
+        var result = new Dictionary<PotGroupViewModel, List<PotViewModel>>();
         double sum = 0;
 
         foreach (var (group, pot) in allPots)
         {
             if (!result.ContainsKey(group))
-                result[group] = new List<PotDto>();
+                result[group] = new List<PotViewModel>();
 
             result[group].Add(pot);
             sum += pot.MetalLevel;

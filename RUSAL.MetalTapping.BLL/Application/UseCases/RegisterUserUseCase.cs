@@ -1,19 +1,20 @@
 ﻿using RUSAL.MetalTapping.BLL.Application.Contracts;
-using RUSAL.MetalTapping.BLL.Domain.Entities;
+using RUSAL.MetalTapping.BLL.Application.Services;
+using RUSAL.MetalTapping.BLL.Domain.DTOs;
 using RUSAL.MetalTapping.BLL.Domain.Exceptions;
 using RUSAL.MetalTapping.BLL.Domain.Interfaces;
 namespace RUSAL.MetalTapping.BLL.Application.UseCases;
 
 public class RegisterUserUseCase(
-    IUserRepository userRepository,
-    IRoleRepository roleRepository,
+    UserService userService,
+    RoleService roleService,
     IPasswordHasher passwordHasher,
-    IGenericRepository<UserRoleMembers> userRoleRepository)
+    UserRoleMembersService userRoleMembersService)
 {
-    private readonly IUserRepository _userRepository = userRepository;
-    private readonly IRoleRepository _roleRepository = roleRepository;
+    private readonly UserService _userService = userService;
+    private readonly RoleService _roleService = roleService;
     private readonly IPasswordHasher _passwordHasher = passwordHasher;
-    private readonly IGenericRepository<UserRoleMembers> _userRoleRepository = userRoleRepository;
+    private readonly UserRoleMembersService _userRoleMembersService = userRoleMembersService;
 
     /// <summary>
     /// Регистрация пользователя в системе
@@ -23,17 +24,15 @@ public class RegisterUserUseCase(
     /// <exception cref="NotFoundException"> Роль не найдена в бд </exception>
     public async Task ExecuteAsync(RegisterUserRequest model)
     {
-        var existingUser = await _userRepository.GetByEmailAsync(model.email);
+        var existingUser = await _userService.FindByEmailAsync(model.email);
         if (existingUser != null)
             throw new AlreadyExistsException("User already exists");
 
-        var role = await _roleRepository.GetByNameAsync(model.role);
-        if (role == null)
-            throw new NotFoundException($"Role {model.role} not found");
+        var role = await _roleService.GetByNameAsync(model.role);
 
         var hashedPassword = _passwordHasher.Hash(model.password);
 
-        var user = new User
+        var user = new UserDto
         {
             Id = Guid.NewGuid(),
             FirstName = model.firstName,
@@ -42,14 +41,14 @@ public class RegisterUserUseCase(
             Password = hashedPassword
         };
 
-        await _userRepository.CreateAsync(user);
+        await _userService.CreateAsync(user);
 
-        var userRole = new UserRoleMembers
+        var userRole = new UserRoleMembersDto
         {
             UserId = user.Id,
             RoleId = role.Id
         };
 
-        await _userRoleRepository.CreateAsync(userRole);
+        await _userRoleMembersService.CreateAsync(userRole);
     }
 }

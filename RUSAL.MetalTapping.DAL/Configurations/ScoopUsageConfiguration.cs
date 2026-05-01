@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RUSAL.MetalTapping.DAL.Models;
+using RUSAL.MetalTapping.DAL.Entities;
 namespace RUSAL.MetalTapping.DAL.Configurations;
 
-public class ScoopUsageConfiguration : IEntityTypeConfiguration<ScoopUsageModel>
+public class ScoopUsageConfiguration : IEntityTypeConfiguration<ScoopUsage>
 {
-    public void Configure(EntityTypeBuilder<ScoopUsageModel> builder)
+    public void Configure(EntityTypeBuilder<ScoopUsage> builder)
     {
         builder.ToTable("ScoopUsage");
 

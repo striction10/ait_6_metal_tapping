@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RUSAL.MetalTapping.DAL.Models;
+using RUSAL.MetalTapping.DAL.Entities;
 namespace RUSAL.MetalTapping.DAL.Configurations;
 
-public class MetalMarkConfiguration : IEntityTypeConfiguration<MetalMarkModel>
+public class MetalMarkConfiguration : IEntityTypeConfiguration<MetalMark>
 {
-    public void Configure(EntityTypeBuilder<MetalMarkModel> builder)
+    public void Configure(EntityTypeBuilder<MetalMark> builder)
     {
         builder.ToTable("MetalMark");
 

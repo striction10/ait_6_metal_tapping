@@ -1,15 +1,17 @@
 ﻿using RUSAL.MetalTapping.BLL.Application.Contracts;
+using RUSAL.MetalTapping.BLL.Application.Services;
 using RUSAL.MetalTapping.BLL.Domain.Exceptions;
 using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+using RUSAL.MetalTapping.DAL.Interfaces;
 namespace RUSAL.MetalTapping.BLL.Application.UseCases;
 
 public class LoginUserUseCase(
-    IUserRepository userRepository,
+    UserService userService,
     IPasswordHasher passwordHasher,
     IJwtProvider jwtProvider,
     IRoleRepository roleRepository)
 {
-    private readonly IUserRepository _userRepository = userRepository;
+    private readonly UserService _userService = userService;
     private readonly IPasswordHasher _passwordHasher = passwordHasher;
     private readonly IJwtProvider _jwtProvider = jwtProvider;
     private readonly IRoleRepository _roleRepository = roleRepository;
@@ -23,9 +25,7 @@ public class LoginUserUseCase(
     /// <exception cref="AuthentificationException"> Неверный пароль </exception>
     public async Task<string> ExecuteAsync(LoginUserRequest model)
     {
-        var user = await _userRepository.GetByEmailAsync(model.email);
-        if (user == null)
-            throw new NotFoundException("User with that email does not found");
+        var user = await _userService.GetByEmailAsync(model.email);
 
         var valid = _passwordHasher.Verify(model.password, user.Password);
         if (!valid)

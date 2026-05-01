@@ -27,6 +27,27 @@ public static class DependencyInjection
         services.AddScoped<ShiftAssignmentService>();
         services.AddScoped<ScoopReservationService>();
         services.AddScoped<ViewTaskService>();
+        services.AddScoped<ChemicalElemService>();
+        services.AddScoped<DeviationService>();
+        services.AddScoped<DeviationValuesService>();
+        services.AddScoped<ExternalDataService>();
+        services.AddScoped<MetalMarkAnalysisService>();
+        services.AddScoped<MetalMarkAnalysisValueService>();
+        services.AddScoped<MetalMarkService>();
+        services.AddScoped<OrderService>();
+        services.AddScoped<PotGroupService>();
+        services.AddScoped<PotReglamentService>();
+        services.AddScoped<ReglamentService>();
+        services.AddScoped<RoleService>();
+        services.AddScoped<ScoopService>();
+        services.AddScoped<ScoopStateService>();
+        services.AddScoped<ScoopUsageService>();
+        services.AddScoped<ShiftService>();
+        services.AddScoped<TapTaskPotService>();
+        services.AddScoped<TapTaskReservationService>();
+        services.AddScoped<TasksService>();
+        services.AddScoped<UserRoleMembersService>();
+        services.AddScoped<UserService>();
 
         services.AddScoped<ProcessDeviationAndTaskUseCase>();
         services.AddScoped<ProcessCalculatedTaskUseCase>();

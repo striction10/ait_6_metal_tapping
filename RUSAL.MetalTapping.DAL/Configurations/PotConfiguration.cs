@@ -1,12 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RUSAL.MetalTapping.DAL.Models;
-
+using RUSAL.MetalTapping.DAL.Entities;
 namespace RUSAL.MetalTapping.DAL.Configurations;
 
-public class PotConfiguration : IEntityTypeConfiguration<PotModel>
+public class PotConfiguration : IEntityTypeConfiguration<Pot>
 {
-    public void Configure(EntityTypeBuilder<PotModel> builder)
+    public void Configure(EntityTypeBuilder<Pot> builder)
     {
         builder.ToTable("Pot");
 

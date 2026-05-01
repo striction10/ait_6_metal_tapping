@@ -1,45 +1,39 @@
 ﻿using RUSAL.MetalTapping.BLL.Application.Contracts;
-using RUSAL.MetalTapping.BLL.Application.DTOs;
 using RUSAL.MetalTapping.BLL.Application.Services;
-using RUSAL.MetalTapping.BLL.Domain.Entities;
+using RUSAL.MetalTapping.BLL.Application.ViewModels;
+using RUSAL.MetalTapping.BLL.Domain.DTOs;
 using RUSAL.MetalTapping.BLL.Domain.Exceptions;
-using RUSAL.MetalTapping.BLL.Domain.Interfaces;
-using static RUSAL.MetalTapping.BLL.Domain.Guard;
 namespace RUSAL.MetalTapping.BLL.Application.UseCases;
 
 public class CreateTaskUseCase(
-    IGenericRepository<Building> buildingRepository,
-    IPotGroupRepository potGroupRepository,
-    IPotGroupHistoryRepository potGroupHistoryRepository,
-    IGenericRepository<Scoop> scoopRepository,
-    IGenericRepository<ScoopState> scoopStateRepository,
-    IScoopUsageRepository scoopUsageRepository,
-    IGenericRepository<PotState> potStateRepository,
-    ICalculatedTaskRepository calculatedTaskRepository,
-    IMetalMarkAnalysisRepository metalMarkAnalysisRepository,
-    IMetalMarkRepository metalMarkRepository,
+    BuildingService buildingService,
+    PotGroupService potGroupService,
     PotService potService,
+    ScoopService scoopService,
+    ScoopStateService scoopStateService,
+    ScoopUsageService scoopUsageService,
+    CalculatedTaskService calculatedTaskService,
+    MetalMarkAnalysisService metalMarkAnalysisService,
+    MetalMarkService metalMarkService,
     GroupService groupService,
     BuildingService buildingInfoService,
     CastingExecutionPlanService planSelector,
-    TapTaskService tapTaskService,
+    TapTaskReservationService tapTaskReservationService,
     ShiftAssignmentService shiftAssignmentService)
 {
-    private readonly IGenericRepository<Building> _buildingRepository = buildingRepository;
-    private readonly IPotGroupRepository _potGroupRepository = potGroupRepository;
-    private readonly IPotGroupHistoryRepository _potGroupHistoryRepository = potGroupHistoryRepository;
-    private readonly IGenericRepository<Scoop> _scoopRepository = scoopRepository;
-    private readonly IGenericRepository<ScoopState> _scoopStateRepository = scoopStateRepository;
-    private readonly IScoopUsageRepository _scoopUsageRepository = scoopUsageRepository;
-    private readonly ICalculatedTaskRepository _calculatedTaskRepository = calculatedTaskRepository;
-    private readonly IMetalMarkAnalysisRepository _metalMarkAnalysisRepository = metalMarkAnalysisRepository;
-    private readonly IMetalMarkRepository _metalMarkRepository = metalMarkRepository;
-
+    private readonly BuildingService _buildingService = buildingService;
+    private readonly PotGroupService _potGroupService = potGroupService;
     private readonly PotService _potService = potService;
+    private readonly ScoopService _scoopService = scoopService;
+    private readonly ScoopStateService _scoopStateService = scoopStateService;
+    private readonly ScoopUsageService _scoopUsageService = scoopUsageService;
+    private readonly CalculatedTaskService _calculatedTaskService = calculatedTaskService;
+    private readonly MetalMarkAnalysisService _metalMarkAnalysisService = metalMarkAnalysisService;
+    private readonly MetalMarkService _metalMarkService = metalMarkService;
     private readonly GroupService _groupService = groupService;
     private readonly BuildingService _buildingInfoService = buildingInfoService;
     private readonly CastingExecutionPlanService _planSelector = planSelector;
-    private readonly TapTaskService _tapTaskService = tapTaskService;
+    private readonly TapTaskReservationService _tapTaskReservationService = tapTaskReservationService;
     private readonly ShiftAssignmentService _shiftAssignmentService = shiftAssignmentService;
 
     /// <summary>
@@ -50,44 +44,36 @@ public class CreateTaskUseCase(
     /// <exception cref="BusinessException"> Нет данных для отображения </exception>
     public async Task ExecuteAsync(OrderRequest model)
     {
-        var metalMark = EnsureFound(
-            await _metalMarkRepository.GetByNameAsync(model.metalMarkName),
-            $"Metal mark {model.metalMarkName} not found");
+        var metalMark = await _metalMarkService.GetByNameAsync(model.metalMarkName);
 
-        var buildings = EnsureFound(
-            await _buildingRepository.GetAllAsync(),
-            "Buildings not found");
+        var buildings = await _buildingService.GetAllAsync();
 
-        var marksByPot = new Dictionary<Guid, MetalMarkAnalysis>();
+        var marksByPot = new Dictionary<Guid, MetalMarkAnalysisDto>();
         var metalLevelByPot = new Dictionary<Guid, double>();
 
-        var buildingInfos = new List<BuildingMetalInfo>();
+        var buildingInfos = new List<BuildingMetalInfoViewModel>();
 
         foreach (var building in buildings)
         {
-            var groups = await _potGroupRepository.GetByBuildingIdsAsync(building.Id);
-            var groupDtos = new List<PotGroupDto>();
+            var groups = await _potGroupService.GetByBuildingIdAsync(building.Id);
+            var groupDtos = new List<PotGroupViewModel>();
 
             foreach (var group in groups)
             {
-                var scoop = EnsureFound(
-                    await _scoopRepository.GetByIdAsync(group.ScoopId),
-                    $"Scoop {group.ScoopId} not found");
+                var scoop = await _scoopService.GetByIdAsync(group.ScoopId);
 
-                var scoopState = EnsureFound(
-                    await _scoopStateRepository.GetByIdAsync(scoop.StateId),
-                    $"Scoop state {scoop.StateId} not found");
+                var scoopState = await _scoopStateService.GetByIdAsync(scoop.StateId);
 
-                var scoopUsage = await _scoopUsageRepository.GetByScoopIdAsync(scoop.Id);
+                var scoopUsage = await _scoopUsageService.GetByScoopIdAsync(scoop.Id);
 
-                var pots = await _potGroupHistoryRepository.GetPotsByGroupIdAsync(group.Id);
+                var pots = await _potService.GetByGroupIdAsync(group.Id);
                 var potIds = pots.Select(p => p.Id).ToList();
 
-                var calculated = await _calculatedTaskRepository.GetByPotIdsAsync(potIds);
+                var calculated = await _calculatedTaskService.GetByPotIdsAsync(potIds);
                 if (calculated.Count() != potIds.Count())
                     throw new BusinessException("Missing calculated tasks");
 
-                var analysis = await _metalMarkAnalysisRepository.GetMetalMarkAnalysisWithPotIdsAsync(potIds);
+                var analysis = await _metalMarkAnalysisService.GetByPotIdsAsync(potIds);
                 if (analysis.Count() != potIds.Count())
                     throw new BusinessException("Missing metal mark analysis");
 
@@ -108,13 +94,13 @@ public class CreateTaskUseCase(
                 groupDtos.Add(groupDto);
             }
 
-            var buildingInfo = _buildingInfoService.Create(building, groupDtos, metalMark.Id);
+            var buildingInfo = _buildingInfoService.CreateViewModel(building, groupDtos, metalMark.Id);
             buildingInfos.Add(buildingInfo);
         }
 
         var plan = _planSelector.SelectExecutionPlan(buildingInfos, model.requiredMetalWeight);
 
-        var tasks = await _tapTaskService.CreateAsync(plan, model, metalMark.Id, marksByPot, metalLevelByPot);
+        var tasks = await _tapTaskReservationService.CreateTasksAsync(plan, model, metalMark.Id, marksByPot, metalLevelByPot);
 
         await _shiftAssignmentService.AssignTaskAsync(tasks);
     }

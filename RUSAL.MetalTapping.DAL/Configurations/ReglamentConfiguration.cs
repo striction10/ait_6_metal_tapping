@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RUSAL.MetalTapping.DAL.Models;
+using RUSAL.MetalTapping.DAL.Entities;
 namespace RUSAL.MetalTapping.DAL.Configurations;
 
-public class ReglamentConfiguration : IEntityTypeConfiguration<ReglamentModel>
+public class ReglamentConfiguration : IEntityTypeConfiguration<Reglament>
 {
-    public void Configure(EntityTypeBuilder<ReglamentModel> builder)
+    public void Configure(EntityTypeBuilder<Reglament> builder)
     {
         builder.ToTable("Reglament");
 

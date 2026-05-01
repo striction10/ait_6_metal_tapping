@@ -1,26 +1,24 @@
-﻿using RUSAL.MetalTapping.BLL.Domain.Entities;
-using RUSAL.MetalTapping.BLL.Domain.Enums;
-using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+﻿using RUSAL.MetalTapping.BLL.Domain.Enums;
 using RUSAL.MetalTapping.BLL.Application.Services;
-using static RUSAL.MetalTapping.BLL.Domain.Guard;
 using RUSAL.MetalTapping.BLL.Application.Contracts;
+using RUSAL.MetalTapping.BLL.Domain.DTOs;
 namespace RUSAL.MetalTapping.BLL.Application.UseCases;
 
 public class ProcessDeviationAndTaskUseCase(
-    IDeviationRepository deviationRepository,
-    IDeviationValuesRepository deviationValuesRepository,
-    IExternalDataRepository externalDataRepository,
-    IPotParametersRepository potParametersRepository,
-    ICalculatedTaskRepository calculatedTaskRepository,
+    DeviationService deviationService,
+    DeviationValuesService deviationValuesService,
+    ExternalDataService externalDataService,
+    PotParametersService potParametersService,
+    CalculatedTaskService calculatedTaskService,
     DeviationCalculationService deviationCalc,
     CalculatedTaskService taskCalc,
     PotParametersService potParamService)
 {
-    private readonly IDeviationRepository _deviationRepository = deviationRepository;
-    private readonly IDeviationValuesRepository _deviationValuesRepository = deviationValuesRepository;
-    private readonly IExternalDataRepository _externalDataRepository = externalDataRepository;
-    private readonly IPotParametersRepository _potParametersRepository = potParametersRepository;
-    private readonly ICalculatedTaskRepository _calculatedTaskRepository = calculatedTaskRepository;
+    private readonly DeviationService _deviationService = deviationService;
+    private readonly DeviationValuesService _deviationValuesService = deviationValuesService;
+    private readonly ExternalDataService _externalDataService = externalDataService;
+    private readonly PotParametersService _potParametersService = potParametersService;
+    private readonly CalculatedTaskService _calculatedTaskService = calculatedTaskService;
 
     private readonly DeviationCalculationService _deviationCalc = deviationCalc;
     private readonly CalculatedTaskService _taskCalc = taskCalc;
@@ -33,13 +31,9 @@ public class ProcessDeviationAndTaskUseCase(
     /// <returns> ViewModel расчётного задания и ЗПР для клиента </returns>
     public async Task<ProcessDeviationAndTaskResponse> ExecuteAsync(ProcessDeviationAndTaskRequest model)
     {
-        var deviation = EnsureFound(
-            await _deviationRepository.GetDeviationWithPotIdAsync(model.potId),
-            $"Deviation with pot id {model.potId} was not found");
+        var deviation = await _deviationService.GetWithPotIdAsync(model.potId);
 
-        var deviationValues = EnsureFound(
-            await _deviationValuesRepository.GetDeviationValuesWithDeviationId(deviation.Id),
-            $"DeviationValues with deviation id {deviation.Id} was not found");
+        var deviationValues = await _deviationValuesService.GetWithDeviationIdAsync(deviation.Id);
 
         var deviationAmount = _deviationCalc.CalculateDeviation(
             deviation.TargetMetalLevel,
@@ -52,9 +46,9 @@ public class ProcessDeviationAndTaskUseCase(
             deviation.IsValid = false;
             deviation.ActualMetalLevel = model.actualMetalLevel;
 
-            await _deviationRepository.UpdateAsync(deviation);
+            await _deviationService.UpdateAsync(deviation);
 
-            await _calculatedTaskRepository.CreateAsync(new CalculatedTask
+            await _calculatedTaskService.CreateAsync(new CalculatedTaskDto
             {
                 Id = Guid.NewGuid(),
                 PotId = model.potId,
@@ -69,13 +63,9 @@ public class ProcessDeviationAndTaskUseCase(
         deviation.IsValid = true;
         deviation.ActualMetalLevel = model.actualMetalLevel;
 
-        var externalData = EnsureFound(
-            await _externalDataRepository.GetExternalDataWithPotId(model.potId),
-            $"ExternalData with pot id {model.potId} was not found");
+        var externalData = await _externalDataService.GetByPotId(model.potId);
 
-        var potParameters = EnsureFound(
-            await _potParametersRepository.GetPotParametersWithGroupId(externalData.PotParametersGroupId),
-            $"PotParameters with potGroupId {model.potId} was not found");
+        var potParameters = await _potParametersService.GetByGroupId(externalData.PotParametersGroupId);
 
         var amperage = _potParamService.GetParameter(potParameters, PotParametersType.Amperage);
         var averageAmperage = _potParamService.GetParameter(potParameters, PotParametersType.AverageAmperage);
@@ -83,9 +73,9 @@ public class ProcessDeviationAndTaskUseCase(
         var calculatedTask = _taskCalc.CalculatedTask(amperage, averageAmperage);
         var roundCalculatedTask = _taskCalc.CalculateRoundedTask(calculatedTask, castingRatio.Value);
 
-        await _deviationRepository.UpdateAsync(deviation);
+        await _deviationService.UpdateAsync(deviation);
 
-        await _calculatedTaskRepository.CreateAsync(new CalculatedTask
+        await _calculatedTaskService.CreateAsync(new CalculatedTaskDto
         {
             Id = Guid.NewGuid(),
             PotId = model.potId,

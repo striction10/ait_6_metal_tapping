@@ -1,4 +1,4 @@
-﻿using RUSAL.MetalTapping.BLL.Domain.Entities;
+﻿using RUSAL.MetalTapping.BLL.Domain.DTOs;
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 
 public class DeviationCalculationService
@@ -18,7 +18,7 @@ public class DeviationCalculationService
     /// <param name="deviationAmount"> Отклонение от заданного уровня металла </param>
     /// <param name="values"> Список регламентных отклонений </param>
     /// <returns> Статус отклонения </returns>
-    public bool IsValidDeviation(double deviationAmount, IEnumerable<DeviationValues> values)
+    public bool IsValidDeviation(double deviationAmount, IEnumerable<DeviationValuesDto> values)
         => values.Any(v => v.Value == deviationAmount);
 
     /// <summary>
@@ -27,6 +27,6 @@ public class DeviationCalculationService
     /// <param name="deviationAmount"> Значение отклонения </param>
     /// <param name="values"> Список регламентных отклонений </param>
     /// <returns> Значение регламентного процента выливки </returns>
-    public int? GetCastingRatio(double deviationAmount, IEnumerable<DeviationValues> values)
+    public int? GetCastingRatio(double deviationAmount, IEnumerable<DeviationValuesDto> values)
         => values.FirstOrDefault(v => v.Value == deviationAmount)?.CastingRatio;
 }

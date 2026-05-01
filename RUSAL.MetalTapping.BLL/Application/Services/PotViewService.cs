@@ -1,5 +1,5 @@
 ﻿using RUSAL.MetalTapping.BLL.Application.Contracts;
-using RUSAL.MetalTapping.BLL.Domain.Entities;
+using RUSAL.MetalTapping.BLL.Domain.DTOs;
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 
 public class PotViewService
@@ -16,11 +16,11 @@ public class PotViewService
     /// <param name="metalMarkName"> Имя марки металла внутри электролизёра </param>
     /// <returns> ViewModel электролизера </returns>
     public ViewDeviationAndTaskPot BuildPotView(
-        Pot pot,
-        Deviation deviation,
+        PotDto pot,
+        DeviationDto deviation,
         double amperage,
         double averageAmperage,
-        CalculatedTask? lastTask,
+        CalculatedTaskDto? lastTask,
         string metalMarkName)
     {
         var deviationValue = deviation.TargetMetalLevel - deviation.ActualMetalLevel;

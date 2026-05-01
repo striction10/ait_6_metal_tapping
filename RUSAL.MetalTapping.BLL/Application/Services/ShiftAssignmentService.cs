@@ -1,20 +1,19 @@
-﻿using RUSAL.MetalTapping.BLL.Domain.Entities;
+﻿using RUSAL.MetalTapping.BLL.Domain.DTOs;
 using RUSAL.MetalTapping.BLL.Domain.Exceptions;
-using RUSAL.MetalTapping.BLL.Domain.Interfaces;
 using static RUSAL.MetalTapping.BLL.Domain.Guard;
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 
 public class ShiftAssignmentService(
-    IShiftRepository shiftRepository,
-    ITasksRepository tasksRepository,
+    ShiftService shiftService,
+    TasksService tasksService,
     ShiftTaskService shiftTaskService,
-    ITapTaskPotRepository tapTaskPotRepository,
-    IScoopUsageRepository scoopUsageRepository)
+    TapTaskPotService tapTaskPotService,
+    ScoopUsageService scoopUsageService)
 {
-    private readonly IShiftRepository _shiftRepository = shiftRepository;
-    private readonly ITasksRepository _tasksRepository = tasksRepository;
-    private readonly ITapTaskPotRepository _tapTaskPotRepository = tapTaskPotRepository;
-    private readonly IScoopUsageRepository _scoopUsageRepository = scoopUsageRepository;
+    private readonly ShiftService _shiftService = shiftService;
+    private readonly TasksService _tasksService = tasksService;
+    private readonly TapTaskPotService _tapTaskPotService = tapTaskPotService;
+    private readonly ScoopUsageService _scoopUsageService = scoopUsageService;
     
     private readonly ShiftTaskService _shiftTaskService = shiftTaskService;
 
@@ -23,10 +22,10 @@ public class ShiftAssignmentService(
     /// </summary>
     /// <param name="tapTasks"> Задания на выливку </param>
     /// <exception cref="BusinessException"> Смена на сегодняшний день отсуствует в бд </exception>
-    public async Task AssignTaskAsync(IEnumerable<TapTask> tapTasks)
+    public async Task AssignTaskAsync(IEnumerable<TapTaskDto> tapTasks)
     {
         var currentShifts = EnsureFound(
-            await _shiftRepository.GetCurrentShifts(),
+            await _shiftService.GetCurrentShifts(),
             "Current shifts was not found");
 
         foreach (var tapTask in tapTasks)
@@ -34,7 +33,7 @@ public class ShiftAssignmentService(
             var shift = currentShifts.FirstOrDefault(cs => cs.BuildingId == tapTask.BuildingId)
                 ?? throw new BusinessException($"No current shift found for {tapTask.BuildingId}");
 
-            var pots = await _tapTaskPotRepository.GetByTapTaskId(tapTask.Id);
+            var pots = await _tapTaskPotService.GetByTapTaskIdAsync(tapTask.Id);
             var countOfPots = pots.Count();
 
             var suitableShift = await FindSuitableShift(tapTask, shift, countOfPots);
@@ -51,7 +50,7 @@ public class ShiftAssignmentService(
     /// <param name="countOfPots"> Количество электролизеров в задании </param>
     /// <returns> Свободная смена для выполнения задания </returns>
     /// <exception cref="BusinessException"> Нет свободных смен для выполнения задания в бд </exception>
-    private async Task<Shift> FindSuitableShift(TapTask task, Shift currentShift, int countOfPots)
+    private async Task<ShiftDto> FindSuitableShift(TapTaskDto task, ShiftDto currentShift, int countOfPots)
     {
         var shift = currentShift;
 
@@ -60,7 +59,7 @@ public class ShiftAssignmentService(
             if (await CanFitTaskIntoShift(task, countOfPots, shift))
                 return shift;
 
-            shift = await _shiftRepository.GetNextShiftForBuilding(task.BuildingId, shift.EndDate);
+            shift = await _shiftService.GetNextShiftForBuilding(task.BuildingId, shift.EndDate);
         }
 
         throw new BusinessException("No suitable shifts for uploading the task");
@@ -73,7 +72,7 @@ public class ShiftAssignmentService(
     /// <param name="countOfPots"> Количество электролизёров в задании </param>
     /// <param name="shift"> Текущая смена </param>
     /// <returns> Возможно ли задействовать текущую смену </returns>
-    private async Task<bool> CanFitTaskIntoShift(TapTask tapTask, int countOfPots, Shift shift)
+    private async Task<bool> CanFitTaskIntoShift(TapTaskDto tapTask, int countOfPots, ShiftDto shift)
     {
         var busyFrom = shift.BeginDate;
 
@@ -83,15 +82,15 @@ public class ShiftAssignmentService(
         if (busyUntil > shift.EndDate)
             return false;
 
-        var usage = await _scoopUsageRepository.GetByScoopIdAsync(tapTask.ScoopId);
+        var usage = await _scoopUsageService.GetByScoopIdAsync(tapTask.ScoopId);
         if (usage != null && usage.BusyUntil > busyFrom)
             return false;
 
-        var tasks = await _tasksRepository.GetByShiftIdAsync(shift.Id);
+        var tasks = await _tasksService.GetByShiftIdAsync(shift.Id);
 
         foreach (var t in tasks)
         {
-            var pots = await _tapTaskPotRepository.GetByTapTaskId(t.TapTaskId);
+            var pots = await _tapTaskPotService.GetByTapTaskIdAsync(t.TapTaskId);
             var tDuration = TimeSpan.FromHours(pots.Count());
 
             var tBusyFrom = t.LeadTime;

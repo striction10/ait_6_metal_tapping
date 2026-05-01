@@ -1,11 +1,11 @@
 ﻿using RUSAL.MetalTapping.BLL.Application.Contracts;
-using RUSAL.MetalTapping.BLL.Domain.Entities;
-using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+using RUSAL.MetalTapping.BLL.Application.Services;
+using RUSAL.MetalTapping.BLL.Domain.DTOs;
 namespace RUSAL.MetalTapping.BLL.Application.UseCases;
 
-public class ProcessCalculatedTaskUseCase(ICalculatedTaskRepository calculatedTaskRepository)
+public class ProcessCalculatedTaskUseCase(CalculatedTaskService calculatedTaskService)
 {
-    private readonly ICalculatedTaskRepository _calculatedTaskRepository = calculatedTaskRepository;
+    private readonly CalculatedTaskService _calculatedTaskService = calculatedTaskService;
 
     /// <summary>
     /// Запись значения расчетного задания для электролизёра
@@ -13,11 +13,11 @@ public class ProcessCalculatedTaskUseCase(ICalculatedTaskRepository calculatedTa
     /// <param name="model"> Данные для создания расчётного задания </param>
     public async Task ExecuteAsync(ProcessCalculatedTaskRequest model)
     {
-        var existingTask = await _calculatedTaskRepository.GetCalculatedTaskWithPotIdAsync(model.potId);
+        var existingTask = await _calculatedTaskService.GetByPotIdAsync(model.potId);
 
         if (existingTask == null)
         {
-            var newTask = new CalculatedTask
+            var newTask = new CalculatedTaskDto
             {
                 Id = Guid.NewGuid(),
                 PotId = model.potId,
@@ -25,7 +25,7 @@ public class ProcessCalculatedTaskUseCase(ICalculatedTaskRepository calculatedTa
                 CreatedAt = DateTime.UtcNow
             };
 
-            await _calculatedTaskRepository.CreateAsync(newTask);
+            await _calculatedTaskService.CreateAsync(newTask);
 
             return;
         }
@@ -33,6 +33,6 @@ public class ProcessCalculatedTaskUseCase(ICalculatedTaskRepository calculatedTa
         existingTask.CalculatedTaskForPot = model.calculatedTask;
         existingTask.CreatedAt = DateTime.UtcNow;
 
-        await _calculatedTaskRepository.UpdateAsync(existingTask);
+        await _calculatedTaskService.UpdateAsync(existingTask);
     }
 }

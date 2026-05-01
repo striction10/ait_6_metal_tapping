@@ -1,4 +1,4 @@
-﻿using RUSAL.MetalTapping.BLL.Application.DTOs;
+﻿using RUSAL.MetalTapping.BLL.Application.ViewModels;
 using RUSAL.MetalTapping.BLL.Domain.Exceptions;
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 
@@ -16,8 +16,8 @@ public class CastingExecutionPlanService(
     /// <param name="requiredWeight"> Заданное количество металла </param>
     /// <returns> План выливки </returns>
     /// <exception cref="BusinessException"> Все ковши заняты - выливка невозможна на данный момент </exception>
-    public ExecutionPlan SelectExecutionPlan(
-        List<BuildingMetalInfo> buildings,
+    public ExecutionPlanViewModel SelectExecutionPlan(
+        List<BuildingMetalInfoViewModel> buildings,
         double requiredWeight)
     {
         foreach (var b in buildings)
@@ -25,11 +25,11 @@ public class CastingExecutionPlanService(
             var g = _groupSelector.SelectSingleGroup(b, requiredWeight);
             if (g != null)
             {
-                return new ExecutionPlan
+                return new ExecutionPlanViewModel
                 {
-                    Segments = new List<ExecutionSegment>
+                    Segments = new List<ExecutionSegmentViewModel>
                     {
-                        new ExecutionSegment
+                        new ExecutionSegmentViewModel
                         {
                             BuildingId = b.BuildingId,
                             GroupId = g.Id,
@@ -52,9 +52,9 @@ public class CastingExecutionPlanService(
 
                 if (total >= requiredWeight)
                 {
-                    return new ExecutionPlan
+                    return new ExecutionPlanViewModel
                     {
-                        Segments = groups.Select(g => new ExecutionSegment
+                        Segments = groups.Select(g => new ExecutionSegmentViewModel
                         {
                             BuildingId = b.BuildingId,
                             GroupId = g.group.Id,
@@ -71,9 +71,9 @@ public class CastingExecutionPlanService(
 
         if (multi != null)
         {
-            return new ExecutionPlan
+            return new ExecutionPlanViewModel
             {
-                Segments = multi.SelectMany(x => x.groups.Select(g => new ExecutionSegment
+                Segments = multi.SelectMany(x => x.groups.Select(g => new ExecutionSegmentViewModel
                     {
                         BuildingId = x.building.BuildingId,
                         GroupId = g.group.Id,

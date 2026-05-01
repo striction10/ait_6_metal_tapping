@@ -1,33 +1,31 @@
 ﻿using RUSAL.MetalTapping.BLL.Application.Contracts;
 using RUSAL.MetalTapping.BLL.Application.Services;
-using RUSAL.MetalTapping.BLL.Domain.Entities;
 using RUSAL.MetalTapping.BLL.Domain.Enums;
-using RUSAL.MetalTapping.BLL.Domain.Interfaces;
 using static RUSAL.MetalTapping.BLL.Domain.Guard;
 namespace RUSAL.MetalTapping.BLL.Application.UseCases;
 
 public class ViewDeviationAndTaskUseCase(
-    IGenericRepository<Building> buildingRepository,
-    IReglamentRepository reglamentRepository,
-    IPotReglamentRepository potReglamentRepository,
-    ICalculatedTaskRepository calculatedTaskRepository,
-    IMetalMarkAnalysisRepository metalMarkAnalysisRepository,
-    IGenericRepository<Pot> potRepository,
-    IGenericRepository<MetalMark> metalMarkRepository,
-    IPotParametersRepository potParametersRepository,
-    IExternalDataRepository externalDataRepository,
+    BuildingService buildingService,
+    ReglamentService reglamentService,
+    PotReglamentService potReglamentService,
+    CalculatedTaskService calculatedTaskService,
+    MetalMarkAnalysisService metalMarkAnalysisService,
+    PotService potService,
+    MetalMarkService metalMarkService,
+    PotParametersService potParametersService,
+    ExternalDataService externalDataService,
     PotViewService potViewService,
     PotParametersService potParamService)
 {
-    private readonly IGenericRepository<Building> _buildingRepository = buildingRepository;
-    private readonly IGenericRepository<Pot> _potRepository = potRepository;
-    private readonly IGenericRepository<MetalMark> _metalMarkRepository = metalMarkRepository;
-    private readonly IReglamentRepository _reglamentRepository = reglamentRepository;
-    private readonly IPotReglamentRepository _potReglamentRepository = potReglamentRepository;
-    private readonly ICalculatedTaskRepository _calculatedTaskRepository = calculatedTaskRepository;
-    private readonly IMetalMarkAnalysisRepository _metalMarkAnalysisRepository = metalMarkAnalysisRepository;
-    private readonly IPotParametersRepository _potParametersRepository = potParametersRepository;
-    private readonly IExternalDataRepository _externalDataRepository = externalDataRepository;
+    private readonly BuildingService _buildingService = buildingService;
+    private readonly PotService _potService = potService;
+    private readonly MetalMarkService _metalMarkService = metalMarkService;
+    private readonly ReglamentService _reglamentService = reglamentService;
+    private readonly PotReglamentService _potReglamentService = potReglamentService;
+    private readonly CalculatedTaskService _calculatedTaskService = calculatedTaskService;
+    private readonly MetalMarkAnalysisService _metalMarkAnalysisService = metalMarkAnalysisService;
+    private readonly PotParametersService _potParametersService = potParametersService;
+    private readonly ExternalDataService _externalDataService = externalDataService;
 
     private readonly PotViewService _potViewService = potViewService;
     private readonly PotParametersService _potParamService = potParamService;
@@ -39,14 +37,11 @@ public class ViewDeviationAndTaskUseCase(
     /// <returns> ViewModel для отображения таблицы </returns>
     public async Task<ViewDeviationAndTaskResponse> ExecuteAsync(ViewDeviationAndTaskRequest model)
     {
-        EnsureFound(await _buildingRepository.GetByIdAsync(model.buildingId),
-            $"Building with id {model.buildingId} was not found");
+        var building = await _buildingService.GetByIdAsync(model.buildingId);
 
-        EnsureFound(await _reglamentRepository.GetByIdAsync(model.reglamentId),
-            $"Reglament with id {model.reglamentId} was not found");
+        var reglament = await _reglamentService.GetByIdAsync(model.reglamentId);
 
-        var potReglaments = await _potReglamentRepository
-            .GetByReglamentAndBuildingWithDeviationsAsync(model.reglamentId, model.buildingId);
+        var potReglaments = await _potReglamentService.GetByReglamentAndBuildingIdAsync(model.reglamentId, model.buildingId);
 
         var pots = new List<ViewDeviationAndTaskPot>();
 
@@ -56,18 +51,15 @@ public class ViewDeviationAndTaskUseCase(
             if (deviation == null)
                 continue;
 
-            var pot = EnsureFound(await _potRepository.GetByIdAsync(potReglament.PotId),
-                $"Pot with id {potReglament.PotId} was not found");
+            var pot = await _potService.GetByIdAsync(potReglament.PotId);
 
-            var externalData = EnsureFound(await _externalDataRepository.GetExternalDataWithPotId(pot.Id),
-                $"ExternalData with pot id {pot.Id} was not found");
+            var externalData = await _externalDataService.GetByPotId(pot.Id);
 
-            var lastTask = await _calculatedTaskRepository.GetCalculatedTaskWithPotIdAsync(potReglament.PotId);
+            var lastTask = await _calculatedTaskService.GetByPotIdAsync(potReglament.PotId);
 
-            var analysis = await _metalMarkAnalysisRepository.GetMetalMarkAnalysisWithPotIdAsync(potReglament.PotId);
+            var analysis = await _metalMarkAnalysisService.GetByPotIdAsync(potReglament.PotId);
 
-            var potParameters = EnsureFound(await _potParametersRepository.GetPotParametersWithGroupId(externalData.PotParametersGroupId),
-                $"PotParameters with potGroupId {pot.Id} was not found");
+            var potParameters = await _potParametersService.GetByGroupId(externalData.PotParametersGroupId);
 
             var amperage = _potParamService.GetParameter(potParameters, PotParametersType.Amperage);
             var averageAmperage = _potParamService.GetParameter(potParameters, PotParametersType.AverageAmperage);
@@ -76,7 +68,7 @@ public class ViewDeviationAndTaskUseCase(
 
             if (analysis != null)
             {
-                var metalMark = await _metalMarkRepository.GetByIdAsync(analysis.MetalMarkId);
+                var metalMark = await _metalMarkService.GetByIdAsync(analysis.MetalMarkId);
                 metalMarkName = metalMark?.Name ?? "N/A";
             }
 

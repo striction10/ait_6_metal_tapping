@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RUSAL.MetalTapping.BLL.Application.DTOs;
 using RUSAL.MetalTapping.BLL.Application.UseCases.Buildings;
+using RUSAL.MetalTapping.BLL.Domain.DTOs;
 namespace RUSAL.MetalTapping.API.Controllers;
 
 [ApiController]

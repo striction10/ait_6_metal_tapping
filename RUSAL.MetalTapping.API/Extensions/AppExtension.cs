@@ -1,9 +1,14 @@
-﻿namespace RUSAL.MetalTapping.API.Extensions;
+﻿using Hellang.Middleware.ProblemDetails;
+
+namespace RUSAL.MetalTapping.API.Extensions;
 
 public static class AppExtension
 {
-    public static void UseAppPipeline(this WebApplication  app)
+    public static void UseAppPipeline(this WebApplication app)
     {
+        app.UseProblemDetails();
+        app.UseStatusCodePages();
+
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
@@ -13,17 +18,11 @@ public static class AppExtension
                 c.RoutePrefix = "api/swagger";
             });
         }
-        else
-        {
-            app.UseExceptionHandler("/Error");
-            app.UseHsts();
-        }
 
         app.UseHttpsRedirection();
         app.UseStaticFiles();
 
         app.UseRouting();
-
 
         app.UseAuthentication();
         app.UseAuthorization();

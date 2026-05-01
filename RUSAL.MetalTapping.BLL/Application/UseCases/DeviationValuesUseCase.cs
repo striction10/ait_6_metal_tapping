@@ -1,19 +1,18 @@
 ﻿using RUSAL.MetalTapping.BLL.Application.Contracts;
-using RUSAL.MetalTapping.BLL.Domain.Entities;
-using RUSAL.MetalTapping.BLL.Domain.Interfaces;
-using static RUSAL.MetalTapping.BLL.Domain.Guard;
+using RUSAL.MetalTapping.BLL.Application.Services;
+using RUSAL.MetalTapping.BLL.Domain.DTOs;
 namespace RUSAL.MetalTapping.BLL.Application.UseCases;
 
 public class DeviationValuesUseCase(
-    IGenericRepository<Building> buildingRepository,
-    IReglamentRepository reglamentRepository,
-    IPotReglamentRepository potReglamentRepository,
-    IGenericRepository<Pot> potRepository)
+    BuildingService buildingService,
+    ReglamentService reglamentService,
+    PotReglamentService potReglamentService,
+    PotService potService)
 {
-    private readonly IGenericRepository<Building> _buildingRepository = buildingRepository;
-    private readonly IReglamentRepository _reglamentRepository = reglamentRepository;
-    private readonly IPotReglamentRepository _potReglamentRepository = potReglamentRepository;
-    private readonly IGenericRepository<Pot> _potRepository = potRepository;
+    private readonly BuildingService _buildingService = buildingService;
+    private readonly ReglamentService _reglamentService = reglamentService;
+    private readonly PotReglamentService _potReglamentService = potReglamentService;
+    private readonly PotService _potService = potService;
 
     /// <summary>
     /// Создание ViewModel таблицы регламентов для клиента 
@@ -22,17 +21,13 @@ public class DeviationValuesUseCase(
     /// <returns> ViewModel таблицы регламентов </returns>
     public async Task<ReglamentTableResponse> GetReglamentTableAsync(ReglamentTableRequest model)
     {
-        EnsureFound(await _buildingRepository.GetByIdAsync(model.buildingId),
-            $"Building with id {model.buildingId} was not found");
+        var building = await _buildingService.GetByIdAsync(model.buildingId);
 
-        EnsureFound(await _reglamentRepository.GetByIdAsync(model.reglamentId),
-            $"Reglament with id {model.reglamentId} was not found");
+        var reglament = await _reglamentService.GetByIdAsync(model.reglamentId);
 
-        var potReglaments =
-            await _potReglamentRepository.GetByReglamentAndBuildingWithDeviationsAsync(
-                model.reglamentId, model.buildingId);
+        var potReglaments = await _potReglamentService.GetByReglamentAndBuildingIdAsync(reglament.Id, building.Id);
 
-        var pots = new List<PotDeviation>();
+        var pots = new List<PotDeviationDto>();
 
         foreach (var potReglament in potReglaments)
         {
@@ -40,17 +35,17 @@ public class DeviationValuesUseCase(
             if (deviation == null)
                 continue;
 
-            var pot = await _potRepository.GetByIdAsync(potReglament.PotId);
-            EnsureFound(pot, $"Pot with id {potReglament.PotId} was not found");
+            var pot = await _potService.GetByIdAsync(potReglament.PotId);
 
             var castingRatios = deviation.Values
                 .ToDictionary(v => v.Value, v => v.CastingRatio);
 
-            pots.Add(new PotDeviation(
-                id: potReglament.PotId,
-                name: pot.Name,
-                castingRatio: castingRatios
-            ));
+            pots.Add(new PotDeviationDto
+            {
+                Id = potReglament.PotId,
+                Name = pot.Name,
+                CastingRatio = castingRatios
+            });
         }
 
         return new ReglamentTableResponse(pots);

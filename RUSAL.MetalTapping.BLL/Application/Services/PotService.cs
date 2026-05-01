@@ -1,13 +1,20 @@
-﻿using RUSAL.MetalTapping.BLL.Application.DTOs;
-using RUSAL.MetalTapping.BLL.Domain.Entities;
+﻿using AutoMapper;
+using RUSAL.MetalTapping.BLL.Application.ViewModels;
+using RUSAL.MetalTapping.BLL.Domain.DTOs;
 using RUSAL.MetalTapping.BLL.Domain.Exceptions;
-using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+using RUSAL.MetalTapping.DAL.Entities;
+using RUSAL.MetalTapping.DAL.Interfaces;
 using static RUSAL.MetalTapping.BLL.Domain.Guard;
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 
-public class PotService(IGenericRepository<PotState> potStateRepository)
+public class PotService(
+    IGenericRepository<PotState> potStateRepository,
+    IPotRepository potRepository,
+    IMapper mapper)
 {
     private readonly IGenericRepository<PotState> _potStateRepository = potStateRepository;
+    private readonly IPotRepository _potRepository = potRepository;
+    private readonly IMapper _mapper = mapper;
 
     /// <summary>
     /// Создание DTO
@@ -19,14 +26,14 @@ public class PotService(IGenericRepository<PotState> potStateRepository)
     /// <param name="metalLevelByPot"> Распределение уровня металла по электролизёрам </param>
     /// <returns> Список электролизёров </returns>
     /// <exception cref="BusinessException"> Нет ЗПР для составления списка электролизёров </exception>
-    public async Task<List<PotDto>> CreateAsync(
-        IEnumerable<Pot> pots,
-        IEnumerable<CalculatedTask> calculated,
-        IEnumerable<MetalMarkAnalysis> analysis,
-        Dictionary<Guid, MetalMarkAnalysis> marksByPot,
-        Dictionary<Guid, double> metalLevelByPot)
+    public async Task<List<PotViewModel>> CreateAsync(
+        IEnumerable<PotDto> pots,
+        IEnumerable<CalculatedTaskDto> calculated,
+        IEnumerable<MetalMarkAnalysisDto> analysis,
+        Dictionary<Guid, MetalMarkAnalysisDto> marksByPot,
+        Dictionary<Guid, double> metalLevelByPot) // TODO: Вынести для пота поиск расчётного задания в этот сервис
     {
-        var potDtos = new List<PotDto>();
+        var potDtos = new List<PotViewModel>();
 
         var calcByPot = calculated.ToDictionary(c => c.PotId);
         var analysisByPot = analysis.ToDictionary(a => a.PotId);
@@ -46,7 +53,7 @@ public class PotService(IGenericRepository<PotState> potStateRepository)
             metalLevelByPot[pot.Id] = level;
             marksByPot[pot.Id] = metalMarkAnalysis;
 
-            potDtos.Add(new PotDto
+            potDtos.Add(new PotViewModel
             {
                 Id = pot.Id,
                 Name = pot.Name,
@@ -57,5 +64,31 @@ public class PotService(IGenericRepository<PotState> potStateRepository)
         }
 
         return potDtos;
+    }
+
+    /// <summary>
+    /// Получение электролизёра по идентификатору
+    /// </summary>
+    /// <param name="id"> Идентификатор электролизёра </param>
+    /// <returns> DTO электролизёра </returns>
+    public async Task<PotDto> GetByIdAsync(Guid id)
+    {
+        var entity = EnsureFound(await _potRepository.GetByIdAsync(id),
+            $"Pot with id {id} was not found");
+
+        return _mapper.Map<PotDto>(entity);
+    }
+
+    /// <summary>
+    /// Получение списка электролизёров по идентификатору группы
+    /// </summary>
+    /// <param name="groupId"> Идентификатор группы электролизёров </param>
+    /// <returns> DTO группы электролизёров </returns>
+    public async Task<IEnumerable<PotDto?>> GetByGroupIdAsync(Guid groupId)
+    {
+        var entities = EnsureFound(await _potRepository.GetPotsByGroupIdAsync(groupId),
+            $"Pots with group {groupId} was not found");
+
+        return _mapper.Map<IEnumerable<PotDto?>>(entities);
     }
 }

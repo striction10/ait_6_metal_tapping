@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using RUSAL.MetalTapping.API.Extensions;
 using RUSAL.MetalTapping.DAL;
 

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RUSAL.MetalTapping.BLL.Application.DTOs;
 using RUSAL.MetalTapping.BLL.Application.UseCases;
+using RUSAL.MetalTapping.BLL.Application.ViewModels;
 namespace RUSAL.MetalTapping.API.Controllers;
 
 [ApiController]
@@ -16,9 +16,9 @@ public class MetalMarkController(GetAllMetalMarksUseCase service) : ControllerBa
     /// <returns> Список марок металла </returns>
     [HttpGet("all")]
     [Authorize]
-    [ProducesResponseType(typeof(IEnumerable<MetalMarkDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<MetalMarkViewModel>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<IEnumerable<MetalMarkDto>>> GetAll()
+    public async Task<ActionResult<IEnumerable<MetalMarkViewModel>>> GetAll()
     {
         var response = await _service.ExecuteAsync();
         return Ok(response);

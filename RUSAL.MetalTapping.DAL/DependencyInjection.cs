@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RUSAL.MetalTapping.DAL.Contexts;
-using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+using RUSAL.MetalTapping.DAL.Interfaces;
 using RUSAL.MetalTapping.DAL.Repositories;
 namespace RUSAL.MetalTapping.DAL;
 
@@ -17,7 +17,7 @@ public static class DependencyInjection
         services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(connectionString));
 
-        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositoryAdapter<>));
+        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
         services.AddScoped<IDeviationRepository, DeviationRepository>();
         services.AddScoped<IDeviationValuesRepository, DeviationValuesRepository>();
@@ -30,12 +30,13 @@ public static class DependencyInjection
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IMetalMarkRepository, MetalMarkRepository>();
-        services.AddScoped<IPotGroupHistoryRepository, PotGroupHistoryRepository>();
         services.AddScoped<IPotGroupRepository, PotGroupRepository>();
         services.AddScoped<IScoopUsageRepository, ScoopUsageRepository>();
         services.AddScoped<IShiftRepository, ShiftRepository>();
         services.AddScoped<ITasksRepository, TaskRepository>();
         services.AddScoped<ITapTaskPotRepository, TapTaskPotRepository>();
+        services.AddScoped<IMetalMarkAnalysisValueRepository, MetalMarkAnalysisValueRepository>();
+        services.AddScoped<IPotRepository, PotRepository>();
 
         return services;
     }

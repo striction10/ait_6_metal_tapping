@@ -1,10 +1,9 @@
-﻿using RUSAL.MetalTapping.BLL.Domain.Entities;
-using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+﻿using RUSAL.MetalTapping.BLL.Domain.DTOs;
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 
-public class ScoopReservationService(IScoopUsageRepository scoopUsageRepository)
+public class ScoopReservationService(ScoopUsageService scoopUsageService)
 {
-    private readonly IScoopUsageRepository _scoopUsageRepository = scoopUsageRepository;
+    private readonly ScoopUsageService _scoopUsageService = scoopUsageService;
 
     /// <summary>
     /// Резервация ковша на время выполнения задания
@@ -14,19 +13,17 @@ public class ScoopReservationService(IScoopUsageRepository scoopUsageRepository)
     /// <param name="busyUntil"> До какого момента ковш занят </param>
     public async Task ReservateScoop(Guid scoopId, DateTime busyFrom, DateTime busyUntil)
     {
-        var currentUsage = await _scoopUsageRepository.GetByScoopIdAsync(scoopId);
+        var currentUsage = await _scoopUsageService.GetByScoopIdAsync(scoopId);
 
         if (currentUsage == null)
         {
-            var scoopUsage = new ScoopUsage
+            await _scoopUsageService.CreateAsync(new ScoopUsageDto
             {
                 Id = Guid.NewGuid(),
                 ScoopId = scoopId,
                 BusyFrom = busyFrom,
                 BusyUntil = busyUntil
-            };
-
-            await _scoopUsageRepository.CreateAsync(scoopUsage);
+            });
 
             return;
         }
@@ -34,6 +31,6 @@ public class ScoopReservationService(IScoopUsageRepository scoopUsageRepository)
         currentUsage.BusyFrom = busyFrom;
         currentUsage.BusyUntil = busyUntil;
 
-        await _scoopUsageRepository.UpdateAsync(currentUsage);
+        await _scoopUsageService.UpdateAsync(currentUsage);
     }
 }

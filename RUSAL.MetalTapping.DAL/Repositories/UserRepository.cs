@@ -1,23 +1,16 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using RUSAL.MetalTapping.BLL.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using RUSAL.MetalTapping.DAL.Entities;
 using RUSAL.MetalTapping.DAL.Contexts;
-using RUSAL.MetalTapping.DAL.Models;
-using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+using RUSAL.MetalTapping.DAL.Interfaces;
 namespace RUSAL.MetalTapping.DAL.Repositories;
 
-public class UserRepository(
-    AppDbContext context, IMapper mapper) 
-        : GenericRepository<User, UserModel>(context, mapper), 
-        IUserRepository
+public class UserRepository(AppDbContext context) 
+    : GenericRepository<User>(context), IUserRepository
 {
     private readonly AppDbContext _context = context;
-    private readonly IMapper _mapper = mapper;
 
     public async Task<User?> GetByEmailAsync(string email)
     {
-        var entity = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
-
-        return _mapper.Map<User>(entity);
+        return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
     }
 }

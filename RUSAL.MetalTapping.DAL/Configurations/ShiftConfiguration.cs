@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RUSAL.MetalTapping.DAL.Models;
+using RUSAL.MetalTapping.DAL.Entities;
 namespace RUSAL.MetalTapping.DAL.Configurations;
 
-public class ShiftConfiguration : IEntityTypeConfiguration<ShiftModel>
+public class ShiftConfiguration : IEntityTypeConfiguration<Shift>
 {
-    public void Configure(EntityTypeBuilder<ShiftModel> builder)
+    public void Configure(EntityTypeBuilder<Shift> builder)
     {
         builder.ToTable("Shift");
         

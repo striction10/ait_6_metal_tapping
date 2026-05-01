@@ -1,35 +1,36 @@
 ﻿using RUSAL.MetalTapping.BLL.Application.Contracts;
-using RUSAL.MetalTapping.BLL.Application.DTOs;
-using RUSAL.MetalTapping.BLL.Domain.Entities;
-using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+using RUSAL.MetalTapping.BLL.Application.ViewModels;
+using RUSAL.MetalTapping.BLL.Domain.DTOs;
 using static RUSAL.MetalTapping.BLL.Domain.Guard;
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 
 public class ViewTaskService(
-    ITasksRepository tasksRepository,
-    ITapTaskPotRepository tapTaskPotRepository,
-    IMetalMarkAnalysisRepository metalMarkAnalysisRepository,
-    IMetalMarkRepository metalMarkRepository,
-    IGenericRepository<Scoop> scoopRepository,
-    IGenericRepository<ChemicalElem> chemicalElemRepository,
-    IGenericRepository<Pot> potRepository,
-    IGenericRepository<TapTask> tapTaskRepository)
+    TasksService tasksService,
+    TapTaskPotService tapTaskPotService,
+    MetalMarkAnalysisService metalMarkAnalysisService,
+    MetalMarkService metalMarkService,
+    ScoopService scoopRepository,
+    ChemicalElemService chemicalElemService,
+    PotService potService,
+    TapTaskService tapTaskService,
+    MetalMarkAnalysisValueService metalMarkAnalysisValueService)
 {
-    private readonly ITasksRepository _tasksRepository = tasksRepository;
-    private readonly ITapTaskPotRepository _tapTaskPotRepository = tapTaskPotRepository;
-    private readonly IMetalMarkAnalysisRepository _metalMarkAnalysisRepository = metalMarkAnalysisRepository;
-    private readonly IMetalMarkRepository _metalMarkRepository = metalMarkRepository;
-    private readonly IGenericRepository<Scoop> _scoopRepository = scoopRepository;
-    private readonly IGenericRepository<ChemicalElem> _chemicalElemRepository = chemicalElemRepository;
-    private readonly IGenericRepository<Pot> _potRepository = potRepository;
-    private readonly IGenericRepository<TapTask> _tapTaskRepository = tapTaskRepository;
+    private readonly TasksService _tasksService = tasksService;
+    private readonly TapTaskPotService _tapTaskPotService = tapTaskPotService;
+    private readonly MetalMarkAnalysisService _metalMarkAnalysisService = metalMarkAnalysisService;
+    private readonly MetalMarkService _metalMarkService = metalMarkService;
+    private readonly ScoopService _scoopService = scoopRepository;
+    private readonly ChemicalElemService _chemicalElemService = chemicalElemService;
+    private readonly PotService _potService = potService;
+    private readonly TapTaskService _tapTaskService = tapTaskService;
+    private readonly MetalMarkAnalysisValueService _metalMarkAnalysisValueService = metalMarkAnalysisValueService;
 
     /// <summary>
     /// Создание ViewModel заданий на выливку для клиента
     /// </summary>
     /// <param name="request"> Задания </param>
     /// <returns> ViewModel для конкретного корпуса по сменам </returns>
-    public async Task<DailyTaskResponse> ViewTask(TaskRequest request)
+    public async Task<DailyTaskResponseViewModel> ViewTask(TaskRequest request)
     {
         var nightStart = request.Date.AddDays(-1).Date.AddHours(20);
         var nightEnd = request.Date.Date.AddHours(8);
@@ -37,7 +38,7 @@ public class ViewTaskService(
         var dayStart = request.Date.Date.AddHours(8);
         var dayEnd = request.Date.Date.AddHours(20);
 
-        var tasks = await _tasksRepository.GetByBuildingAndDateRange(
+        var tasks = await _tasksService.GetByBuildingAndDateRangeAsync(
             request.BuildingId,
             nightStart,
             dayEnd
@@ -49,7 +50,7 @@ public class ViewTaskService(
         var nightBlock = await BuildShiftBlock(nightTasks);
         var dayBlock = await BuildShiftBlock(dayTasks);
 
-        var summary = new DailySummary
+        var summary = new DailySummaryViewModel
         {
             TotalWeight = nightBlock.TotalWeight + dayBlock.TotalWeight,
             MetalGrade = nightBlock.Items.FirstOrDefault()?.MetalGrade
@@ -57,7 +58,7 @@ public class ViewTaskService(
                          ?? "N/A"
         };
 
-        return new DailyTaskResponse
+        return new DailyTaskResponseViewModel
         {
             Date = request.Date,
             NightShift = nightBlock,
@@ -71,22 +72,22 @@ public class ViewTaskService(
     /// </summary>
     /// <param name="tasks"> Задания на выливку</param>
     /// <returns> Задание на выливку конкретного электролизёра для смены</returns>
-    private async Task<ShiftTaskBlock> BuildShiftBlock(IEnumerable<ShiftTask> tasks)
+    private async Task<ShiftTaskBlockViewModel> BuildShiftBlock(IEnumerable<ShiftTaskDto> tasks)
     {
-        var block = new ShiftTaskBlock();
+        var block = new ShiftTaskBlockViewModel();
         double total = 0;
 
         foreach (var task in tasks)
         {
             var tapTask = EnsureFound(
-                await _tapTaskRepository.GetByIdAsync(task.TapTaskId),
+                await _tapTaskService.GetByIdAsync(task.TapTaskId),
                 $"TapTask {task.TapTaskId} not found");
 
             var scoop = EnsureFound(
-                await _scoopRepository.GetByIdAsync(tapTask.ScoopId),
+                await _scoopService.GetByIdAsync(tapTask.ScoopId),
                 $"Scoop {tapTask.ScoopId} not found");
 
-            var pots = await _tapTaskPotRepository.GetByTapTaskId(task.TapTaskId);
+            var pots = await _tapTaskPotService.GetByTapTaskIdAsync(task.TapTaskId);
 
             var startLeadTime = task.LeadTime;
             var currentTime = startLeadTime;
@@ -94,20 +95,20 @@ public class ViewTaskService(
             foreach (var pot in pots)
             {
                 var analysis = EnsureFound(
-                    await _metalMarkAnalysisRepository.GetMetalMarkAnalysisWithPotIdAsync(pot.PotId),
+                    await _metalMarkAnalysisService.GetByPotIdAsync(pot.PotId),
                     $"MetalMarkAnalysis for pot {pot.PotId} not found");
 
                 var potEntity = EnsureFound(
-                    await _potRepository.GetByIdAsync(pot.PotId),
+                    await _potService.GetByIdAsync(pot.PotId),
                     $"Pot with id {pot.PotId} not found");
 
                 var mark = EnsureFound(
-                    await _metalMarkRepository.GetByIdAsync(analysis.MetalMarkId),
+                    await _metalMarkService.GetByIdAsync(analysis.MetalMarkId),
                     $"MetalMark {analysis.MetalMarkId} not found");
 
                 var elements = await BuildChemicalElements(analysis.Id);
 
-                block.Items.Add(new ShiftTaskItem
+                block.Items.Add(new ShiftTaskItemViewModel
                 {
                     Time = currentTime,
                     Weight = pot.PotMetalWeigth,
@@ -133,18 +134,18 @@ public class ViewTaskService(
     /// </summary>
     /// <param name="metalMarkAnalysisId"> Идентификатор анализа марки металла внутри электролизёра </param>
     /// <returns> Значения состава металла </returns>
-    private async Task<List<ChemicalElemDto>> BuildChemicalElements(Guid metalMarkAnalysisId)
+    private async Task<List<ChemicalElemViewModel>> BuildChemicalElements(Guid metalMarkAnalysisId)
     {
-        var values = await _metalMarkAnalysisRepository
-            .GetValuesByAnalysisIdAsync(metalMarkAnalysisId);
+        var values = await _metalMarkAnalysisValueService
+            .GetByAnalysisIdAsync(metalMarkAnalysisId);
 
-        var result = new List<ChemicalElemDto>();
+        var result = new List<ChemicalElemViewModel>();
 
         foreach (var v in values)
         {
-            var elem = await _chemicalElemRepository.GetByIdAsync(v.ChemicalElemId);
+            var elem = await _chemicalElemService.GetByIdAsync(v.ChemicalElemId);
 
-            result.Add(new ChemicalElemDto
+            result.Add(new ChemicalElemViewModel
             {
                 Name = elem.Name,
                 Value = v.Value

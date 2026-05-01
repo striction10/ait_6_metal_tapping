@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RUSAL.MetalTapping.BLL.Application.Contracts;
-using RUSAL.MetalTapping.BLL.Application.DTOs;
 using RUSAL.MetalTapping.BLL.Application.UseCases;
+using RUSAL.MetalTapping.BLL.Application.ViewModels;
 namespace RUSAL.MetalTapping.API.Controllers;
 
 [ApiController]
@@ -19,9 +19,9 @@ public class ReglamentController(
     /// </summary>
     [HttpGet]
     [Authorize]
-    [ProducesResponseType(typeof(IEnumerable<ReglamentDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<ReglamentViewModel>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult<IEnumerable<ReglamentDto>>> GetAll()
+    public async Task<ActionResult<IEnumerable<ReglamentViewModel>>> GetAll()
     {
         var response = await _service.ExecuteAsync();
         return Ok(response);

@@ -1,12 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RUSAL.MetalTapping.DAL.Models;
-
+using RUSAL.MetalTapping.DAL.Entities;
 namespace RUSAL.MetalTapping.DAL.Configurations;
 
-public class OrderConfgiration : IEntityTypeConfiguration<OrderModel>
+public class OrderConfgiration : IEntityTypeConfiguration<Order>
 {
-    public void Configure(EntityTypeBuilder<OrderModel> builder)
+    public void Configure(EntityTypeBuilder<Order> builder)
     {
         builder.ToTable("Order");
 
