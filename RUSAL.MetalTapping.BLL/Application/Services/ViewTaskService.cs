@@ -2,6 +2,10 @@
 using RUSAL.MetalTapping.BLL.Application.ViewModels;
 using RUSAL.MetalTapping.BLL.Domain.DTOs;
 using static RUSAL.MetalTapping.BLL.Domain.Guard;
+using ChemicalElemDto = RUSAL.MetalTapping.BLL.Domain.DTOs.ChemicalElemDto;
+using PotDto = RUSAL.MetalTapping.BLL.Domain.DTOs.PotDto;
+using ScoopDto = RUSAL.MetalTapping.BLL.Domain.DTOs.ScoopDto;
+
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 
 public class ViewTaskService(
@@ -63,7 +67,7 @@ public class ViewTaskService(
             Date = request.Date,
             NightShift = nightBlock,
             DayShift = dayBlock,
-            Summary = summary
+            SummaryViewModel = summary
         };
     }
 

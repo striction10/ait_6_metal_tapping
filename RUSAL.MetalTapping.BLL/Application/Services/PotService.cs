@@ -5,6 +5,8 @@ using RUSAL.MetalTapping.BLL.Domain.Exceptions;
 using RUSAL.MetalTapping.DAL.Entities;
 using RUSAL.MetalTapping.DAL.Interfaces;
 using static RUSAL.MetalTapping.BLL.Domain.Guard;
+using PotDto = RUSAL.MetalTapping.BLL.Domain.DTOs.PotDto;
+
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 
 public class PotService(
