@@ -1,26 +1,23 @@
-﻿using RUSAL.MetalTapping.BLL.Application.DTOs;
-using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+﻿using RUSAL.MetalTapping.BLL.Application.Services;
+using RUSAL.MetalTapping.BLL.Application.ViewModels;
+namespace RUSAL.MetalTapping.BLL.Application.UseCases;
 
-namespace RUSAL.MetalTapping.BLL.Application.UseCases
+public class GetAllReglamentsUseCase(ReglamentService reglamentService)
 {
-    public class GetAllReglamentsUseCase
+    private readonly ReglamentService _reglamentService = reglamentService;
+
+    /// <summary>
+    /// Получение списка регламентов
+    /// </summary>
+    /// <returns> Список регламентов </returns>
+    public async Task<IEnumerable<ReglamentViewModel>> ExecuteAsync()
     {
-        private readonly IReglamentRepository _repository;
+        var reglaments = await _reglamentService.GetAllAsync();
 
-        public GetAllReglamentsUseCase(IReglamentRepository repository)
+        return reglaments.Select(r => new ReglamentViewModel
         {
-            _repository = repository;
-        }
-
-        public async Task<IEnumerable<ReglamentDto>> ExecuteAsync()
-        {
-            var reglaments = await _repository.GetAllAsync();
-
-            return reglaments.Select(r => new ReglamentDto
-            {
-                Id = r.Id,
-                Name = r.Name
-            });
-        }
+            Id = r.Id,
+            Name = r.Name
+        });
     }
 }

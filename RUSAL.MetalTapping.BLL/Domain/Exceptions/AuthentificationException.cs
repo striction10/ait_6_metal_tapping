@@ -1,7 +1,6 @@
-﻿namespace RUSAL.MetalTapping.BLL.Domain.Exceptions
+﻿namespace RUSAL.MetalTapping.BLL.Domain.Exceptions;
+
+public class AuthentificationException : Exception
 {
-    public class AuthentificationException : Exception
-    {
-        public AuthentificationException(string message) : base(message) { }
-    }
+    public AuthentificationException(string message) : base(message) { }
 }

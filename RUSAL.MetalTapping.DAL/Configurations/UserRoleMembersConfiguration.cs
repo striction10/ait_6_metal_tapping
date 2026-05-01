@@ -1,12 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RUSAL.MetalTapping.DAL.Models;
-
+using RUSAL.MetalTapping.DAL.Entities;
 namespace RUSAL.MetalTapping.DAL.Configurations;
 
-public class UserRoleMembersConfiguration : IEntityTypeConfiguration<UserRoleMembersModel>
+public class UserRoleMembersConfiguration : IEntityTypeConfiguration<UserRoleMembers>
 {
-    public void Configure(EntityTypeBuilder<UserRoleMembersModel> builder)
+    public void Configure(EntityTypeBuilder<UserRoleMembers> builder)
     {
         builder.ToTable("UserRoleMembers");
 

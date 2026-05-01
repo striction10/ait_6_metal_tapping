@@ -1,42 +1,46 @@
-﻿using RUSAL.MetalTapping.BLL.Application.DTOs;
+﻿using RUSAL.MetalTapping.BLL.Application.ViewModels;
+namespace RUSAL.MetalTapping.BLL.Application.Services;
 
-namespace RUSAL.MetalTapping.BLL.Application.Services
+public class BuildingMetalInfoService
 {
-    public class BuildingMetalInfoService
+    /// <summary>
+    /// Получение информации о заданном корпусе по заданной марке (сколько металла можно получить в разных группах)
+    /// </summary>
+    /// <param name="building"> Корпус </param>
+    /// <param name="metalMarkId"> Идентификатор марки металла </param>
+    /// <returns></returns>
+    public BuildingMetalInfoViewModel AnalyzeBuilding(BuildingViewModel building, Guid metalMarkId)
     {
-        public BuildingMetalInfo AnalyzeBuilding(BuildingDto building, Guid metalMarkId)
+        var groupInfos = new List<PotGroupViewModel>();
+
+        foreach (var group in building.Groups)
         {
-            var groupInfos = new List<PotGroupDto>();
+            var pots = group.Pots
+                .Where(p => p.MetalMarkId == metalMarkId)
+                .ToList();
 
-            foreach (var group in building.Groups)
+            if (!pots.Any())
+                continue;
+
+            var groupMetalWeight = pots.Sum(p => p.MetalLevel);
+
+            var groupInfo = new PotGroupViewModel
             {
-                var pots = group.Pots
-                    .Where(p => p.MetalMarkId == metalMarkId)
-                    .ToList();
-
-                if (!pots.Any())
-                    continue;
-
-                var groupMetalWeight = pots.Sum(p => p.MetalLevel);
-
-                var groupInfo = new PotGroupDto
-                {
-                    Id = group.Id,
-                    Scoop = group.Scoop,
-                    Pots = pots,
-                    GroupMetalWeight = groupMetalWeight
-                };
-
-                groupInfos.Add(groupInfo);
-            }
-
-            return new BuildingMetalInfo
-            {
-                BuildingId = building.Id,
-                MetalMarkId = metalMarkId,
-                Groups = groupInfos,
-                TotalMetalWeight = groupInfos.Sum(g => g.GroupMetalWeight)
+                Id = group.Id,
+                Scoop = group.Scoop,
+                Pots = pots,
+                GroupMetalWeight = groupMetalWeight
             };
+
+            groupInfos.Add(groupInfo);
         }
+
+        return new BuildingMetalInfoViewModel
+        {
+            BuildingId = building.Id,
+            MetalMarkId = metalMarkId,
+            Groups = groupInfos,
+            TotalMetalWeight = groupInfos.Sum(g => g.GroupMetalWeight)
+        };
     }
 }

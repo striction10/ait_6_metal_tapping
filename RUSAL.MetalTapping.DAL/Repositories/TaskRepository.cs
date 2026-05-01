@@ -1,46 +1,32 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using RUSAL.MetalTapping.BLL.Domain.Entities;
-using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using RUSAL.MetalTapping.DAL.Entities;
+using RUSAL.MetalTapping.DAL.Interfaces;
 using RUSAL.MetalTapping.DAL.Contexts;
-using RUSAL.MetalTapping.DAL.Models;
+namespace RUSAL.MetalTapping.DAL.Repositories;
 
-namespace RUSAL.MetalTapping.DAL.Repositories
+public class TaskRepository(
+    AppDbContext context) 
+    : GenericRepository<ShiftTask>(context), ITasksRepository
 {
-    public class TaskRepository : GenericRepository<ShiftTask, TaskModel>, ITasksRepository
+    private readonly AppDbContext _context = context;
+
+    public async Task<IEnumerable<ShiftTask?>> GetByShiftIdAsync(Guid shiftId)
     {
-        private readonly AppDbContext _context;
-        private readonly IMapper _mapper;
+        return await _context.Tasks
+            .Where(t => t.ShiftId == shiftId)
+            .ToListAsync();
+    }
 
-        public TaskRepository(AppDbContext context, IMapper mapper)
-            : base(context, mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
-
-        public async Task<IEnumerable<ShiftTask?>> GetByShiftIdAsync(Guid shiftId)
-        {
-            var entities = await _context.Tasks
-                .Where(t => t.ShiftId == shiftId)
-                .ToListAsync();
-
-            return _mapper.Map<IEnumerable<ShiftTask?>>(entities);
-        }
-
-        public async Task<IEnumerable<ShiftTask>> GetByBuildingAndDateRange(
-            Guid buildingId,
-            DateTime from,
-            DateTime to)
-        {
-            var entities = await _context.Tasks
-                .Where(t =>
-                    t.Shift.BuildingId == buildingId &&
-                    t.LeadTime >= from &&
-                    t.LeadTime < to)
-                .ToListAsync();
-
-            return _mapper.Map<IEnumerable<ShiftTask>>(entities);
-        }
+    public async Task<IEnumerable<ShiftTask>> GetByBuildingAndDateRange(
+        Guid buildingId,
+        DateTime from,
+        DateTime to)
+    {
+        return await _context.Tasks
+            .Where(t =>
+                t.Shift.BuildingId == buildingId &&
+                t.LeadTime >= from &&
+                t.LeadTime < to)
+            .ToListAsync();
     }
 }

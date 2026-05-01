@@ -3,8 +3,10 @@ import Header from '../../components/Header/Header'
 import PageTitle from '../../components/PageTitle'
 import Table from '../../components/Table/Table'
 import ActionButtons from '../../components/ActionButton/ActionButton'
+import SendPopup from '../../components/SendPopup/SendPopup'
 import { useReglamentsData } from '../../hooks/useReglamentsData'
 import { useTasksData } from '../../hooks/useTasksData'
+import { exportTasksToPDF } from '../../utils/exportToPDFTasks'
 import './Tasks.css'
 
 function Tasks () {
@@ -14,6 +16,7 @@ function Tasks () {
     const [selectedSort, setSelectedSort] = useState('0')
     const [selectedCorpus, setSelectedCorpus] = useState('0')
     const [selectedShift, setSelectedShift] = useState('all')
+    const [isUploadOpen, setIsUploadOpen] = useState(false)
     const { buildings } = useReglamentsData()
     const { 
         totalTaskData, 
@@ -29,11 +32,16 @@ function Tasks () {
     const sortOptions = getSortOptions()
 
     const handleSave = () => {
-        alert('Данные сохранены')
+        const corpusName = buildings.find(b => b.value === selectedCorpus)?.label || selectedCorpus
+        exportTasksToPDF(filteredShiftData, totalTaskData, corpusName, selectedDate)
     }
 
     const handleSubmit = () => {
-        alert('Данные отправлены')
+        setIsUploadOpen(true)
+    }
+
+    const handleFileSubmit = () => {
+        setIsUploadOpen(false)
     }
 
     const handleCorpusChange = (e) => {
@@ -71,9 +79,9 @@ function Tasks () {
                             name: "shift",
                             options: [
                                 { value: "all", label: "Все смены" },
-                                { value: "1", label: "Смена 1 (05:00-13:00)" },
-                                { value: "2", label: "Смена 2 (13:00-21:00)" },
-                                { value: "3", label: "Смена 3 (21:00-05:00)" }
+                                { value: "1", label: "Смена 1 (00:00-08:00)" },
+                                { value: "2", label: "Смена 2 (08:00-20:00)" },
+                                { value: "3", label: "Смена 3 (20:00-00:00)" }
                             ],
                             value: selectedShift,
                             onChange: (e) => setSelectedShift(e.target.value),
@@ -106,10 +114,16 @@ function Tasks () {
                 </div>
                 
                 <ActionButtons 
-                        onSave={handleSave}
-                        onSubmit={handleSubmit}
+                    onSave={handleSave}
+                    onSubmit={handleSubmit}
                 />
             </div>
+
+            <SendPopup
+                isOpen={isUploadOpen}
+                onClose={() => setIsUploadOpen(false)}
+                onSubmit={handleFileSubmit}
+            />
         </>
     )
 }

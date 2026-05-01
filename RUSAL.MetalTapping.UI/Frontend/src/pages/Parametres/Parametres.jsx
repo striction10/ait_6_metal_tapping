@@ -8,7 +8,7 @@ import { useReglamentsData } from '../../hooks/useReglamentsData'
 import { useParametersData } from '../../hooks/useParametresData'
 import { exportTableToPDF } from '../../utils/exportToPDFParametres'
 import { getUserData } from '../../utils/auth'
-import api from '../../services/api'
+import { parametersApi } from '../../services/parameters'
 
 function Parametres() {
     const [selectedCorpus, setSelectedCorpus] = useState('')
@@ -48,6 +48,32 @@ function Parametres() {
         return field === 'actualMetalLevel'
     }
 
+    const getCellClassName = (row, col, rowIndex, colIndex) => {
+        const deviation = parseFloat(row.deviationValue)
+        const isDeviationOutOfRange = !isNaN(deviation) && deviation <= -5 //TODO: get value from db
+        
+        if (role === 'Technologist') {
+            if (isDeviationOutOfRange && (
+                col.field === 'deviationValue' || 
+                col.field === 'calculatedTask' || 
+                col.field === 'roundCalculatedTask'
+            )) {
+                return 'technologist-blue'
+            }
+            return ''
+        }
+        
+        if (isDeviationOutOfRange && (
+            col.field === 'deviationValue' || 
+            col.field === 'calculatedTask' || 
+            col.field === 'roundCalculatedTask'
+        )) {
+            return 'red-item'
+        }
+        
+        return ''
+    }
+
     const handleCellChange = async (row, field, newValue) => {
         if (!canEdit(field)) return 
         
@@ -56,12 +82,7 @@ function Parametres() {
         if (isNaN(numValue)) return
 
         if (field === 'actualMetalLevel') {
-            const response = await api.post('/api/parameters', null, {
-                params: {
-                    potId: row.potId,
-                    actualMetalLevel: numValue
-                }
-            })
+            const response = await parametersApi.updateMetalLevel(row.potId, numValue)
             
             setSortedData(prev => prev.map(item => 
                 item.potId === row.potId 
@@ -76,11 +97,7 @@ function Parametres() {
             ))
         } 
         else if (field === 'calculatedTask') {
-            const response = await api.post(`/api/Parameters/calculated/${row.potId}`, null, {
-                params: {
-                    calculatedTask: numValue
-                }
-            })
+            const response = await parametersApi.updateCalculatedTask(row.potId, numValue)
             
             setSortedData(prev => prev.map(item => 
                 item.potId === row.potId 
@@ -93,11 +110,7 @@ function Parametres() {
             ))
         }
         else if (field === 'roundCalculatedTask') {
-            const response = await api.post(`/api/parameters/round/${row.potId}`, null, {
-                params: {
-                    roundTask: numValue
-                }
-            })
+            const response = await parametersApi.updateRoundTask(row.potId, numValue)
             
             setSortedData(prev => prev.map(item => 
                 item.potId === row.potId 
@@ -119,7 +132,6 @@ function Parametres() {
     }
 
     const handleFileSubmit = (file) => {
-        console.log('Файл отправлен:', file)
         setIsUploadOpen(false)
     }
 
@@ -158,11 +170,12 @@ function Parametres() {
                         colspan={headers.length}
                         onCellChange={handleCellChange}
                         canEdit={canEdit}
+                        getCellClassName={getCellClassName}
                     />
                 </div>
                 <ActionButtons 
-                        onSave={handleSave}
-                        onSubmit={handleSubmit}
+                    onSave={handleSave}
+                    onSubmit={handleSubmit}
                 />
             </div>
 

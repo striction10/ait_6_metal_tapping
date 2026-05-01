@@ -6,7 +6,7 @@ import ActionButtons from '../../components/ActionButton/ActionButton'
 import SendPopup from "../../components/SendPopup/SendPopup"
 import { useReglamentsData } from '../../hooks/useReglamentsData'
 import { exportReglamentsToPDF } from '../../utils/exportToPDFReglaments'
-import api from '../../services/api'
+import { reglamentsApi } from '../../services/reglaments'
 
 function Reglaments() {
     const [selectedReglament, setSelectedReglament] = useState('')
@@ -34,12 +34,7 @@ function Reglaments() {
             }
 
             try {
-                const response = await api.get('/api/reglament/table', {
-                    params: {
-                        buildingId: selectedCorpus,
-                        reglamentId: selectedReglament
-                    }
-                })
+                const response = await reglamentsApi.getReglamentTable(selectedCorpus, selectedReglament)
                 
                 if (response.data && response.data.pots && Array.isArray(response.data.pots)) {
                     const sorted = [...response.data.pots].sort((a, b) => {
@@ -94,7 +89,6 @@ function Reglaments() {
     const columns = getColumns()
 
     const handleSave = () => {
-        console.log('Сохранение данных...', sortedData)
         const corpusName = buildings.find(b => b.value === selectedCorpus)?.label || selectedCorpus
         const reglamentName = reglaments.find(r => r.value === selectedReglament)?.label || selectedReglament
         
@@ -105,8 +99,7 @@ function Reglaments() {
         setIsUploadOpen(true)
     }
 
-     const handleFileSubmit = (file) => {
-        console.log('Файл отправлен:', file)
+    const handleFileSubmit = (file) => {
         setIsUploadOpen(false)
     }
 
@@ -155,8 +148,8 @@ function Reglaments() {
                     />
                 </div>
                 <ActionButtons 
-                        onSave={handleSave}
-                        onSubmit={handleSubmit}
+                    onSave={handleSave}
+                    onSubmit={handleSubmit}
                 />
             </div>
 

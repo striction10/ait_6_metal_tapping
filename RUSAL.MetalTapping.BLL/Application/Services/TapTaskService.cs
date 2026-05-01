@@ -1,75 +1,40 @@
-﻿using RUSAL.MetalTapping.BLL.Application.Contracts;
-using RUSAL.MetalTapping.BLL.Application.DTOs;
-using RUSAL.MetalTapping.BLL.Domain.Entities;
-using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+﻿using AutoMapper;
+using RUSAL.MetalTapping.BLL.Domain.DTOs;
+using RUSAL.MetalTapping.DAL.Entities;
+using RUSAL.MetalTapping.DAL.Interfaces;
+using static RUSAL.MetalTapping.BLL.Domain.Guard;
+namespace RUSAL.MetalTapping.BLL.Application.Services;
 
-namespace RUSAL.MetalTapping.BLL.Application.Services
+public class TapTaskService(
+    IGenericRepository<TapTask> tapTaskRepository,
+    IMapper mapper)
 {
-    public class TapTaskService
+    private readonly IGenericRepository<TapTask> _tapTaskRepository = tapTaskRepository;
+    private readonly IMapper _mapper = mapper;
+
+    /// <summary>
+    /// Создание записи о задании на выливку в базе данных
+    /// </summary>
+    /// <param name="dto"> DTO записи о задании на выливку </param>
+    public async Task CreateAsync(TapTaskDto dto)
     {
-        private readonly IGenericRepository<Order> _orderRepository;
-        private readonly IGenericRepository<TapTask> _tapTaskRepository;
-        private readonly IGenericRepository<TapTaskPot> _tapTaskPotRepository;
+        var entity = _mapper.Map<TapTask>(dto);
 
-        public TapTaskService(
-            IGenericRepository<Order> orderRepository,
-            IGenericRepository<TapTask> tapTaskRepository,
-            IGenericRepository<TapTaskPot> tapTaskPotRepository)
-        {
-            _orderRepository = orderRepository;
-            _tapTaskRepository = tapTaskRepository;
-            _tapTaskPotRepository = tapTaskPotRepository;
-        }
-
-        public async Task<IEnumerable<TapTask>> CreateAsync(
-            ExecutionPlan plan,
-            OrderRequest orderRequest,
-            Guid metalMarkId,
-            Dictionary<Guid, MetalMarkAnalysis> marksByPot,
-            Dictionary<Guid, double> metalLevelByPot)
-        {
-            var order = new Order
-            {
-                Id = Guid.NewGuid(),
-                WeightOfMetal = orderRequest.requiredMetalWeight,
-                MetalmarkId = metalMarkId,
-                DateOfOrder = DateTime.UtcNow
-            };
-
-            await _orderRepository.CreateAsync(order);
-
-            var tapTasks = new List<TapTask>();
-
-            foreach (var segment in plan.Segments)
-            {
-                var tapTask = new TapTask
-                {
-                    Id = Guid.NewGuid(),
-                    BuildingId = segment.BuildingId,
-                    OrderId = order.Id,
-                    ScoopId = segment.ScoopId
-                };
-
-                tapTasks.Add(tapTask);
-
-                await _tapTaskRepository.CreateAsync(tapTask);
-
-                foreach (var potId in segment.PotIds)
-                {
-                    var tapTaskPot = new TapTaskPot
-                    {
-                        Id = Guid.NewGuid(),
-                        TapTaskId = tapTask.Id,
-                        PotId = potId,
-                        MetalMarkAnalysisId = marksByPot[potId].Id,
-                        PotMetalWeigth = metalLevelByPot[potId]
-                    };
-
-                    await _tapTaskPotRepository.CreateAsync(tapTaskPot);
-                }
-            }
-
-            return tapTasks;
-        }
+        await _tapTaskRepository.CreateAsync(entity);
     }
+
+    /// <summary>
+    /// Получение записи о задании на выливку по идентификатору 
+    /// </summary>
+    /// <param name="id"> Идентификатор записи о задании на выливку </param>
+    /// <returns> DTO записи о задании на выливку </returns>
+    public async Task<TapTaskDto?> GetByIdAsync(Guid id)
+    {
+        var entity = EnsureFound(await _tapTaskRepository.GetByIdAsync(id),
+            $"Tap task with id {id} was not found");
+
+        return _mapper.Map<TapTaskDto?>(entity);
+    }
+
+
 }

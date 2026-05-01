@@ -1,7 +1,6 @@
-﻿namespace RUSAL.MetalTapping.BLL.Domain.Exceptions
+﻿namespace RUSAL.MetalTapping.BLL.Domain.Exceptions;
+
+public class BusinessException : Exception
 {
-    public class BusinessException : Exception
-    {
-        public BusinessException(string message) : base(message){ }
-    }
+    public BusinessException(string message) : base(message){ }
 }

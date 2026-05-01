@@ -1,39 +1,24 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using RUSAL.MetalTapping.BLL.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using RUSAL.MetalTapping.DAL.Entities;
 using RUSAL.MetalTapping.DAL.Contexts;
-using RUSAL.MetalTapping.DAL.Models;
-using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+using RUSAL.MetalTapping.DAL.Interfaces;
+namespace RUSAL.MetalTapping.DAL.Repositories;
 
-namespace RUSAL.MetalTapping.DAL.Repositories
+public class RoleRepository(AppDbContext context) 
+    : GenericRepository<Role>(context), IRoleRepository
 {
-    public class RoleRepository : GenericRepository<Role, RoleModel>, IRoleRepository
+    private readonly AppDbContext _context = context;
+
+    public async Task<Role?> GetByNameAsync(string name)
     {
-        private readonly AppDbContext _context;
-        private readonly IMapper _mapper;
+        return await _context.Roles.FirstOrDefaultAsync(r => r.Name == name);
+    }
 
-        public RoleRepository(AppDbContext context, IMapper mapper) 
-            : base(context, mapper) 
-        {
-            _context = context;
-            _mapper = mapper;
-        }
-
-        public async Task<Role?> GetByNameAsync(string name)
-        {
-            var entity = await _context.Roles.FirstOrDefaultAsync(r => r.Name == name);
-
-            return _mapper.Map<Role>(entity);
-        }
-
-        public async Task<IEnumerable<Role?>> GetUserRolesAsync(Guid userId)
-        {
-            var entities = await _context.UserRoleMembers
-                .Where(x => x.UserId == userId)
-                .Select(x => x.Role)
-                .ToListAsync();
-
-            return _mapper.Map<IEnumerable<Role>>(entities);
-        }
+    public async Task<IEnumerable<Role?>> GetUserRolesAsync(Guid userId)
+    {
+        return await _context.UserRoleMembers
+            .Where(x => x.UserId == userId)
+            .Select(x => x.Role)
+            .ToListAsync();
     }
 }

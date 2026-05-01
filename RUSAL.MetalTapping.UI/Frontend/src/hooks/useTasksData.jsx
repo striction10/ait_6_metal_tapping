@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import api from '../services/api'
+import { taskApi } from '../services/tasks'
 
 export function useTasksData(selectedCorpus, selectedDate) {
     const [shiftTaskData, setShiftTaskData] = useState([])
@@ -21,12 +21,10 @@ export function useTasksData(selectedCorpus, selectedDate) {
             }
 
             try {
-                const requestData = {
-                    date: new Date(selectedDate).toISOString(),
-                    buildingId: selectedCorpus
-                }
-                
-                const response = await api.post('/api/Task', requestData)
+                const response = await taskApi.getTasks(
+                    new Date(selectedDate).toISOString(),
+                    selectedCorpus
+                )
                 
                 const formattedShiftData = []
                 const marksSet = new Set()
@@ -83,24 +81,30 @@ export function useTasksData(selectedCorpus, selectedDate) {
                 setAvailableMarks(uniqueMarks)
                 
                 if (response.data.summary) {
+                    // const calculateTotalWeight = () => {
+                    //     let total = 0
+                    //     if (response.data.nightShift?.items) {
+                    //         total += response.data.nightShift.items.reduce((sum, item) => sum + (item.weight || 0), 0)
+                    //     }
+                    //     if (response.data.dayShift?.items) {
+                    //         total += response.data.dayShift.items.reduce((sum, item) => sum + (item.weight || 0), 0)
+                    //     }
+                    //     return total
+                    // }
                     setTotalTaskData([{
                         task: response.data.summary.totalWeight ?? 0,
                         mark: response.data.summary.metalGrade || '-'
                     }])
                 } else {
-                    setTotalTaskData([{
-                        task: 0,
-                        mark: '-'
-                    }])
+                    setTotalTaskData([{ task: 0, mark: '-' }])
                 }
                 
             } catch (err) {
-                console.error('❌ Ошибка загрузки данных:', err)
                 setShiftTaskData([])
                 setTotalTaskData([])
                 setAvailableMarks([])
             }
-        };
+        }
 
         fetchTaskData()
     }, [selectedCorpus, selectedDate])
@@ -111,7 +115,7 @@ export function useTasksData(selectedCorpus, selectedDate) {
     }
 
     const filterByShift = (data, shift) => {
-        if (shift === 'all') return data;
+        if (shift === 'all') return data
         
         return data.filter(item => {
             if (shift === '1') return item.shift1Kg !== '-'
@@ -129,9 +133,9 @@ export function useTasksData(selectedCorpus, selectedDate) {
     }
 
     const getSortOptions = () => {
-        const options = [{ value: "0", label: "Выбрать сортность" }];
+        const options = [{ value: "0", label: "Выбрать сортность" }]
         availableMarks.forEach(mark => {
-            options.push({ value: mark, label: mark });
+            options.push({ value: mark, label: mark })
         })
         return options
     }

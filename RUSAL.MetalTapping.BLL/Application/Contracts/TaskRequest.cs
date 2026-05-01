@@ -1,4 +1,3 @@
-﻿namespace RUSAL.MetalTapping.BLL.Application.Contracts
-{
-    public record TaskRequest(DateTime Date, Guid BuildingId);
-}
+﻿namespace RUSAL.MetalTapping.BLL.Application.Contracts;
+
+public record TaskRequest(DateTime Date, Guid BuildingId);

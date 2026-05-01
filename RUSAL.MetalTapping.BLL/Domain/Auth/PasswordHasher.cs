@@ -1,0 +1,11 @@
+﻿using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+
+namespace RUSAL.MetalTapping.BLL.Domain.Auth;
+
+public class PasswordHasher : IPasswordHasher
+{
+    public string Hash(string password) => BCrypt.Net.BCrypt.HashPassword(password);
+
+    public bool Verify(string password, string hashedPassword) => BCrypt.Net.BCrypt.Verify(password, hashedPassword);
+    
+}

@@ -6,6 +6,7 @@
 .DS_Store
 .idea
 *.iml
+Migrations/
 
 # User-specific files
 *.rsuser

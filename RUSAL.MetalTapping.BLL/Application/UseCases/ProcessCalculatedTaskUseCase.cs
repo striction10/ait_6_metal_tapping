@@ -1,41 +1,38 @@
 ﻿using RUSAL.MetalTapping.BLL.Application.Contracts;
-using RUSAL.MetalTapping.BLL.Domain.Entities;
-using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+using RUSAL.MetalTapping.BLL.Application.Services;
+using RUSAL.MetalTapping.BLL.Domain.DTOs;
+namespace RUSAL.MetalTapping.BLL.Application.UseCases;
 
-namespace RUSAL.MetalTapping.BLL.Application.UseCases
+public class ProcessCalculatedTaskUseCase(CalculatedTaskService calculatedTaskService)
 {
-    public class ProcessCalculatedTaskUseCase
+    private readonly CalculatedTaskService _calculatedTaskService = calculatedTaskService;
+
+    /// <summary>
+    /// Запись значения расчетного задания для электролизёра
+    /// </summary>
+    /// <param name="model"> Данные для создания расчётного задания </param>
+    public async Task ExecuteAsync(ProcessCalculatedTaskRequest model)
     {
-        private readonly ICalculatedTaskRepository _calculatedTaskRepository;
+        var existingTask = await _calculatedTaskService.GetByPotIdAsync(model.potId);
 
-        public ProcessCalculatedTaskUseCase(ICalculatedTaskRepository calculatedTaskRepository)
+        if (existingTask == null)
         {
-            _calculatedTaskRepository = calculatedTaskRepository;
-        }
-
-        public async Task ExecuteAsync(ProcessCalculatedTaskRequest model)
-        {
-            var existingTask = await _calculatedTaskRepository.GetCalculatedTaskWithPotIdAsync(model.potId);
-
-            if (existingTask == null)
+            var newTask = new CalculatedTaskDto
             {
-                var newTask = new CalculatedTask
-                {
-                    Id = Guid.NewGuid(),
-                    PotId = model.potId,
-                    CalculatedTaskForPot = model.calculatedTask,
-                    CreatedAt = DateTime.UtcNow
-                };
+                Id = Guid.NewGuid(),
+                PotId = model.potId,
+                CalculatedTaskForPot = model.calculatedTask,
+                CreatedAt = DateTime.UtcNow
+            };
 
-                await _calculatedTaskRepository.CreateAsync(newTask);
+            await _calculatedTaskService.CreateAsync(newTask);
 
-                return;
-            }
-
-            existingTask.CalculatedTaskForPot = model.calculatedTask;
-            existingTask.CreatedAt = DateTime.UtcNow;
-
-            await _calculatedTaskRepository.UpdateAsync(existingTask);
+            return;
         }
+
+        existingTask.CalculatedTaskForPot = model.calculatedTask;
+        existingTask.CreatedAt = DateTime.UtcNow;
+
+        await _calculatedTaskService.UpdateAsync(existingTask);
     }
 }

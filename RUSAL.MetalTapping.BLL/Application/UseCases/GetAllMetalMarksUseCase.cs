@@ -1,27 +1,23 @@
-﻿using RUSAL.MetalTapping.BLL.Application.DTOs;
-using RUSAL.MetalTapping.BLL.Domain.Entities;
-using RUSAL.MetalTapping.BLL.Domain.Interfaces;
+﻿using RUSAL.MetalTapping.BLL.Application.Services;
+using RUSAL.MetalTapping.BLL.Application.ViewModels;
+namespace RUSAL.MetalTapping.BLL.Application.UseCases;
 
-namespace RUSAL.MetalTapping.BLL.Application.UseCases
+public class GetAllMetalMarksUseCase(MetalMarkService metalMarkService)
 {
-    public class GetAllMetalMarksUseCase
+    private readonly MetalMarkService _metalMarkService = metalMarkService;
+
+    /// <summary>
+    /// Получение списка марок металла
+    /// </summary>
+    /// <returns> Список марок металла </returns>
+    public async Task<IEnumerable<MetalMarkViewModel>> ExecuteAsync()
     {
-        private readonly IGenericRepository<MetalMark> _repository;
+        var metalMarks = await _metalMarkService.GetAllAsync();
 
-        public GetAllMetalMarksUseCase(IGenericRepository<MetalMark> repository)
+        return metalMarks.Select(m => new MetalMarkViewModel 
         {
-            _repository = repository;
-        }
-
-        public async Task<IEnumerable<MetalMarkDto>> ExecuteAsync()
-        {
-            var metalMarks = await _repository.GetAllAsync();
-
-            return metalMarks.Select(m => new MetalMarkDto 
-            {
-                Id = m.Id,
-                Name = m.Name
-            });
-        }
+            Id = m.Id,
+            Name = m.Name
+        });
     }
 }

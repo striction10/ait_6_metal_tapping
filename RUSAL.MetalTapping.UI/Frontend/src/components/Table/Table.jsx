@@ -8,7 +8,8 @@ function Table({
     columns = [],
     colspan = 10,
     onCellChange,
-    canEdit
+    canEdit,
+    getCellClassName
 }) {
     const [editingCell, setEditingCell] = useState(null)
 
@@ -43,7 +44,6 @@ function Table({
         return value !== undefined && value !== null ? value : '-'
     }
 
-    // Проверка, можно ли редактировать поле
     const isEditable = (colField) => {
         if (canEdit) {
             return canEdit(colField)
@@ -83,6 +83,10 @@ function Table({
                                     cellContent = '-'
                                 }
 
+                                const cellClass = getCellClassName 
+                                    ? getCellClassName(row, col, rowIndex, colIndex) 
+                                    : ''
+
                                 if (isEditable(colField) && isEditing) {
                                     return (
                                         <td key={colIndex}>
@@ -101,6 +105,7 @@ function Table({
                                 return (
                                     <td 
                                         key={colIndex}
+                                        className={cellClass}
                                         onClick={() => isEditable(colField) && 
                                             handleCellClick(rowIndex, colField, cellContent)}
                                         style={isEditable(colField) ? { cursor: 'pointer' } : {}}
