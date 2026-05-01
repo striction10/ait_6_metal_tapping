@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using RUSAL.MetalTapping.BLL.Domain.DTOs;
-using RUSAL.MetalTapping.DAL.Entities;
 using RUSAL.MetalTapping.DAL.Interfaces;
-using RUSAL.MetalTapping.DAL.Repositories;
 using static RUSAL.MetalTapping.BLL.Domain.Guard;
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 

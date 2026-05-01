@@ -18,9 +18,9 @@ public class BuildingService(
     /// <summary>
     /// Создание ViewModel
     /// </summary>
-    /// <param name="buildingDto"></param>
-    /// <param name="groups"></param>
-    /// <param name="metalMarkId"></param>
+    /// <param name="building"> DTO корпуса </param>
+    /// <param name="groups"> Список групп электролизёров </param>
+    /// <param name="metalMarkId"> Идентификатор марки металла </param>
     /// <returns> Полная информация по корпусу в виде ViewModel </returns>
     public BuildingMetalInfoViewModel CreateViewModel(
         BuildingDto building,
@@ -29,8 +29,8 @@ public class BuildingService(
     {
         var dto = new BuildingViewModel
         {
-            Id = buildingDto.Id,
-            Name = buildingDto.Name,
+            Id = building.Id,
+            Name = building.Name,
             Groups = groups
         };
 

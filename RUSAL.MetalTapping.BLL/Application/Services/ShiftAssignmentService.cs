@@ -45,18 +45,18 @@ public class ShiftAssignmentService(
     /// <summary>
     /// Найти свободную смену для выполнения задания
     /// </summary>
-    /// <param name="taskDto"> Задание на выливку </param>
-    /// <param name="currentShiftDto"> Текущая смена </param>
+    /// <param name="task"> Задание на выливку </param>
+    /// <param name="currentShift"> Текущая смена </param>
     /// <param name="countOfPots"> Количество электролизеров в задании </param>
     /// <returns> Свободная смена для выполнения задания </returns>
     /// <exception cref="BusinessException"> Нет свободных смен для выполнения задания в бд </exception>
     private async Task<ShiftDto> FindSuitableShift(TapTaskDto task, ShiftDto currentShift, int countOfPots)
     {
-        var shift = currentShiftDto;
+        var shift = currentShift;
 
         while (shift != null)
         {
-            if (await CanFitTaskIntoShift(taskDto, countOfPots, shift))
+            if (await CanFitTaskIntoShift(task, countOfPots, shift))
                 return shift;
 
             shift = await _shiftService.GetNextShiftForBuilding(task.BuildingId, shift.EndDate);
@@ -68,18 +68,18 @@ public class ShiftAssignmentService(
     /// <summary>
     /// Возможно ли задействовать текущую смену для выполнения задания
     /// </summary>
-    /// <param name="tapTaskDto"> Задание на выливку </param>
+    /// <param name="tapTask"> Задание на выливку </param>
     /// <param name="countOfPots"> Количество электролизёров в задании </param>
-    /// <param name="shiftDto"> Текущая смена </param>
+    /// <param name="shift"> Текущая смена </param>
     /// <returns> Возможно ли задействовать текущую смену </returns>
     private async Task<bool> CanFitTaskIntoShift(TapTaskDto tapTask, int countOfPots, ShiftDto shift)
     {
-        var busyFrom = shiftDto.BeginDate;
+        var busyFrom = shift.BeginDate;
 
         var duration = TimeSpan.FromHours(countOfPots);
         var busyUntil = busyFrom + duration;
 
-        if (busyUntil > shiftDto.EndDate)
+        if (busyUntil > shift.EndDate)
             return false;
 
         var usage = await _scoopUsageService.GetByScoopIdAsync(tapTask.ScoopId);

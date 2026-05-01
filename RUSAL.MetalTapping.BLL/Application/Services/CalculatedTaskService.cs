@@ -29,8 +29,8 @@ public class CalculatedTaskService(
     /// <summary>
     /// Расчётное параметра "ЗПР"
     /// </summary>
-    /// <param name="task"></param>
-    /// <param name="castingRatio"></param>
+    /// <param name="task"> Расчётное задание электролизёра </param>
+    /// <param name="castingRatio"> Коэффициент литья </param>
     /// <returns> ЗПР электролизёра </returns>
     public double CalculateRoundedTask(double task, int castingRatio)
     {
@@ -40,7 +40,7 @@ public class CalculatedTaskService(
     /// <summary>
     /// Создание записи о расчёте задания в базе данных
     /// </summary>
-    /// <param name="dto"></param>
+    /// <param name="dto"> DTO расчётного задания </param>
     public async Task CreateAsync(CalculatedTaskDto dto)
     {
         var entity = _mapper.Map<CalculatedTask>(dto);
@@ -49,9 +49,9 @@ public class CalculatedTaskService(
     }
 
     /// <summary>
-    /// Получение 
+    /// Получение записи о расчётном задании по идентификатору электролизёра
     /// </summary>
-    /// <param name="potId"></param>
+    /// <param name="potId"> Идентификатор электролизёра </param>
     /// <returns></returns>
     public async Task<CalculatedTaskDto> GetByPotIdAsync(Guid potId)
     {
@@ -64,7 +64,7 @@ public class CalculatedTaskService(
     /// <summary>
     /// Обновление записи о расчётном задании в базе данных
     /// </summary>
-    /// <param name="dto">  </param>
+    /// <param name="dto"> DTO расчётного задания </param>
     /// <returns></returns>
     public async Task UpdateAsync(CalculatedTaskDto dto)
     {

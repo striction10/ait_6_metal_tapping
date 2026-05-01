@@ -1,7 +1,6 @@
 ﻿using RUSAL.MetalTapping.BLL.Application.Contracts;
 using RUSAL.MetalTapping.BLL.Application.Services;
 using RUSAL.MetalTapping.BLL.Domain.Enums;
-using static RUSAL.MetalTapping.BLL.Domain.Guard;
 namespace RUSAL.MetalTapping.BLL.Application.UseCases;
 
 public class ViewDeviationAndTaskUseCase(

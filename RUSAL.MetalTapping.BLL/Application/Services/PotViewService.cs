@@ -8,8 +8,8 @@ public class PotViewService
     /// <summary>
     /// Создание ViewModel
     /// </summary>
-    /// <param name="potDto"> Электролизёр </param>
-    /// <param name="deviationDto"> Отклонение</param>
+    /// <param name="pot"> Электролизёр </param>
+    /// <param name="deviation"> Отклонение</param>
     /// <param name="amperage"> Сила тока </param>
     /// <param name="averageAmperage"> Выход по току</param>
     /// <param name="lastTask"> Последнее расчётное задание </param>
@@ -23,14 +23,14 @@ public class PotViewService
         CalculatedTaskDto? lastTask,
         string metalMarkName)
     {
-        var deviationValue = deviationDto.TargetMetalLevel - deviationDto.ActualMetalLevel;
+        var deviationValue = deviation.TargetMetalLevel - deviation.ActualMetalLevel;
 
 
         return new ViewDeviationAndTaskPot(
-            potId: potDto.Id,
-            potName: potDto.Name,
-            targetMetalLevel: deviationDto.TargetMetalLevel,
-            actualMetalLevel: deviationDto.ActualMetalLevel,
+            potId: pot.Id,
+            potName: pot.Name,
+            targetMetalLevel: deviation.TargetMetalLevel,
+            actualMetalLevel: deviation.ActualMetalLevel,
             deviationValue: deviationValue,
             amperage: amperage,
             avgAmperage: averageAmperage,

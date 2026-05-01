@@ -10,7 +10,7 @@ public class TapTaskService(
     IMapper mapper)
 {
     private readonly IGenericRepository<TapTask> _tapTaskRepository = tapTaskRepository;
-    IMapper _mapper = mapper;
+    private readonly IMapper _mapper = mapper;
 
     /// <summary>
     /// Создание записи о задании на выливку в базе данных
