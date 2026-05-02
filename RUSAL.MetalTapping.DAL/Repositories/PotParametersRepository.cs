@@ -2,16 +2,17 @@
 using RUSAL.MetalTapping.DAL.Contexts;
 using RUSAL.MetalTapping.DAL.Entities;
 using RUSAL.MetalTapping.DAL.Interfaces;
+
 namespace RUSAL.MetalTapping.DAL.Repositories;
 
 public class PotParametersRepository(AppDbContext context) 
         : GenericRepository<PotParameter>(context), IPotParametersRepository
 {
-    private readonly AppDbContext _context = context;
+    private readonly AppDbContext context = context;
 
     public async Task<IEnumerable<PotParameter>> GetPotParametersWithGroupId(Guid id)
     {
-        return await _context.PotParameters
+        return await context.PotParameters
             .Include(pp => pp.Group)
             .Where(pp => pp.Group.Id == id)
             .ToListAsync();

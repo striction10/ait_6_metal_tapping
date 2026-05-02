@@ -1,28 +1,34 @@
 ﻿using RUSAL.MetalTapping.BLL.Application.ViewModels;
 using RUSAL.MetalTapping.BLL.Domain.Exceptions;
+
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 
+/// <summary>
+/// Сервис расчёта оптимального плана выливки металла.
+/// </summary>
+/// <param name="groupSelector"> Сервис выбора групп электролизёров. </param>
+/// <param name="buildingSelector"> Сервис выбора электролизёров из всех корпусов. </param>
 public class CastingExecutionPlanService(
     CastingGroupSelectorService groupSelector,
     CastingBuildingSelectorService buildingSelector)
 {
-    private readonly CastingGroupSelectorService _groupSelector = groupSelector;
-    private readonly CastingBuildingSelectorService _buildingSelector = buildingSelector;
+    private readonly CastingGroupSelectorService groupSelector = groupSelector;
+    private readonly CastingBuildingSelectorService buildingSelector = buildingSelector;
 
     /// <summary>
-    /// Расчёт оптимального маршрута выливки
+    /// Расчёт оптимального маршрута выливки.
     /// </summary>
-    /// <param name="buildings"> Корпусы </param>
-    /// <param name="requiredWeight"> Заданное количество металла </param>
-    /// <returns> План выливки </returns>
-    /// <exception cref="BusinessException"> Все ковши заняты - выливка невозможна на данный момент </exception>
+    /// <param name="buildings"> Корпусы. </param>
+    /// <param name="requiredWeight"> Заданное количество металла. </param>
+    /// <returns> План выливки. </returns>
+    /// <exception cref="BusinessException"> Все ковши заняты - выливка невозможна на данный момент. </exception>
     public ExecutionPlanViewModel SelectExecutionPlan(
         List<BuildingMetalInfoViewModel> buildings,
         double requiredWeight)
     {
         foreach (var b in buildings)
         {
-            var g = _groupSelector.SelectSingleGroup(b, requiredWeight);
+            var g = groupSelector.SelectSingleGroup(b, requiredWeight);
             if (g != null)
             {
                 return new ExecutionPlanViewModel
@@ -35,16 +41,16 @@ public class CastingExecutionPlanService(
                             GroupId = g.Id,
                             ScoopId = g.Scoop.Id,
                             PotIds = g.Pots.Select(p => p.Id).ToList(),
-                            MetalWeight = g.GroupMetalWeight
-                        }
-                    }
+                            MetalWeight = g.GroupMetalWeight,
+                        },
+                    },
                 };
             }
         }
 
         foreach (var b in buildings)
         {
-            var groups = _groupSelector.SelectMultiGroupInBuilding(b, requiredWeight);
+            var groups = groupSelector.SelectMultiGroupInBuilding(b, requiredWeight);
 
             if (groups != null && groups.Any())
             {
@@ -60,14 +66,14 @@ public class CastingExecutionPlanService(
                             GroupId = g.group.Id,
                             ScoopId = g.group.Scoop.Id,
                             PotIds = g.pots.Select(p => p.Id).ToList(),
-                            MetalWeight = g.pots.Sum(p => p.MetalLevel)
-                        }).ToList()
+                            MetalWeight = g.pots.Sum(p => p.MetalLevel),
+                        }).ToList(),
                     };
                 }
             }
         }
 
-        var multi = _buildingSelector.SelectGlobalPots(buildings, requiredWeight);
+        var multi = buildingSelector.SelectGlobalPots(buildings, requiredWeight);
 
         if (multi != null)
         {
@@ -79,9 +85,9 @@ public class CastingExecutionPlanService(
                         GroupId = g.group.Id,
                         ScoopId = g.group.Scoop.Id,
                         PotIds = g.pots.Select(p => p.Id).ToList(),
-                        MetalWeight = g.pots.Sum(p => p.MetalLevel)
+                        MetalWeight = g.pots.Sum(p => p.MetalLevel),
                     }))
-                    .ToList()
+                    .ToList(),
             };
         }
 

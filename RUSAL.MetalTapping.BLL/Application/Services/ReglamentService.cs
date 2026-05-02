@@ -2,36 +2,44 @@
 using RUSAL.MetalTapping.BLL.Domain.DTOs;
 using RUSAL.MetalTapping.DAL.Interfaces;
 using static RUSAL.MetalTapping.BLL.Domain.Guard;
+
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 
+/// <summary>
+/// Сервис для работы с регламентами.
+/// </summary>
+/// <param name="reglamentRepository">Репозиторий регламентов.</param>
+/// <param name="mapper">Маппер объектов.</param>
 public class ReglamentService(IReglamentRepository reglamentRepository, IMapper mapper)
 {
-    private readonly IReglamentRepository _reglamentRepository = reglamentRepository;
-    private readonly IMapper _mapper = mapper;
+    private readonly IReglamentRepository reglamentRepository = reglamentRepository;
+    private readonly IMapper mapper = mapper;
 
     /// <summary>
-    /// Получение регламента по идентификатору
+    /// Получение регламента по идентификатору.
     /// </summary>
-    /// <param name="id"> Идентификатор регламента </param>
-    /// <returns> DTO регламента </returns>
+    /// <param name="id"> Идентификатор регламента. </param>
+    /// <returns> DTO регламента. </returns>
     public async Task<ReglamentDto> GetByIdAsync(Guid id)
     {
-        var entity = EnsureFound(await _reglamentRepository.GetByIdAsync(id),
+        var entity = EnsureFound(
+            await reglamentRepository.GetByIdAsync(id),
             $"Reglament with id {id} was not found");
 
-        return _mapper.Map<ReglamentDto>(entity);
+        return mapper.Map<ReglamentDto>(entity);
     }
 
     /// <summary>
-    /// Получение текущего действующего регламента 
+    /// Получение текущего действующего регламента. 
     /// </summary>
-    /// <returns> DTO действующего регламента </returns>
+    /// <returns> DTO действующего регламента. </returns>
     public async Task<ReglamentDto> GetCurrentReglament()
     {
-        var entity = EnsureFound(await _reglamentRepository.GetNewReglament(),
+        var entity = EnsureFound(
+            await reglamentRepository.GetNewReglament(),
             "Current reglament was not found");
 
-        return _mapper.Map<ReglamentDto>(entity);
+        return mapper.Map<ReglamentDto>(entity);
     }
 
     /// <summary>
@@ -40,8 +48,8 @@ public class ReglamentService(IReglamentRepository reglamentRepository, IMapper 
     /// <returns></returns>
     public async Task<IEnumerable<ReglamentDto>> GetAllAsync()
     {
-        var entities = await _reglamentRepository.GetAllAsync();
+        var entities = await reglamentRepository.GetAllAsync();
 
-        return _mapper.Map <IEnumerable<ReglamentDto>>(entities);
+        return mapper.Map <IEnumerable<ReglamentDto>>(entities);
     }
 }

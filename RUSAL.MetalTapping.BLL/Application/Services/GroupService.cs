@@ -1,18 +1,22 @@
 ﻿using RUSAL.MetalTapping.BLL.Application.ViewModels;
 using RUSAL.MetalTapping.BLL.Domain.DTOs;
+
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 
+/// <summary>
+/// Сервис формирования ViewModel групп электролизёров.
+/// </summary>
 public class GroupService
 {
     /// <summary>
-    /// Создание DTO
+    /// Создание DTO.
     /// </summary>
-    /// <param name="group"> Группа электролизёров </param>
-    /// <param name="scoop"> Ковш внутри группы </param>
-    /// <param name="scoopState"> Состояние ковша внутри группы </param>
-    /// <param name="scoopUsage"> Состояние занятости ковша внутри группы </param>
-    /// <param name="pots"> Электролизёры внутри группы </param>
-    /// <returns> DTO </returns>
+    /// <param name="group"> Группа электролизёров. </param>
+    /// <param name="scoop"> Ковш внутри группы. </param>
+    /// <param name="scoopState"> Состояние ковша внутри группы. </param>
+    /// <param name="scoopUsage"> Состояние занятости ковша внутри группы. </param>
+    /// <param name="pots"> Электролизёры внутри группы. </param>
+    /// <returns> DTO. </returns>
     public PotGroupViewModel Create(
         PotGroupDto group,
         ScoopDto scoop,
@@ -26,14 +30,14 @@ public class GroupService
         {
             Id = scoop.Id,
             State = scoopState.Name,
-            IsBusy = isBusy
+            IsBusy = isBusy,
         };
 
         return new PotGroupViewModel
         {
             Id = group.Id,
             Scoop = scoopDto,
-            Pots = pots
+            Pots = pots,
         };
     }
 }

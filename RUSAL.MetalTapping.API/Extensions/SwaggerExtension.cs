@@ -1,9 +1,17 @@
-﻿using Microsoft.OpenApi.Models;
-using System.Reflection;
+﻿using System.Reflection;
+using Microsoft.OpenApi.Models;
+
 namespace RUSAL.MetalTapping.API.Extensions;
 
+/// <summary>
+/// Расширение для регистрации и настройки Swagger.
+/// </summary>
 public static class SwaggerExtension
 {
+    /// <summary>
+    /// Регистрация и настройка Swagger.
+    /// </summary>
+    /// <param name="services"> Коллекция сервисов. </param>
     public static void AddSwaggerExtension(this IServiceCollection services)
     {
         services.AddEndpointsApiExplorer();
@@ -13,7 +21,7 @@ public static class SwaggerExtension
             {
                 Title = "RUSAL.MetalTapping",
                 Version = "v1",
-                Description = "API for RUSAL.MetalTapping"
+                Description = "API for RUSAL.MetalTapping",
             });
 
             var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -27,7 +35,7 @@ public static class SwaggerExtension
                 Scheme = "Bearer",
                 BearerFormat = "JWT",
                 In = ParameterLocation.Header,
-                Description = "Введите токен в формате: Bearer {your token}"
+                Description = "Введите токен в формате: Bearer {your token}",
             });
 
             c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -42,7 +50,7 @@ public static class SwaggerExtension
                         }
                     },
                     Array.Empty<string>()
-                }
+                },
             });
         });
     }

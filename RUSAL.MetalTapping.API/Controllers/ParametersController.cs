@@ -2,8 +2,16 @@
 using Microsoft.AspNetCore.Mvc;
 using RUSAL.MetalTapping.BLL.Application.Contracts;
 using RUSAL.MetalTapping.BLL.Application.UseCases;
+
 namespace RUSAL.MetalTapping.API.Controllers;
 
+/// <summary>
+/// Контроллер параметров. 
+/// </summary>
+/// <param name="processDeviationAndTask"> Оркестратор для работы сервисов с расчётом параметров электролизёров. </param>
+/// <param name="processCalculatedTask"> Оркестратор для работы сервисов с расчётом расчётного задания. </param>
+/// <param name="viewDeviationAndTask"> Оркестратор для работы сервисов с отображением параметров электролизёров. </param>
+/// <param name="processRoundTask"> Оркестратор для работы сервисов с расчётом ЗПР электролизёров. </param>
 [ApiController]
 [Route("api/[controller]")]
 public class ParametersController(
@@ -12,16 +20,16 @@ public class ParametersController(
     ViewDeviationAndTaskUseCase viewDeviationAndTask,
     ProcessRoundTaskUseCase processRoundTask) : ControllerBase
 {
-    private readonly ProcessDeviationAndTaskUseCase _processDeviationAndTask = processDeviationAndTask;
-    private readonly ProcessCalculatedTaskUseCase _processCalculatedTask = processCalculatedTask;
-    private readonly ViewDeviationAndTaskUseCase _viewDeviationAndTask = viewDeviationAndTask;
-    private readonly ProcessRoundTaskUseCase _processRoundTask = processRoundTask;
+    private readonly ProcessDeviationAndTaskUseCase processDeviationAndTask = processDeviationAndTask;
+    private readonly ProcessCalculatedTaskUseCase processCalculatedTask = processCalculatedTask;
+    private readonly ViewDeviationAndTaskUseCase viewDeviationAndTask = viewDeviationAndTask;
+    private readonly ProcessRoundTaskUseCase processRoundTask = processRoundTask;
 
     /// <summary>
-    /// Запись актуального уровня металла внутри электролизёра
+    /// Запись актуального уровня металла внутри электролизёра.
     /// </summary>
-    /// <param name="potId"> Идентификатор электролизёра </param>
-    /// <param name="actualMetalLevel"> Актуальный уровень металла </param>
+    /// <param name="potId"> Идентификатор электролизёра. </param>
+    /// <param name="actualMetalLevel"> Актуальный уровень металла. </param>
     [HttpPost]
     [Authorize(Roles = "User,Technologist")]
     [ProducesResponseType(typeof(ProcessDeviationAndTaskResponse), StatusCodes.Status200OK)]
@@ -34,15 +42,15 @@ public class ParametersController(
         [FromQuery] double actualMetalLevel)
     {
         var request = new ProcessDeviationAndTaskRequest(potId, actualMetalLevel);
-        var response = await _processDeviationAndTask.ExecuteAsync(request);
+        var response = await processDeviationAndTask.ExecuteAsync(request);
         return Ok(response);
     }
 
     /// <summary>
-    /// Получение списка параметров электролизёра в заданном корпусе
+    /// Получение списка параметров электролизёра в заданном корпусе.
     /// </summary>
-    /// <param name="reglamentId"> Идентификатор регламента </param>
-    /// <param name="buidlingId"> Идентификатор корпуса </param>
+    /// <param name="reglamentId"> Идентификатор регламента. </param>
+    /// <param name="buidlingId"> Идентификатор корпуса. </param>
     [HttpGet("table")]
     [Authorize(Roles = "User,Technologist")]
     [ProducesResponseType(typeof(ViewDeviationAndTaskResponse), StatusCodes.Status200OK)]
@@ -55,15 +63,15 @@ public class ParametersController(
         [FromQuery] Guid buidlingId)
     {
         var request = new ViewDeviationAndTaskRequest(reglamentId, buidlingId);
-        var response = await _viewDeviationAndTask.ExecuteAsync(request);
+        var response = await viewDeviationAndTask.ExecuteAsync(request);
         return Ok(response);
     }
 
     /// <summary>
-    /// Запись расчётного задания при нерегламентном отклонении
+    /// Запись расчётного задания при нерегламентном отклонении.
     /// </summary>
-    /// <param name="potId"> Идентификатор электролизёра </param>
-    /// <param name="calculatedTask"> Значение расчётного задания </param>
+    /// <param name="potId"> Идентификатор электролизёра. </param>
+    /// <param name="calculatedTask"> Значение расчётного задания. </param>
     [HttpPost("calculated/{potId}")]
     [Authorize(Roles = "Technologist")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -76,15 +84,15 @@ public class ParametersController(
         [FromQuery] double calculatedTask)
     {
         var request = new ProcessCalculatedTaskRequest(potId, calculatedTask);
-        await _processCalculatedTask.ExecuteAsync(request);
+        await processCalculatedTask.ExecuteAsync(request);
         return Ok();
     }
 
     /// <summary>
-    /// Запись расчётного задания при нерегламентном отклонении
+    /// Запись расчётного задания при нерегламентном отклонении.
     /// </summary>
-    /// <param name="potId"> Идентификатор электролизёра </param>
-    /// <param name="roundTask"> Значение расчётного задания </param>
+    /// <param name="potId"> Идентификатор электролизёра. </param>
+    /// <param name="roundTask"> Значение расчётного задания. </param>
     [HttpPost("round/{potId}")]
     [Authorize(Roles = "Technologist")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -97,7 +105,7 @@ public class ParametersController(
         [FromQuery] double roundTask)
     {
         var request = new ProcessRoundTaskRequest(potId, roundTask);
-        await _processRoundTask.ExecuteAsync(request);
+        await processRoundTask.ExecuteAsync(request);
         return Ok();
     }
 }

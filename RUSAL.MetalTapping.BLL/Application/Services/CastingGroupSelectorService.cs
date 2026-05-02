@@ -1,33 +1,43 @@
 ﻿using RUSAL.MetalTapping.BLL.Application.ViewModels;
+
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 
+/// <summary>
+/// Сервис выбора групп электролизёров для выполнения заказа на выливку.
+/// </summary>
 public class CastingGroupSelectorService
 {
     /// <summary>
-    /// Фильтрация группы по статусу активности ковша
+    /// Проверяет доступность группы для выливки.
     /// </summary>
-    /// <param name="group"> Группа электролизёров </param>
-    /// <returns> Доступна ли группа для выливки (Свободен ли ковш) </returns>
+    /// <param name="group">Группа электролизёров.</param>
+    /// <returns>true, если группа доступна.</returns>
     private bool IsAvailable(PotGroupViewModel group)
     {
         if (group.Scoop.State != "Активен")
+        {
             return false;
+        }
 
         if (group.Scoop.IsBusy)
+        {
             return false;
+        }
 
         if (group.Pots.Any(p => p.State != "Активен"))
+        {
             return false;
+        }
 
         return true;
     }
 
     /// <summary>
-    /// Выбор единичной группы, которая сможет выполнить выливку заданного количества металла
+    /// Выбор единичной группы, которая сможет выполнить выливку заданного количества металла.
     /// </summary>
-    /// <param name="building"> Корпус </param>
-    /// <param name="requiredWeight"> Заданное количество металла </param>
-    /// <returns> Группа в корпусе, которая сможет выполнить выливку заданного количества металла </returns>
+    /// <param name="building"> Корпус. </param>
+    /// <param name="requiredWeight"> Заданное количество металла. </param>
+    /// <returns> Группа в корпусе, которая сможет выполнить выливку заданного количества металла. </returns>
     public PotGroupViewModel? SelectSingleGroup(BuildingMetalInfoViewModel building, double requiredWeight)
     {
         return building.Groups
@@ -37,11 +47,11 @@ public class CastingGroupSelectorService
     }
 
     /// <summary>
-    /// Выбор нескольких групп в одном корпусе, которые смогут выполнить выливку заданного количества металла
+    /// Выбор нескольких групп в одном корпусе, которые смогут выполнить выливку заданного количества металла.
     /// </summary>
-    /// <param name="building"> Корпус </param>
-    /// <param name="requiredWeight"> Заданное количество металла </param>
-    /// <returns> Список групп в корпусе, которые смогут выполнить выливку заданного количества металла </returns>
+    /// <param name="building"> Корпус. </param>
+    /// <param name="requiredWeight"> Заданное количество металла. </param>
+    /// <returns> Список групп в корпусе, которые смогут выполнить выливку заданного количества металла. </returns>
     public List<(PotGroupViewModel group, List<PotViewModel> pots)> SelectMultiGroupInBuilding(
         BuildingMetalInfoViewModel building, 
         double requiredWeight)
@@ -60,13 +70,17 @@ public class CastingGroupSelectorService
         foreach (var (group, pot) in allPots)
         {
             if (!result.ContainsKey(group))
+            {
                 result[group] = new List<PotViewModel>();
+            }
 
             result[group].Add(pot);
             sum += pot.MetalLevel;
 
             if (sum >= requiredWeight)
+            {
                 break;
+            }
         }
 
         return result

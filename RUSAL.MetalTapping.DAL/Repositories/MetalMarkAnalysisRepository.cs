@@ -2,16 +2,17 @@
 using RUSAL.MetalTapping.DAL.Contexts;
 using RUSAL.MetalTapping.DAL.Entities;
 using RUSAL.MetalTapping.DAL.Interfaces;
+
 namespace RUSAL.MetalTapping.DAL.Repositories;
 
 public class MetalMarkAnalysisRepository(AppDbContext context) 
     : GenericRepository<MetalMarkAnalysis>(context), IMetalMarkAnalysisRepository
 {
-    private readonly AppDbContext _context = context;
+    private readonly AppDbContext context = context;
 
     public async Task<MetalMarkAnalysis?> GetMetalMarkAnalysisWithPotIdAsync(Guid id) 
     {
-        return await _context.MetalMarkAnalyses
+        return await context.MetalMarkAnalyses
             .Include(ma => ma.MetalMark)
             .Where(ma => ma.PotId == id)
             .FirstOrDefaultAsync();
@@ -19,7 +20,7 @@ public class MetalMarkAnalysisRepository(AppDbContext context)
 
     public async Task<IEnumerable<MetalMarkAnalysis?>> GetMetalMarkAnalysisWithPotIdsAsync(IEnumerable<Guid> potIds)
     {
-        return await _context.MetalMarkAnalyses
+        return await context.MetalMarkAnalyses
             .Include(ma => ma.MetalMark)
             .Where(ma => potIds.Contains(ma.PotId))
             .ToListAsync();
@@ -27,7 +28,7 @@ public class MetalMarkAnalysisRepository(AppDbContext context)
 
     public async Task<IEnumerable<MetalMarkAnalysisValue>> GetValuesByAnalysisIdAsync(Guid analysisId)
     {
-        return await _context.MetalMarkAnalysisValues
+        return await context.MetalMarkAnalysisValues
             .Where(v => v.MetalMarkAnalysisId == analysisId)
             .ToListAsync();
     }

@@ -1,17 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RUSAL.MetalTapping.DAL.Contexts;
 using RUSAL.MetalTapping.DAL.Interfaces;
 using RUSAL.MetalTapping.DAL.Repositories;
+
 namespace RUSAL.MetalTapping.DAL;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddDAL(this IServiceCollection services, string? connectionString)
+    public static IServiceCollection AddDAL(this IServiceCollection services, IConfiguration configuration)
     {
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
         if (string.IsNullOrWhiteSpace(connectionString))
         {
-            throw new ArgumentException("Connection string 'DefaultConnection' is not configured.", nameof(connectionString));
+            throw new InvalidOperationException("Connection string 'DefaultConnection' is not configured.");
         }
 
         services.AddDbContext<AppDbContext>(options =>

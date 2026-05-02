@@ -3,49 +3,56 @@ using RUSAL.MetalTapping.BLL.Domain.DTOs;
 using RUSAL.MetalTapping.DAL.Entities;
 using RUSAL.MetalTapping.DAL.Interfaces;
 using static RUSAL.MetalTapping.BLL.Domain.Guard;
+
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 
+/// <summary>
+/// Сервис для работы с данными об использовании ковшей.
+/// </summary>
+/// <param name="scoopUsageRepository">Репозиторий использования ковшей.</param>
+/// <param name="mapper">Маппер объектов.</param>
 public class ScoopUsageService(
     IScoopUsageRepository scoopUsageRepository,
     IMapper mapper)
 {
-    private readonly IScoopUsageRepository _scoopUsageRepository = scoopUsageRepository;
-    private readonly IMapper _mapper = mapper;
+    private readonly IScoopUsageRepository scoopUsageRepository = scoopUsageRepository;
+    private readonly IMapper mapper = mapper;
 
     /// <summary>
-    /// Получение записи об использовании ковша по идентификатору ковша
+    /// Получение записи об использовании ковша по идентификатору ковша.
     /// </summary>
-    /// <param name="scoopId"> Идентификатор ковша </param>
-    /// <returns> DTO записи об использовании ковша </returns>
+    /// <param name="scoopId"> Идентификатор ковша. </param>
+    /// <returns> DTO записи об использовании ковша. </returns>
     public async Task<ScoopUsageDto> GetByScoopIdAsync(Guid scoopId)
     {
-        var entity = EnsureFound(await _scoopUsageRepository.GetByScoopIdAsync(scoopId),
+        var entity = EnsureFound(
+            await scoopUsageRepository.GetByScoopIdAsync(scoopId),
             $"Scoop usage with scoop {scoopId} was not found");
 
-        return _mapper.Map<ScoopUsageDto>(entity);
+        return mapper.Map<ScoopUsageDto>(entity);
     }
 
     /// <summary>
-    /// Создание записи об использовании ковша
+    /// Создание записи об использовании ковша.
     /// </summary>
-    /// <param name="dto"> DTO записи о использовании ковша </param>
+    /// <param name="dto"> DTO записи о использовании ковша. </param>
     public async Task CreateAsync(ScoopUsageDto dto)
     {
-        var entity = _mapper.Map<ScoopUsage>(dto);
+        var entity = mapper.Map<ScoopUsage>(dto);
 
-        await _scoopUsageRepository.CreateAsync(entity);
+        await scoopUsageRepository.CreateAsync(entity);
     }
 
     /// <summary>
-    /// Обновление записи об использовании ковша
+    /// Обновление записи об использовании ковша.
     /// </summary>
-    /// <param name="dto"> DTO записи об использовании ковша </param>
+    /// <param name="dto"> DTO записи об использовании ковша. </param>
     public async Task UpdateAsync(ScoopUsageDto dto)
     {
-        var entity = await _scoopUsageRepository.GetByIdAsync(dto.Id);
+        var entity = await scoopUsageRepository.GetByIdAsync(dto.Id);
 
-        _mapper.Map(dto, entity);
+        mapper.Map(dto, entity);
 
-        await _scoopUsageRepository.SaveChangesAsync();
+        await scoopUsageRepository.SaveChangesAsync();
     }
 }

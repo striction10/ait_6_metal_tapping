@@ -2,19 +2,24 @@
 using Microsoft.AspNetCore.Mvc;
 using RUSAL.MetalTapping.BLL.Application.Contracts;
 using RUSAL.MetalTapping.BLL.Application.UseCases;
+
 namespace RUSAL.MetalTapping.API.Controllers;
 
+/// <summary>
+/// Контроллер заказов.
+/// </summary>
+/// <param name="useCase"> Оркестратор для работы с распределением заказов на задания на выливку. </param>
 [ApiController]
 [Route("api/[controller]")]
-public class OrderController(CreateTaskUseCase service) : ControllerBase
+public class OrderController(CreateTaskUseCase useCase) : ControllerBase
 {
-    private readonly CreateTaskUseCase _service = service;
+    private readonly CreateTaskUseCase useCase = useCase;
 
     /// <summary>
-    /// Регистрация запроса и расчёт оптимального маршрута выливки
+    /// Регистрация запроса и расчёт оптимального маршрута выливки.
     /// </summary>
-    /// <param name="metalMarkName"> Заказанная марка металла </param>
-    /// <param name="requiredMetalWeight"> Заказанное количество металла </param>
+    /// <param name="metalMarkName"> Заказанная марка металла. </param>
+    /// <param name="requiredMetalWeight"> Заказанное количество металла. </param>
     [HttpGet]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -25,7 +30,7 @@ public class OrderController(CreateTaskUseCase service) : ControllerBase
     {
         var request = new OrderRequest(metalMarkName, requiredMetalWeight);
 
-        await _service.ExecuteAsync(request);
+        await useCase.ExecuteAsync(request);
 
         return Ok();
     }

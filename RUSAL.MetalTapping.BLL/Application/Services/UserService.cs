@@ -3,50 +3,57 @@ using RUSAL.MetalTapping.BLL.Domain.DTOs;
 using RUSAL.MetalTapping.DAL.Entities;
 using RUSAL.MetalTapping.DAL.Interfaces;
 using static RUSAL.MetalTapping.BLL.Domain.Guard;
+
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 
+/// <summary>
+/// Сервис для работы с пользователями.
+/// </summary>
+/// <param name="userRepository">Репозиторий пользователей.</param>
+/// <param name="mapper">Маппер объектов.</param>
 public class UserService(
     IUserRepository userRepository,
     IMapper mapper)
 {
-    private readonly IUserRepository _userRepository = userRepository;
-    private readonly IMapper _mapper = mapper;
+    private readonly IUserRepository userRepository = userRepository;
+    private readonly IMapper mapper = mapper;
 
     /// <summary>
-    /// Получение пользователя по адресу почты 
+    /// Получение пользователя по адресу почты. 
     /// </summary>
-    /// <param name="email"> Адрес почты пользователя </param>
-    /// <returns> DTO пользователя </returns>
+    /// <param name="email"> Адрес почты пользователя. </param>
+    /// <returns> DTO пользователя. </returns>
     public async Task<UserDto> GetByEmailAsync(string email)
     {
-        var entity = EnsureFound(await _userRepository.GetByEmailAsync(email),
+        var entity = EnsureFound(
+            await userRepository.GetByEmailAsync(email),
             $"User with email {email} was not found");
 
-        return _mapper.Map<UserDto>(entity);
+        return mapper.Map<UserDto>(entity);
     }
 
     /// <summary>
-    /// Поиск записи о пользователе по адресу почты
+    /// Поиск записи о пользователе по адресу почты.
     /// </summary>
-    /// <param name="email"> Адрес почты </param>
-    /// <returns> DTO пользователя </returns>
+    /// <param name="email"> Адрес почты. </param>
+    /// <returns> DTO пользователя. </returns>
     public async Task<UserDto?> FindByEmailAsync(string email)
     {
-        var entity = await _userRepository.GetByEmailAsync(email);
+        var entity = await userRepository.GetByEmailAsync(email);
 
         return entity == null
             ? null
-            : _mapper.Map<UserDto>(entity);
+            : mapper.Map<UserDto>(entity);
     }
 
     /// <summary>
-    /// Создание записи о новом пользователе в базе данных
+    /// Создание записи о новом пользователе в базе данных.
     /// </summary>
-    /// <param name="dto"> DTO пользователя </param>
+    /// <param name="dto"> DTO пользователя. </param>
     public async Task CreateAsync(UserDto dto)
     {
-        var entity = _mapper.Map<User>(dto);
+        var entity = mapper.Map<User>(dto);
 
-        await _userRepository.CreateAsync(entity);
+        await userRepository.CreateAsync(entity);
     }
 }

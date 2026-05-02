@@ -2,38 +2,45 @@
 using RUSAL.MetalTapping.BLL.Domain.DTOs;
 using RUSAL.MetalTapping.DAL.Interfaces;
 using static RUSAL.MetalTapping.BLL.Domain.Guard;
+
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 
+/// <summary>
+/// Сервис для работы с отклонениями уровня металла.
+/// </summary>
+/// <param name="deviationRepository">Репозиторий отклонений.</param>
+/// <param name="mapper">Маппер объектов.</param>
 public class DeviationService(
     IDeviationRepository deviationRepository,
     IMapper mapper)
 {
-    private readonly IDeviationRepository _deviationRepository = deviationRepository;
-    private readonly IMapper _mapper = mapper;
+    private readonly IDeviationRepository deviationRepository = deviationRepository;
+    private readonly IMapper mapper = mapper;
 
     /// <summary>
-    /// Получение значения отклонения по идентификатору электролизёра
+    /// Получение значения отклонения по идентификатору электролизёра.
     /// </summary>
-    /// <param name="potId"> Идентификатор электролизёра </param>
-    /// <returns> DTO записи отклонения </returns>
+    /// <param name="potId"> Идентификатор электролизёра. </param>
+    /// <returns> DTO записи отклонения. </returns>
     public async Task<DeviationDto> GetWithPotIdAsync(Guid potId)
     {
-        var entity = EnsureFound(await _deviationRepository.GetDeviationWithPotIdAsync(potId),
+        var entity = EnsureFound(
+            await deviationRepository.GetDeviationWithPotIdAsync(potId),
             $"Deviation with pot {potId} was not found");
 
-        return _mapper.Map<DeviationDto>(entity);
+        return mapper.Map<DeviationDto>(entity);
     }
 
     /// <summary>
-    /// Обновление записи об отклонении в базе данных
+    /// Обновление записи об отклонении в базе данных.
     /// </summary>
-    /// <param name="dto"> DTO записи отклонения </param>
+    /// <param name="dto"> DTO записи отклонения. </param>
     public async Task UpdateAsync(DeviationDto dto)
     {
-        var entity = await _deviationRepository.GetByIdAsync(dto.Id);
+        var entity = await deviationRepository.GetByIdAsync(dto.Id);
 
-        _mapper.Map(dto, entity);
+        mapper.Map(dto, entity);
 
-        await _deviationRepository.SaveChangesAsync();
+        await deviationRepository.SaveChangesAsync();
     }
 }

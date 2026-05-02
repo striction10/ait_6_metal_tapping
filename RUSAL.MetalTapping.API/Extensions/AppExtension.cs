@@ -1,14 +1,16 @@
-﻿using Hellang.Middleware.ProblemDetails;
+﻿namespace RUSAL.MetalTapping.API.Extensions;
 
-namespace RUSAL.MetalTapping.API.Extensions;
-
+/// <summary>
+/// Расширение для настройки pipeline.
+/// </summary>
 public static class AppExtension
 {
+    /// <summary>
+    /// Настройка middleware pipeline.
+    /// </summary>
+    /// <param name="app"> Экземпляр WebApplication. </param>
     public static void UseAppPipeline(this WebApplication app)
     {
-        app.UseProblemDetails();
-        app.UseStatusCodePages();
-
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();

@@ -1,4 +1,5 @@
 ﻿using RUSAL.MetalTapping.BLL.Domain.Enums;
+
 namespace RUSAL.MetalTapping.BLL.Domain.DTOs;
 
 public class PotParametersDto
