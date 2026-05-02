@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using RUSAL.MetalTapping.DAL.Entities;
-using RUSAL.MetalTapping.BLL.Domain.Enums;
 using RUSAL.MetalTapping.BLL.Domain.DTOs;
+using RUSAL.MetalTapping.BLL.Domain.Enums;
+using RUSAL.MetalTapping.DAL.Entities;
 
 namespace RUSAL.MetalTapping.DAL.Mappers;
 
@@ -20,7 +20,8 @@ public class DalToDomainProfile : Profile
 
         CreateMap<DeviationDto, Deviation>();
         CreateMap<Deviation, DeviationDto>()
-            .ForMember(dest => dest.Values,
+            .ForMember(
+                dest => dest.Values,
                        opt => opt.MapFrom(src => src.DeviationValues));
 
         CreateMap<DeviationValues, DeviationValuesDto>();
@@ -28,7 +29,8 @@ public class DalToDomainProfile : Profile
         CreateMap<ExternalData, ExternalDataDto>();
 
         CreateMap<MetalMarkAnalysis, MetalMarkAnalysisDto>()
-            .ForMember(dest => dest.Values,
+            .ForMember(
+                dest => dest.Values,
                        opt => opt.MapFrom(src => src.Values));
 
         CreateMap<MetalMarkAnalysisValue, MetalMarkAnalysisValueDto>();
@@ -50,7 +52,8 @@ public class DalToDomainProfile : Profile
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Type.ToString()));
 
         CreateMap<PotReglament, PotReglamentDto>()
-            .ForMember(dest => dest.Deviations,
+            .ForMember(
+                dest => dest.Deviations,
                        opt => opt.MapFrom(src => src.Deviations));
 
         CreateMap<PotState, PotStateDto>();

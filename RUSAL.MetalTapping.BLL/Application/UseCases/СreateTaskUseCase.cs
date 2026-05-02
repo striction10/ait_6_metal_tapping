@@ -3,8 +3,26 @@ using RUSAL.MetalTapping.BLL.Application.Services;
 using RUSAL.MetalTapping.BLL.Application.ViewModels;
 using RUSAL.MetalTapping.BLL.Domain.DTOs;
 using RUSAL.MetalTapping.BLL.Domain.Exceptions;
+
 namespace RUSAL.MetalTapping.BLL.Application.UseCases;
 
+/// <summary>
+/// Оркестратор создания задания на выливку металла.
+/// </summary>
+/// <param name="buildingService">Сервис для работы с корпусами.</param>
+/// <param name="potGroupService">Сервис для работы с группами ковшей.</param>
+/// <param name="potService">Сервис для работы с ковшами.</param>
+/// <param name="scoopService">Сервис для работы с совками.</param>
+/// <param name="scoopStateService">Сервис для работы с состояниями совков.</param>
+/// <param name="scoopUsageService">Сервис для работы с использованием совков.</param>
+/// <param name="calculatedTaskService">Сервис для работы с рассчитанными заданиями.</param>
+/// <param name="metalMarkAnalysisService">Сервис для работы с анализами марок металла.</param>
+/// <param name="metalMarkService">Сервис для работы с марками металла.</param>
+/// <param name="groupService">Сервис для работы с группами.</param>
+/// <param name="buildingInfoService">Сервис для работы с информацией о корпусах.</param>
+/// <param name="planSelector">Сервис выбора плана разливки.</param>
+/// <param name="tapTaskReservationService">Сервис резервирования заданий на выливку.</param>
+/// <param name="shiftAssignmentService">Сервис назначения смен.</param>
 public class CreateTaskUseCase(
     BuildingService buildingService,
     PotGroupService potGroupService,
@@ -21,32 +39,32 @@ public class CreateTaskUseCase(
     TapTaskReservationService tapTaskReservationService,
     ShiftAssignmentService shiftAssignmentService)
 {
-    private readonly BuildingService _buildingService = buildingService;
-    private readonly PotGroupService _potGroupService = potGroupService;
-    private readonly PotService _potService = potService;
-    private readonly ScoopService _scoopService = scoopService;
-    private readonly ScoopStateService _scoopStateService = scoopStateService;
-    private readonly ScoopUsageService _scoopUsageService = scoopUsageService;
-    private readonly CalculatedTaskService _calculatedTaskService = calculatedTaskService;
-    private readonly MetalMarkAnalysisService _metalMarkAnalysisService = metalMarkAnalysisService;
-    private readonly MetalMarkService _metalMarkService = metalMarkService;
-    private readonly GroupService _groupService = groupService;
-    private readonly BuildingService _buildingInfoService = buildingInfoService;
-    private readonly CastingExecutionPlanService _planSelector = planSelector;
-    private readonly TapTaskReservationService _tapTaskReservationService = tapTaskReservationService;
-    private readonly ShiftAssignmentService _shiftAssignmentService = shiftAssignmentService;
+    private readonly BuildingService buildingService = buildingService;
+    private readonly PotGroupService potGroupService = potGroupService;
+    private readonly PotService potService = potService;
+    private readonly ScoopService scoopService = scoopService;
+    private readonly ScoopStateService scoopStateService = scoopStateService;
+    private readonly ScoopUsageService scoopUsageService = scoopUsageService;
+    private readonly CalculatedTaskService calculatedTaskService = calculatedTaskService;
+    private readonly MetalMarkAnalysisService metalMarkAnalysisService = metalMarkAnalysisService;
+    private readonly MetalMarkService metalMarkService = metalMarkService;
+    private readonly GroupService groupService = groupService;
+    private readonly BuildingService buildingInfoService = buildingInfoService;
+    private readonly CastingExecutionPlanService planSelector = planSelector;
+    private readonly TapTaskReservationService tapTaskReservationService = tapTaskReservationService;
+    private readonly ShiftAssignmentService shiftAssignmentService = shiftAssignmentService;
 
     /// <summary>
-    /// Создание ViewModel для отображения таблицы заданий на выливку для смен для заданного корпуса
+    /// Создание ViewModel для отображения таблицы заданий на выливку для смен для заданного корпуса.
     /// </summary>
-    /// <param name="model"> Данные для отображения таблицы </param>
-    /// <returns> ViewModel для отображения таблицы </returns>
-    /// <exception cref="BusinessException"> Нет данных для отображения </exception>
+    /// <param name="model"> Данные для отображения таблицы. </param>
+    /// <returns> ViewModel для отображения таблицы. </returns>
+    /// <exception cref="BusinessException"> Нет данных для отображения. </exception>
     public async Task ExecuteAsync(OrderRequest model)
     {
-        var metalMark = await _metalMarkService.GetByNameAsync(model.metalMarkName);
+        var metalMark = await metalMarkService.GetByNameAsync(model.metalMarkName);
 
-        var buildings = await _buildingService.GetAllAsync();
+        var buildings = await buildingService.GetAllAsync();
 
         var marksByPot = new Dictionary<Guid, MetalMarkAnalysisDto>();
         var metalLevelByPot = new Dictionary<Guid, double>();
@@ -55,36 +73,40 @@ public class CreateTaskUseCase(
 
         foreach (var building in buildings)
         {
-            var groups = await _potGroupService.GetByBuildingIdAsync(building.Id);
+            var groups = await potGroupService.GetByBuildingIdAsync(building.Id);
             var groupDtos = new List<PotGroupViewModel>();
 
             foreach (var group in groups)
             {
-                var scoop = await _scoopService.GetByIdAsync(group.ScoopId);
+                var scoop = await scoopService.GetByIdAsync(group.ScoopId);
 
-                var scoopState = await _scoopStateService.GetByIdAsync(scoop.StateId);
+                var scoopState = await scoopStateService.GetByIdAsync(scoop.StateId);
 
-                var scoopUsage = await _scoopUsageService.GetByScoopIdAsync(scoop.Id);
+                var scoopUsage = await scoopUsageService.GetByScoopIdAsync(scoop.Id);
 
-                var pots = await _potService.GetByGroupIdAsync(group.Id);
+                var pots = await potService.GetByGroupIdAsync(group.Id);
                 var potIds = pots.Select(p => p.Id).ToList();
 
-                var calculated = await _calculatedTaskService.GetByPotIdsAsync(potIds);
+                var calculated = await calculatedTaskService.GetByPotIdsAsync(potIds);
                 if (calculated.Count() != potIds.Count())
+                {
                     throw new BusinessException("Missing calculated tasks");
+                }
 
-                var analysis = await _metalMarkAnalysisService.GetByPotIdsAsync(potIds);
+                var analysis = await metalMarkAnalysisService.GetByPotIdsAsync(potIds);
                 if (analysis.Count() != potIds.Count())
+                {
                     throw new BusinessException("Missing metal mark analysis");
+                }
 
-                var potDtos = await _potService.CreateAsync(
+                var potDtos = await potService.CreateAsync(
                     pots,
                     calculated,
                     analysis,
                     marksByPot,
                     metalLevelByPot);
 
-                var groupDto = _groupService.Create(
+                var groupDto = groupService.Create(
                     group,
                     scoop,
                     scoopState,
@@ -94,14 +116,14 @@ public class CreateTaskUseCase(
                 groupDtos.Add(groupDto);
             }
 
-            var buildingInfo = _buildingInfoService.CreateViewModel(building, groupDtos, metalMark.Id);
+            var buildingInfo = buildingInfoService.CreateViewModel(building, groupDtos, metalMark.Id);
             buildingInfos.Add(buildingInfo);
         }
 
-        var plan = _planSelector.SelectExecutionPlan(buildingInfos, model.requiredMetalWeight);
+        var plan = planSelector.SelectExecutionPlan(buildingInfos, model.requiredMetalWeight);
 
-        var tasks = await _tapTaskReservationService.CreateTasksAsync(plan, model, metalMark.Id, marksByPot, metalLevelByPot);
+        var tasks = await tapTaskReservationService.CreateTasksAsync(plan, model, metalMark.Id, marksByPot, metalLevelByPot);
 
-        await _shiftAssignmentService.AssignTaskAsync(tasks);
+        await shiftAssignmentService.AssignTaskAsync(tasks);
     }
 }

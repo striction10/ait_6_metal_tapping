@@ -3,25 +3,30 @@ using Microsoft.AspNetCore.Mvc;
 using RUSAL.MetalTapping.BLL.Application.Contracts;
 using RUSAL.MetalTapping.BLL.Application.Services;
 using RUSAL.MetalTapping.BLL.Application.ViewModels;
+
 namespace RUSAL.MetalTapping.API.Controllers;
 
+/// <summary>
+/// Контроллер для работы с заданиями на выливку. 
+/// </summary>
+/// <param name="service"> Сервис отображения заданий на выливку. </param>
 [ApiController]
 [Route("api/[controller]")]
 public class TaskController(ViewTaskService service) : ControllerBase
 {
-    private readonly ViewTaskService _service = service;
+    private readonly ViewTaskService service = service;
 
     /// <summary>
-    /// Получение списка заданий на указанную дату
+    /// Получение списка заданий на указанную дату.
     /// </summary>
-    /// <param name="taskRequest"> Целевая дата и идентификатор корпуса, для которого формируется список заданий на выливку</param>
+    /// <param name="taskRequest"> Целевая дата и идентификатор корпуса, для которого формируется список заданий на выливку.</param>
     [HttpPost]
     [Authorize]
     [ProducesResponseType(typeof(DailyTaskResponseViewModel), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<DailyTaskResponseViewModel>> GetDaily([FromBody]TaskRequest taskRequest)
     {
-        var response = await _service.ViewTask(taskRequest);
+        var response = await service.ViewTask(taskRequest);
 
         return Ok(response); 
     }

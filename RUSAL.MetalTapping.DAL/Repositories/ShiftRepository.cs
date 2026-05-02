@@ -1,19 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RUSAL.MetalTapping.DAL.Contexts;
 using RUSAL.MetalTapping.DAL.Entities;
 using RUSAL.MetalTapping.DAL.Interfaces;
-using RUSAL.MetalTapping.DAL.Contexts;
+
 namespace RUSAL.MetalTapping.DAL.Repositories;
 
 public class ShiftRepository(AppDbContext context) 
     : GenericRepository<Shift>(context), IShiftRepository
 {
-    private readonly AppDbContext _context = context;
+    private readonly AppDbContext context = context;
 
     public async Task<Shift?> GetByBuildingId(Guid buildingId)
     {
         var now = DateTime.UtcNow;
 
-        return await _context.Shifts
+        return await context.Shifts
             .Where(s => s.BeginDate <= now && s.EndDate >= now)
             .Where(s => s.BuildingId == buildingId)
             .FirstOrDefaultAsync();
@@ -23,14 +24,14 @@ public class ShiftRepository(AppDbContext context)
     {
         var now = DateTime.Now;
 
-        return await _context.Shifts
+        return await context.Shifts
             .Where(s => s.BeginDate <= now && s.EndDate >= now)
             .ToListAsync();
     }
 
     public async Task<Shift?> GetNextShiftForBuilding(Guid buildingId, DateTime fromDate)
     {
-        return await _context.Shifts
+        return await context.Shifts
             .Where(s => s.BuildingId == buildingId)
             .Where(s => s.BeginDate > fromDate)
             .OrderBy(s => s.BeginDate)
@@ -41,11 +42,11 @@ public class ShiftRepository(AppDbContext context)
     {
         var now = DateTime.Now;
 
-        var currentShift = await _context.Shifts
+        var currentShift = await context.Shifts
             .Where(s => s.BeginDate <= now && s.EndDate >= now)
             .FirstOrDefaultAsync();
 
-        return await _context.Shifts
+        return await context.Shifts
             .Where(s => s.BeginDate > currentShift.EndDate)
             .OrderBy(s => s.BeginDate)
             .ToListAsync();

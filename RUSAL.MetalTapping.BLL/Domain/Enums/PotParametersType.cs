@@ -3,5 +3,5 @@
 public enum PotParametersType
 {
     Amperage,
-    AverageAmperage
+    AverageAmperage,
 }

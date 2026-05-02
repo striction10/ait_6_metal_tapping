@@ -1,20 +1,24 @@
 ﻿using RUSAL.MetalTapping.BLL.Application.Contracts;
 using RUSAL.MetalTapping.BLL.Domain.DTOs;
+
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 
+/// <summary>
+/// Сервис формирования ViewModel для отображения данных электролизёра с отклонениями и заданиями.
+/// </summary>
 public class PotViewService
 {
 
     /// <summary>
-    /// Создание ViewModel
+    /// Создание ViewModel.
     /// </summary>
-    /// <param name="pot"> Электролизёр </param>
-    /// <param name="deviation"> Отклонение</param>
-    /// <param name="amperage"> Сила тока </param>
-    /// <param name="averageAmperage"> Выход по току</param>
-    /// <param name="lastTask"> Последнее расчётное задание </param>
-    /// <param name="metalMarkName"> Имя марки металла внутри электролизёра </param>
-    /// <returns> ViewModel электролизера </returns>
+    /// <param name="pot"> Электролизёр. </param>
+    /// <param name="deviation"> Отклонение.</param>
+    /// <param name="amperage"> Сила тока. </param>
+    /// <param name="averageAmperage"> Выход по току.</param>
+    /// <param name="lastTask"> Последнее расчётное задание. </param>
+    /// <param name="metalMarkName"> Имя марки металла внутри электролизёра. </param>
+    /// <returns> ViewModel электролизера. </returns>
     public ViewDeviationAndTaskPot BuildPotView(
         PotDto pot,
         DeviationDto deviation,

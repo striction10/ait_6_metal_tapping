@@ -1,9 +1,21 @@
-﻿using RUSAL.MetalTapping.BLL.Domain.Enums;
+﻿using RUSAL.MetalTapping.BLL.Application.Contracts;
 using RUSAL.MetalTapping.BLL.Application.Services;
-using RUSAL.MetalTapping.BLL.Application.Contracts;
 using RUSAL.MetalTapping.BLL.Domain.DTOs;
+using RUSAL.MetalTapping.BLL.Domain.Enums;
+
 namespace RUSAL.MetalTapping.BLL.Application.UseCases;
 
+/// <summary>
+/// Оркестратор обработки отклонения и расчёта задания для электролизёра.
+/// </summary>
+/// <param name="deviationService">Сервис для работы с отклонениями.</param>
+/// <param name="deviationValuesService">Сервис для работы со значениями отклонений.</param>
+/// <param name="externalDataService">Сервис для работы с внешними данными.</param>
+/// <param name="potParametersService">Сервис для работы с параметрами ковша.</param>
+/// <param name="calculatedTaskService">Сервис для работы с рассчитанными заданиями.</param>
+/// <param name="deviationCalc">Сервис расчёта отклонений.</param>
+/// <param name="taskCalc">Сервис расчёта заданий.</param>
+/// <param name="potParamService">Сервис получения параметров ковша.</param>
 public class ProcessDeviationAndTaskUseCase(
     DeviationService deviationService,
     DeviationValuesService deviationValuesService,
@@ -14,47 +26,47 @@ public class ProcessDeviationAndTaskUseCase(
     CalculatedTaskService taskCalc,
     PotParametersService potParamService)
 {
-    private readonly DeviationService _deviationService = deviationService;
-    private readonly DeviationValuesService _deviationValuesService = deviationValuesService;
-    private readonly ExternalDataService _externalDataService = externalDataService;
-    private readonly PotParametersService _potParametersService = potParametersService;
-    private readonly CalculatedTaskService _calculatedTaskService = calculatedTaskService;
+    private readonly DeviationService deviationService = deviationService;
+    private readonly DeviationValuesService deviationValuesService = deviationValuesService;
+    private readonly ExternalDataService externalDataService = externalDataService;
+    private readonly PotParametersService potParametersService = potParametersService;
+    private readonly CalculatedTaskService calculatedTaskService = calculatedTaskService;
 
-    private readonly DeviationCalculationService _deviationCalc = deviationCalc;
-    private readonly CalculatedTaskService _taskCalc = taskCalc;
-    private readonly PotParametersService _potParamService = potParamService;
+    private readonly DeviationCalculationService deviationCalc = deviationCalc;
+    private readonly CalculatedTaskService taskCalc = taskCalc;
+    private readonly PotParametersService potParamService = potParamService;
 
     /// <summary>
-    /// Расчёт расчётного задания и ЗПР для электролизёра
+    /// Расчёт расчётного задания и ЗПР для электролизёра.
     /// </summary>
-    /// <param name="model"> Данные для расчёта </param>
-    /// <returns> ViewModel расчётного задания и ЗПР для клиента </returns>
+    /// <param name="model"> Данные для расчёта. </param>
+    /// <returns> ViewModel расчётного задания и ЗПР для клиента. </returns>
     public async Task<ProcessDeviationAndTaskResponse> ExecuteAsync(ProcessDeviationAndTaskRequest model)
     {
-        var deviation = await _deviationService.GetWithPotIdAsync(model.potId);
+        var deviation = await deviationService.GetWithPotIdAsync(model.potId);
 
-        var deviationValues = await _deviationValuesService.GetWithDeviationIdAsync(deviation.Id);
+        var deviationValues = await deviationValuesService.GetWithDeviationIdAsync(deviation.Id);
 
-        var deviationAmount = _deviationCalc.CalculateDeviation(
+        var deviationAmount = deviationCalc.CalculateDeviation(
             deviation.TargetMetalLevel,
             model.actualMetalLevel);
 
-        var castingRatio = _deviationCalc.GetCastingRatio(deviationAmount, deviationValues);
+        var castingRatio = deviationCalc.GetCastingRatio(deviationAmount, deviationValues);
 
         if (castingRatio == null)
         {
             deviation.IsValid = false;
             deviation.ActualMetalLevel = model.actualMetalLevel;
 
-            await _deviationService.UpdateAsync(deviation);
+            await deviationService.UpdateAsync(deviation);
 
-            await _calculatedTaskService.CreateAsync(new CalculatedTaskDto
+            await calculatedTaskService.CreateAsync(new CalculatedTaskDto
             {
                 Id = Guid.NewGuid(),
                 PotId = model.potId,
                 CalculatedTaskForPot = null,
                 RoundCalculatedTaskForPot = null,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
             });
 
             return new ProcessDeviationAndTaskResponse(deviationAmount);
@@ -63,25 +75,25 @@ public class ProcessDeviationAndTaskUseCase(
         deviation.IsValid = true;
         deviation.ActualMetalLevel = model.actualMetalLevel;
 
-        var externalData = await _externalDataService.GetByPotId(model.potId);
+        var externalData = await externalDataService.GetByPotId(model.potId);
 
-        var potParameters = await _potParametersService.GetByGroupId(externalData.PotParametersGroupId);
+        var potParameters = await potParametersService.GetByGroupId(externalData.PotParametersGroupId);
 
-        var amperage = _potParamService.GetParameter(potParameters, PotParametersType.Amperage);
-        var averageAmperage = _potParamService.GetParameter(potParameters, PotParametersType.AverageAmperage);
+        var amperage = potParamService.GetParameter(potParameters, PotParametersType.Amperage);
+        var averageAmperage = potParamService.GetParameter(potParameters, PotParametersType.AverageAmperage);
 
-        var calculatedTask = _taskCalc.CalculatedTask(amperage, averageAmperage);
-        var roundCalculatedTask = _taskCalc.CalculateRoundedTask(calculatedTask, castingRatio.Value);
+        var calculatedTask = taskCalc.CalculatedTask(amperage, averageAmperage);
+        var roundCalculatedTask = taskCalc.CalculateRoundedTask(calculatedTask, castingRatio.Value);
 
-        await _deviationService.UpdateAsync(deviation);
+        await deviationService.UpdateAsync(deviation);
 
-        await _calculatedTaskService.CreateAsync(new CalculatedTaskDto
+        await calculatedTaskService.CreateAsync(new CalculatedTaskDto
         {
             Id = Guid.NewGuid(),
             PotId = model.potId,
             CalculatedTaskForPot = calculatedTask,
             RoundCalculatedTaskForPot = roundCalculatedTask,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
         });
 
         return new ProcessDeviationAndTaskResponse(

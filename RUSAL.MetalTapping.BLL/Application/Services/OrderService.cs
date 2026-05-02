@@ -5,21 +5,26 @@ using RUSAL.MetalTapping.DAL.Interfaces;
 
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 
+/// <summary>
+/// Сервис для работы с заказами.
+/// </summary>
+/// <param name="orderRepository">Репозиторий заказов.</param>
+/// <param name="mapper">Маппер объектов.</param>
 public class OrderService(
     IGenericRepository<Order> orderRepository,
     IMapper mapper)
 {
-    private readonly IGenericRepository<Order> _orderRepository = orderRepository;
-    private readonly IMapper _mapper = mapper;
+    private readonly IGenericRepository<Order> orderRepository = orderRepository;
+    private readonly IMapper mapper = mapper;
 
     /// <summary>
-    /// Создание записи о заказе в базе данных
+    /// Создание записи о заказе в базе данных.
     /// </summary>
-    /// <param name="dto"> DTO заказа </param>
+    /// <param name="dto"> DTO заказа. </param>
     public async Task CreateAsync(OrderDto dto)
     {
-        var entity = _mapper.Map<Order>(dto);
+        var entity = mapper.Map<Order>(dto);
 
-        await _orderRepository.CreateAsync(entity);
+        await orderRepository.CreateAsync(entity);
     }
 }

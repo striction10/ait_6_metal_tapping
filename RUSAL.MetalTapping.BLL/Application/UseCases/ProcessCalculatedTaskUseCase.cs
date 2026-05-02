@@ -1,19 +1,24 @@
 ﻿using RUSAL.MetalTapping.BLL.Application.Contracts;
 using RUSAL.MetalTapping.BLL.Application.Services;
 using RUSAL.MetalTapping.BLL.Domain.DTOs;
+
 namespace RUSAL.MetalTapping.BLL.Application.UseCases;
 
+/// <summary>
+/// Оркестратор сохранения значения расчётного задания для электролизёра.
+/// </summary>
+/// <param name="calculatedTaskService">Сервис для работы с расчётными заданиями.</param>
 public class ProcessCalculatedTaskUseCase(CalculatedTaskService calculatedTaskService)
 {
-    private readonly CalculatedTaskService _calculatedTaskService = calculatedTaskService;
+    private readonly CalculatedTaskService calculatedTaskService = calculatedTaskService;
 
     /// <summary>
-    /// Запись значения расчетного задания для электролизёра
+    /// Запись значения расчетного задания для электролизёра.
     /// </summary>
-    /// <param name="model"> Данные для создания расчётного задания </param>
+    /// <param name="model"> Данные для создания расчётного задания. </param>
     public async Task ExecuteAsync(ProcessCalculatedTaskRequest model)
     {
-        var existingTask = await _calculatedTaskService.GetByPotIdAsync(model.potId);
+        var existingTask = await calculatedTaskService.GetByPotIdAsync(model.potId);
 
         if (existingTask == null)
         {
@@ -22,10 +27,10 @@ public class ProcessCalculatedTaskUseCase(CalculatedTaskService calculatedTaskSe
                 Id = Guid.NewGuid(),
                 PotId = model.potId,
                 CalculatedTaskForPot = model.calculatedTask,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
             };
 
-            await _calculatedTaskService.CreateAsync(newTask);
+            await calculatedTaskService.CreateAsync(newTask);
 
             return;
         }
@@ -33,6 +38,6 @@ public class ProcessCalculatedTaskUseCase(CalculatedTaskService calculatedTaskSe
         existingTask.CalculatedTaskForPot = model.calculatedTask;
         existingTask.CreatedAt = DateTime.UtcNow;
 
-        await _calculatedTaskService.UpdateAsync(existingTask);
+        await calculatedTaskService.UpdateAsync(existingTask);
     }
 }

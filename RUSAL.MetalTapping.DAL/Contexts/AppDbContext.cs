@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RUSAL.MetalTapping.DAL.Entities;
+
 namespace RUSAL.MetalTapping.DAL.Contexts;
 
 public class AppDbContext : DbContext

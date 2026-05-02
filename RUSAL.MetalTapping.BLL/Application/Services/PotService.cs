@@ -5,27 +5,34 @@ using RUSAL.MetalTapping.BLL.Domain.Exceptions;
 using RUSAL.MetalTapping.DAL.Entities;
 using RUSAL.MetalTapping.DAL.Interfaces;
 using static RUSAL.MetalTapping.BLL.Domain.Guard;
+
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 
+/// <summary>
+/// Сервис для работы с электролизёрами.
+/// </summary>
+/// <param name="potStateRepository">Репозиторий состояний электролизёров.</param>
+/// <param name="potRepository">Репозиторий электролизёров.</param>
+/// <param name="mapper">Маппер объектов.</param>
 public class PotService(
     IGenericRepository<PotState> potStateRepository,
     IPotRepository potRepository,
     IMapper mapper)
 {
-    private readonly IGenericRepository<PotState> _potStateRepository = potStateRepository;
-    private readonly IPotRepository _potRepository = potRepository;
-    private readonly IMapper _mapper = mapper;
+    private readonly IGenericRepository<PotState> potStateRepository = potStateRepository;
+    private readonly IPotRepository potRepository = potRepository;
+    private readonly IMapper mapper = mapper;
 
     /// <summary>
-    /// Создание DTO
+    /// Создание DTO.
     /// </summary>
-    /// <param name="pots"> Электролизёры </param>
-    /// <param name="calculated"> Расчетные задания электролизёров</param>
-    /// <param name="analysis"> Анализы марки металла для электролизёров </param>
-    /// <param name="marksByPot"> Распределение марок по электролизёрам </param>
-    /// <param name="metalLevelByPot"> Распределение уровня металла по электролизёрам </param>
-    /// <returns> Список электролизёров </returns>
-    /// <exception cref="BusinessException"> Нет ЗПР для составления списка электролизёров </exception>
+    /// <param name="pots"> Электролизёры. </param>
+    /// <param name="calculated"> Расчетные задания электролизёров.</param>
+    /// <param name="analysis"> Анализы марки металла для электролизёров. </param>
+    /// <param name="marksByPot"> Распределение марок по электролизёрам. </param>
+    /// <param name="metalLevelByPot"> Распределение уровня металла по электролизёрам. </param>
+    /// <returns> Список электролизёров. </returns>
+    /// <exception cref="BusinessException"> Нет ЗПР для составления списка электролизёров. </exception>
     public async Task<List<PotViewModel>> CreateAsync(
         IEnumerable<PotDto> pots,
         IEnumerable<CalculatedTaskDto> calculated,
@@ -44,7 +51,7 @@ public class PotService(
             var metalMarkAnalysis = analysisByPot[pot.Id];
 
             var potState = EnsureFound(
-                await _potStateRepository.GetByIdAsync(pot.StateId),
+                await potStateRepository.GetByIdAsync(pot.StateId),
                 $"Pot state for pot {pot.Name} not found");
 
             var level = calc.RoundCalculatedTaskForPot
@@ -59,7 +66,7 @@ public class PotService(
                 Name = pot.Name,
                 MetalLevel = level,
                 MetalMarkId = metalMarkAnalysis.MetalMarkId,
-                State = potState.Name
+                State = potState.Name,
             });
         }
 
@@ -67,28 +74,30 @@ public class PotService(
     }
 
     /// <summary>
-    /// Получение электролизёра по идентификатору
+    /// Получение электролизёра по идентификатору.
     /// </summary>
-    /// <param name="id"> Идентификатор электролизёра </param>
-    /// <returns> DTO электролизёра </returns>
+    /// <param name="id"> Идентификатор электролизёра. </param>
+    /// <returns> DTO электролизёра. </returns>
     public async Task<PotDto> GetByIdAsync(Guid id)
     {
-        var entity = EnsureFound(await _potRepository.GetByIdAsync(id),
+        var entity = EnsureFound(
+            await potRepository.GetByIdAsync(id),
             $"Pot with id {id} was not found");
 
-        return _mapper.Map<PotDto>(entity);
+        return mapper.Map<PotDto>(entity);
     }
 
     /// <summary>
-    /// Получение списка электролизёров по идентификатору группы
+    /// Получение списка электролизёров по идентификатору группы.
     /// </summary>
-    /// <param name="groupId"> Идентификатор группы электролизёров </param>
-    /// <returns> DTO группы электролизёров </returns>
+    /// <param name="groupId"> Идентификатор группы электролизёров. </param>
+    /// <returns> DTO группы электролизёров. </returns>
     public async Task<IEnumerable<PotDto?>> GetByGroupIdAsync(Guid groupId)
     {
-        var entities = EnsureFound(await _potRepository.GetPotsByGroupIdAsync(groupId),
+        var entities = EnsureFound(
+            await potRepository.GetPotsByGroupIdAsync(groupId),
             $"Pots with group {groupId} was not found");
 
-        return _mapper.Map<IEnumerable<PotDto?>>(entities);
+        return mapper.Map<IEnumerable<PotDto?>>(entities);
     }
 }

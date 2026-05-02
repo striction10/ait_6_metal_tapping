@@ -1,28 +1,33 @@
 ﻿using RUSAL.MetalTapping.BLL.Domain.DTOs;
+
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 
+/// <summary>
+/// Сервис резервирования ковшей на время выполнения заданий.
+/// </summary>
+/// <param name="scoopUsageService">Сервис для работы с занятостью ковшей.</param>
 public class ScoopReservationService(ScoopUsageService scoopUsageService)
 {
-    private readonly ScoopUsageService _scoopUsageService = scoopUsageService;
+    private readonly ScoopUsageService scoopUsageService = scoopUsageService;
 
     /// <summary>
-    /// Резервация ковша на время выполнения задания
+    /// Резервация ковша на время выполнения задания.
     /// </summary>
-    /// <param name="scoopId"> Идентификатор ковша </param>
-    /// <param name="busyFrom"> С какого момента ковш занят </param>
-    /// <param name="busyUntil"> До какого момента ковш занят </param>
+    /// <param name="scoopId"> Идентификатор ковша. </param>
+    /// <param name="busyFrom"> С какого момента ковш занят. </param>
+    /// <param name="busyUntil"> До какого момента ковш занят. </param>
     public async Task ReservateScoop(Guid scoopId, DateTime busyFrom, DateTime busyUntil)
     {
-        var currentUsage = await _scoopUsageService.GetByScoopIdAsync(scoopId);
+        var currentUsage = await scoopUsageService.GetByScoopIdAsync(scoopId);
 
         if (currentUsage == null)
         {
-            await _scoopUsageService.CreateAsync(new ScoopUsageDto
+            await scoopUsageService.CreateAsync(new ScoopUsageDto
             {
                 Id = Guid.NewGuid(),
                 ScoopId = scoopId,
                 BusyFrom = busyFrom,
-                BusyUntil = busyUntil
+                BusyUntil = busyUntil,
             });
 
             return;
@@ -31,6 +36,6 @@ public class ScoopReservationService(ScoopUsageService scoopUsageService)
         currentUsage.BusyFrom = busyFrom;
         currentUsage.BusyUntil = busyUntil;
 
-        await _scoopUsageService.UpdateAsync(currentUsage);
+        await scoopUsageService.UpdateAsync(currentUsage);
     }
 }

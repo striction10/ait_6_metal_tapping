@@ -1,4 +1,5 @@
 ﻿using RUSAL.MetalTapping.BLL.Domain.Exceptions;
+
 namespace RUSAL.MetalTapping.BLL.Domain;
 
 public static class Guard
