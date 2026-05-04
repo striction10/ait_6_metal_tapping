@@ -14,9 +14,6 @@ public class ExternalDataService(
     IExternalDataRepository externalDataRepository,
     IMapper mapper)
 {
-    private readonly IExternalDataRepository externalDataRepository = externalDataRepository;
-    private readonly IMapper mapper = mapper;
-
     /// <summary>
     /// Получение записи о внешних данных из базы данных по идентификатору электролизёра. 
     /// </summary>
@@ -28,6 +25,6 @@ public class ExternalDataService(
             await externalDataRepository.GetExternalDataWithPotId(potId),
             $"External data with pot {potId} was not found");
 
-        return mapper.Map<ExternalDataDto?>( entity);
+        return mapper.Map<ExternalDataDto?>(entity);
     }
 }

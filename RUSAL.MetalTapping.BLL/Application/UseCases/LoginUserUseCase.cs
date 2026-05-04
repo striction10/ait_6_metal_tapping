@@ -19,11 +19,6 @@ public class LoginUserUseCase(
     IJwtProvider jwtProvider,
     IRoleRepository roleRepository)
 {
-    private readonly UserService userService = userService;
-    private readonly IPasswordHasher passwordHasher = passwordHasher;
-    private readonly IJwtProvider jwtProvider = jwtProvider;
-    private readonly IRoleRepository roleRepository = roleRepository;
-
     /// <summary>
     /// Авторизация пользователя.
     /// </summary>
@@ -42,7 +37,7 @@ public class LoginUserUseCase(
         }
 
         var roles = await roleRepository.GetUserRolesAsync(user.Id);
-        
+
         var roleNames = roles.Select(r => r.Name);
 
         return jwtProvider.GenerateJwtToken(user, roleNames);

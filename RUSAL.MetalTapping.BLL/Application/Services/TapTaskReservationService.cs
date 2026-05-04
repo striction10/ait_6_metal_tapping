@@ -15,10 +15,6 @@ public class TapTaskReservationService(
     OrderService orderService,
     TapTaskPotService tapTaskPotService)
 {
-    private readonly TapTaskService tapTaskService = tapTaskService;
-    private readonly OrderService orderService = orderService;
-    private readonly TapTaskPotService tapTaskPotService = tapTaskPotService;
-
     /// <summary>
     /// Создание задания на выливку.
     /// </summary>

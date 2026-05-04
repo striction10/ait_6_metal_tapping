@@ -3,19 +3,20 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RUSAL.MetalTapping.DAL.Entities;
 
 namespace RUSAL.MetalTapping.DAL.Configurations;
+
 public class MetalMarkAnalysisValueConfiguration : IEntityTypeConfiguration<MetalMarkAnalysisValue>
 {
     public void Configure(EntityTypeBuilder<MetalMarkAnalysisValue> builder)
     {
         builder.ToTable("MetalMarkAnalysisValues");
-            
+
         builder.HasKey(k => k.Id);
-            
+
         builder.Property(k => k.Id)
             .HasColumnName("Id")
             .HasColumnType("uniqueidentifier")
             .IsRequired();
-            
+
         builder.Property(k => k.Value)
             .HasColumnName("Value")
             .HasColumnType("numeric(10, 0)")

@@ -9,8 +9,6 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases;
 /// <param name="reglamentService">Сервис для работы с регламентами.</param>
 public class GetAllReglamentsUseCase(ReglamentService reglamentService)
 {
-    private readonly ReglamentService reglamentService = reglamentService;
-
     /// <summary>
     /// Получение списка регламентов.
     /// </summary>

@@ -5,11 +5,9 @@ using RUSAL.MetalTapping.DAL.Interfaces;
 
 namespace RUSAL.MetalTapping.DAL.Repositories;
 
-public class ShiftRepository(AppDbContext context) 
+public class ShiftRepository(AppDbContext context)
     : GenericRepository<Shift>(context), IShiftRepository
 {
-    private readonly AppDbContext context = context;
-
     public async Task<Shift?> GetByBuildingId(Guid buildingId)
     {
         var now = DateTime.UtcNow;

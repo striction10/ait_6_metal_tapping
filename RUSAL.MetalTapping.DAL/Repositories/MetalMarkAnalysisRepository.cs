@@ -5,12 +5,10 @@ using RUSAL.MetalTapping.DAL.Interfaces;
 
 namespace RUSAL.MetalTapping.DAL.Repositories;
 
-public class MetalMarkAnalysisRepository(AppDbContext context) 
+public class MetalMarkAnalysisRepository(AppDbContext context)
     : GenericRepository<MetalMarkAnalysis>(context), IMetalMarkAnalysisRepository
 {
-    private readonly AppDbContext context = context;
-
-    public async Task<MetalMarkAnalysis?> GetMetalMarkAnalysisWithPotIdAsync(Guid id) 
+    public async Task<MetalMarkAnalysis?> GetMetalMarkAnalysisWithPotIdAsync(Guid id)
     {
         return await context.MetalMarkAnalyses
             .Include(ma => ma.MetalMark)

@@ -12,7 +12,7 @@ namespace RUSAL.MetalTapping.BLL.Application.Services;
 /// <param name="tapTaskPotService">Сервис для работы со связями заданий и электролизёров.</param>
 /// <param name="metalMarkAnalysisService">Сервис для работы с анализами марок металла.</param>
 /// <param name="metalMarkService">Сервис для работы с марками металла.</param>
-/// <param name="scoopRepository">Сервис для работы с ковшами.</param>
+/// <param name="scoopService">Сервис для работы с ковшами.</param>
 /// <param name="chemicalElemService">Сервис для работы с химическими элементами.</param>
 /// <param name="potService">Сервис для работы с электролизёрами.</param>
 /// <param name="tapTaskService">Сервис для работы с заданиями на выливку.</param>
@@ -22,22 +22,12 @@ public class ViewTaskService(
     TapTaskPotService tapTaskPotService,
     MetalMarkAnalysisService metalMarkAnalysisService,
     MetalMarkService metalMarkService,
-    ScoopService scoopRepository,
+    ScoopService scoopService,
     ChemicalElemService chemicalElemService,
     PotService potService,
     TapTaskService tapTaskService,
     MetalMarkAnalysisValueService metalMarkAnalysisValueService)
 {
-    private readonly TasksService tasksService = tasksService;
-    private readonly TapTaskPotService tapTaskPotService = tapTaskPotService;
-    private readonly MetalMarkAnalysisService metalMarkAnalysisService = metalMarkAnalysisService;
-    private readonly MetalMarkService metalMarkService = metalMarkService;
-    private readonly ScoopService scoopService = scoopRepository;
-    private readonly ChemicalElemService chemicalElemService = chemicalElemService;
-    private readonly PotService potService = potService;
-    private readonly TapTaskService tapTaskService = tapTaskService;
-    private readonly MetalMarkAnalysisValueService metalMarkAnalysisValueService = metalMarkAnalysisValueService;
-
     /// <summary>
     /// Создание ViewModel заданий на выливку для клиента.
     /// </summary>

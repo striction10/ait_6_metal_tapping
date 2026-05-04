@@ -9,9 +9,9 @@ public class PotParametersGroupConfiguraion : IEntityTypeConfiguration<PotParame
     public void Configure(EntityTypeBuilder<PotParametersGroup> builder)
     {
         builder.ToTable("PotParametersGroup");
-        
+
         builder.HasKey(b => b.Id);
-        
+
         builder.Property(b => b.Id)
             .HasColumnName("Id")
             .HasColumnType("uniqueidentifier")

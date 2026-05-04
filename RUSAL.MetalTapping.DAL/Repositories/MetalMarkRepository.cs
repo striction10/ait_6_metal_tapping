@@ -8,8 +8,6 @@ namespace RUSAL.MetalTapping.DAL.Repositories;
 public class MetalMarkRepository(AppDbContext context)
     : GenericRepository<MetalMark>(context), IMetalMarkRepository
 {
-    private readonly AppDbContext context = context;
-
     public async Task<MetalMark?> GetByNameAsync(string name)
     {
         return await context.MetalMarks.FirstOrDefaultAsync(mm => mm.Name == name);

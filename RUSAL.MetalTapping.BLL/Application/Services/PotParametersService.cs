@@ -16,16 +16,13 @@ public class PotParametersService(
     IPotParametersRepository potParametersRepository,
     IMapper mapper)
 {
-    private readonly IPotParametersRepository potParametersRepository = potParametersRepository;
-    private readonly IMapper mapper = mapper;
-
-   /// <summary>
-   /// Получение параметра электролизёра.
-   /// </summary>
-   /// <param name="parameters"> Параметры электролизёра. </param>
-   /// <param name="type"> Нужный тип параметра. </param>
-   /// <returns> Нужный параметр электролизёра. </returns>
-   /// <exception cref="Exception"> Параметр не найден. </exception>
+    /// <summary>
+    /// Получение параметра электролизёра.
+    /// </summary>
+    /// <param name="parameters"> Параметры электролизёра. </param>
+    /// <param name="type"> Нужный тип параметра. </param>
+    /// <returns> Нужный параметр электролизёра. </returns>
+    /// <exception cref="Exception"> Параметр не найден. </exception>
     public double GetParameter(IEnumerable<PotParametersDto> parameters, PotParametersType type)
     {
         var param = parameters.FirstOrDefault(p => p.Type == type);

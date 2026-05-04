@@ -11,17 +11,17 @@ public class ReglamentConfiguration : IEntityTypeConfiguration<Reglament>
         builder.ToTable("Reglament");
 
         builder.HasKey(b => b.Id);
-        
+
         builder.Property(b => b.Id)
             .HasColumnName("Id")
             .HasColumnType("uniqueidentifier")
             .IsRequired();
-        
+
         builder.Property(b => b.Name)
             .HasColumnName("Name")
             .HasColumnType("nvarchar(20)")
             .IsRequired();
-        
+
         builder.Property(b => b.DateStart)
             .HasColumnName("DateStart")
             .HasColumnType("datetime")

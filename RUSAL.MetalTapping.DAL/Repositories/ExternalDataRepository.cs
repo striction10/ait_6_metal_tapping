@@ -5,11 +5,9 @@ using RUSAL.MetalTapping.DAL.Interfaces;
 
 namespace RUSAL.MetalTapping.DAL.Repositories;
 
-public class ExternalDataRepository(AppDbContext context) 
+public class ExternalDataRepository(AppDbContext context)
     : GenericRepository<ExternalData>(context), IExternalDataRepository
 {
-    private readonly AppDbContext context = context;
-
     public async Task<ExternalData?> GetExternalDataWithPotId(Guid id)
     {
         return await context.ExternalDatas

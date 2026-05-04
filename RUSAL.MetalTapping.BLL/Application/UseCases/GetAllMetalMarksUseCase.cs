@@ -9,8 +9,6 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases;
 /// <param name="metalMarkService">Сервис для работы с марками металла.</param>
 public class GetAllMetalMarksUseCase(MetalMarkService metalMarkService)
 {
-    private readonly MetalMarkService metalMarkService = metalMarkService;
-
     /// <summary>
     /// Получение списка марок металла.
     /// </summary>
@@ -19,7 +17,7 @@ public class GetAllMetalMarksUseCase(MetalMarkService metalMarkService)
     {
         var metalMarks = await metalMarkService.GetAllAsync();
 
-        return metalMarks.Select(m => new MetalMarkViewModel 
+        return metalMarks.Select(m => new MetalMarkViewModel
         {
             Id = m.Id,
             Name = m.Name,

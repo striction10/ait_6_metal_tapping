@@ -4,11 +4,10 @@ using RUSAL.MetalTapping.DAL.Interfaces;
 
 namespace RUSAL.MetalTapping.DAL.Repositories;
 
-public class GenericRepository<TEntity>(AppDbContext context) 
+public class GenericRepository<TEntity>(AppDbContext context)
         : IGenericRepository<TEntity>
         where TEntity : class, IEntity
 {
-    private readonly AppDbContext context = context;
     private readonly DbSet<TEntity> dbSet = context.Set<TEntity>();
 
     public async Task<TEntity?> GetByIdAsync(Guid id)

@@ -10,8 +10,6 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases;
 /// <param name="calculatedTaskService">Сервис для работы с расчётными заданиями.</param>
 public class ProcessCalculatedTaskUseCase(CalculatedTaskService calculatedTaskService)
 {
-    private readonly CalculatedTaskService calculatedTaskService = calculatedTaskService;
-
     /// <summary>
     /// Запись значения расчетного задания для электролизёра.
     /// </summary>

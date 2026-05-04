@@ -5,11 +5,9 @@ using RUSAL.MetalTapping.DAL.Interfaces;
 
 namespace RUSAL.MetalTapping.DAL.Repositories;
 
-public class TapTaskPotRepository(AppDbContext context) 
+public class TapTaskPotRepository(AppDbContext context)
     : GenericRepository<TapTaskPot>(context), ITapTaskPotRepository
 {
-    private readonly AppDbContext context = context;
-
     public async Task<IEnumerable<TapTaskPot?>> GetByTapTaskId(Guid tapTaskId)
     {
         return await context.TapTaskPots

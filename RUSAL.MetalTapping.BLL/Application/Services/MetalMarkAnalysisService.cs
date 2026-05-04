@@ -14,9 +14,6 @@ public class MetalMarkAnalysisService(
     IMetalMarkAnalysisRepository metalMarkAnalysisRepository,
     IMapper mapper)
 {
-    private readonly IMetalMarkAnalysisRepository metalMarkAnalysisRepository = metalMarkAnalysisRepository;
-    private readonly IMapper mapper = mapper;
-
     /// <summary>
     /// Получение записи об анализе марки металла внутри электролизёра по идентификатору электролизёра.
     /// </summary>

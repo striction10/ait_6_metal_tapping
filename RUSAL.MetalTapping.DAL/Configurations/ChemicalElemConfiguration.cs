@@ -8,7 +8,7 @@ public class ChemicalElemConfiguration : IEntityTypeConfiguration<ChemicalElem>
 {
     public void Configure(EntityTypeBuilder<ChemicalElem> builder)
     {
-    builder.ToTable("ChemicalElem");
+        builder.ToTable("ChemicalElem");
 
         builder.HasKey(b => b.Id);
 

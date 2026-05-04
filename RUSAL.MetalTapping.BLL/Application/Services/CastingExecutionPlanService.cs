@@ -12,9 +12,6 @@ public class CastingExecutionPlanService(
     CastingGroupSelectorService groupSelector,
     CastingBuildingSelectorService buildingSelector)
 {
-    private readonly CastingGroupSelectorService groupSelector = groupSelector;
-    private readonly CastingBuildingSelectorService buildingSelector = buildingSelector;
-
     /// <summary>
     /// Расчёт оптимального маршрута выливки.
     /// </summary>
@@ -29,68 +26,73 @@ public class CastingExecutionPlanService(
         foreach (var b in buildings)
         {
             var g = groupSelector.SelectSingleGroup(b, requiredWeight);
-            if (g != null)
+            if (g == null)
             {
-                return new ExecutionPlanViewModel
-                {
-                    Segments = new List<ExecutionSegmentViewModel>
-                    {
-                        new ExecutionSegmentViewModel
-                        {
-                            BuildingId = b.BuildingId,
-                            GroupId = g.Id,
-                            ScoopId = g.Scoop.Id,
-                            PotIds = g.Pots.Select(p => p.Id).ToList(),
-                            MetalWeight = g.GroupMetalWeight,
-                        },
-                    },
-                };
+                continue;
             }
+
+            return new ExecutionPlanViewModel
+            {
+                Segments = new List<ExecutionSegmentViewModel>
+                {
+                    new ExecutionSegmentViewModel
+                    {
+                        BuildingId = b.BuildingId,
+                        GroupId = g.Id,
+                        ScoopId = g.Scoop.Id,
+                        PotIds = g.Pots.Select(p => p.Id).ToList(),
+                        MetalWeight = g.GroupMetalWeight,
+                    },
+                },
+            };
         }
 
         foreach (var b in buildings)
         {
             var groups = groupSelector.SelectMultiGroupInBuilding(b, requiredWeight);
 
-            if (groups != null && groups.Any())
+            if (groups == null || !groups.Any())
             {
-                var total = groups.SelectMany(x => x.pots).Sum(p => p.MetalLevel);
-
-                if (total >= requiredWeight)
-                {
-                    return new ExecutionPlanViewModel
-                    {
-                        Segments = groups.Select(g => new ExecutionSegmentViewModel
-                        {
-                            BuildingId = b.BuildingId,
-                            GroupId = g.group.Id,
-                            ScoopId = g.group.Scoop.Id,
-                            PotIds = g.pots.Select(p => p.Id).ToList(),
-                            MetalWeight = g.pots.Sum(p => p.MetalLevel),
-                        }).ToList(),
-                    };
-                }
+                continue;
             }
+
+            var total = groups.SelectMany(x => x.pots).Sum(p => p.MetalLevel);
+
+            if (total < requiredWeight)
+            {
+                continue;
+            }
+
+            return new ExecutionPlanViewModel
+            {
+                Segments = groups.Select(g => new ExecutionSegmentViewModel
+                {
+                    BuildingId = b.BuildingId,
+                    GroupId = g.group.Id,
+                    ScoopId = g.group.Scoop.Id,
+                    PotIds = g.pots.Select(p => p.Id).ToList(),
+                    MetalWeight = g.pots.Sum(p => p.MetalLevel),
+                }).ToList(),
+            };
         }
 
         var multi = buildingSelector.SelectGlobalPots(buildings, requiredWeight);
 
-        if (multi != null)
+        if (multi == null)
         {
-            return new ExecutionPlanViewModel
-            {
-                Segments = multi.SelectMany(x => x.groups.Select(g => new ExecutionSegmentViewModel
-                    {
-                        BuildingId = x.building.BuildingId,
-                        GroupId = g.group.Id,
-                        ScoopId = g.group.Scoop.Id,
-                        PotIds = g.pots.Select(p => p.Id).ToList(),
-                        MetalWeight = g.pots.Sum(p => p.MetalLevel),
-                    }))
-                    .ToList(),
-            };
+            throw new BusinessException("Невозможно выполнить заказ ни одним набором групп");
         }
 
-        throw new BusinessException("Невозможно выполнить заказ ни одним набором групп");
+        return new ExecutionPlanViewModel
+        {
+            Segments = multi.SelectMany(x => x.groups.Select(g => new ExecutionSegmentViewModel
+            {
+                BuildingId = x.building.BuildingId,
+                GroupId = g.group.Id,
+                ScoopId = g.group.Scoop.Id,
+                PotIds = g.pots.Select(p => p.Id).ToList(),
+                MetalWeight = g.pots.Sum(p => p.MetalLevel),
+            })).ToList(),
+        };
     }
 }

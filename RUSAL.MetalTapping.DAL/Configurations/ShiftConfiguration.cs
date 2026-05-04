@@ -9,19 +9,19 @@ public class ShiftConfiguration : IEntityTypeConfiguration<Shift>
     public void Configure(EntityTypeBuilder<Shift> builder)
     {
         builder.ToTable("Shift");
-        
+
         builder.HasKey(x => x.Id);
-        
+
         builder.Property(x => x.Id)
             .HasColumnName("Id")
             .HasColumnType("uniqueidentifier")
             .IsRequired();
-        
+
         builder.Property(b => b.BeginDate)
             .HasColumnName("BeginDate")
             .HasColumnType("datetime")
             .IsRequired();
-        
+
         builder.Property(b => b.EndDate)
             .HasColumnName("EndDate")
             .HasColumnType("datetime")

@@ -9,14 +9,14 @@ public class ScoopConfiguration : IEntityTypeConfiguration<Scoop>
     public void Configure(EntityTypeBuilder<Scoop> builder)
     {
         builder.ToTable("Scoop");
-        
+
         builder.HasKey(scoop => scoop.Id);
-        
+
         builder.Property(scoop => scoop.Id)
             .HasColumnName("Id")
             .HasColumnType("uniqueidentifier")
             .IsRequired();
-        
+
         builder.Property(scoop => scoop.Name)
             .HasColumnName("Name")
             .HasColumnType("nvarchar(20)")
@@ -24,7 +24,7 @@ public class ScoopConfiguration : IEntityTypeConfiguration<Scoop>
 
         builder.Property(b => b.StateId)
             .HasColumnType("uniqueidentifier");
-        
+
         builder.HasOne(b => b.ScoopState)
             .WithMany(b => b.Scoops)
             .HasForeignKey(b => b.StateId)

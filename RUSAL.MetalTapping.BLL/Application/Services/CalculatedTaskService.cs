@@ -16,9 +16,6 @@ public class CalculatedTaskService(
     ICalculatedTaskRepository calculatedTaskRepository,
     IMapper mapper)
 {
-    private readonly ICalculatedTaskRepository calculatedTaskRepository = calculatedTaskRepository;
-    private readonly IMapper mapper = mapper;
-
     /// <summary>
     /// Расчёт параметра "расчётное задание".
     /// </summary>

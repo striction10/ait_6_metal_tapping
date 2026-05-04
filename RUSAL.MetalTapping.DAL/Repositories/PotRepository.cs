@@ -8,8 +8,6 @@ namespace RUSAL.MetalTapping.DAL.Repositories;
 public class PotRepository(AppDbContext context)
     : GenericRepository<Pot>(context), IPotRepository
 {
-    private readonly AppDbContext context = context;
-
     public async Task<IEnumerable<Pot>> GetPotsByGroupIdAsync(Guid groupId)
     {
         var potIds = await context.PotGroupsHistoryModels.

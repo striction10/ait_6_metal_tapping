@@ -15,9 +15,6 @@ public class TapTaskService(
     IGenericRepository<TapTask> tapTaskRepository,
     IMapper mapper)
 {
-    private readonly IGenericRepository<TapTask> tapTaskRepository = tapTaskRepository;
-    private readonly IMapper mapper = mapper;
-
     /// <summary>
     /// Создание записи о задании на выливку в базе данных.
     /// </summary>

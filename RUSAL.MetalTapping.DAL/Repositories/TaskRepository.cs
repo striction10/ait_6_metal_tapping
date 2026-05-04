@@ -5,12 +5,9 @@ using RUSAL.MetalTapping.DAL.Interfaces;
 
 namespace RUSAL.MetalTapping.DAL.Repositories;
 
-public class TaskRepository(
-    AppDbContext context) 
+public class TaskRepository(AppDbContext context)
     : GenericRepository<ShiftTask>(context), ITasksRepository
 {
-    private readonly AppDbContext context = context;
-
     public async Task<IEnumerable<ShiftTask?>> GetByShiftIdAsync(Guid shiftId)
     {
         return await context.Tasks

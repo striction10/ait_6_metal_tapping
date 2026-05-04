@@ -19,10 +19,6 @@ public class PotService(
     IPotRepository potRepository,
     IMapper mapper)
 {
-    private readonly IGenericRepository<PotState> potStateRepository = potStateRepository;
-    private readonly IPotRepository potRepository = potRepository;
-    private readonly IMapper mapper = mapper;
-
     /// <summary>
     /// Создание DTO.
     /// </summary>

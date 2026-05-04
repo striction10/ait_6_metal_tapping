@@ -7,4 +7,4 @@ namespace RUSAL.MetalTapping.BLL.Application.Contracts;
 /// </summary>
 /// <param name="email"> Электронная почта пользователя </param>
 /// <param name="password"> Пароль пользователя </param>
-public record LoginUserRequest([Required]string email, [Required]string password);
+public record LoginUserRequest([Required] string email, [Required] string password);

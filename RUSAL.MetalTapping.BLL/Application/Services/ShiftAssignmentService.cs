@@ -19,13 +19,6 @@ public class ShiftAssignmentService(
     TapTaskPotService tapTaskPotService,
     ScoopUsageService scoopUsageService)
 {
-    private readonly ShiftService shiftService = shiftService;
-    private readonly TasksService tasksService = tasksService;
-    private readonly TapTaskPotService tapTaskPotService = tapTaskPotService;
-    private readonly ScoopUsageService scoopUsageService = scoopUsageService;
-    
-    private readonly ShiftTaskService shiftTaskService = shiftTaskService;
-
     /// <summary>
     /// Создание задания на смену.
     /// </summary>

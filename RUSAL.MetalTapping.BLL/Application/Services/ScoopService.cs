@@ -15,9 +15,6 @@ public class ScoopService(
     IGenericRepository<Scoop> scoopRepository,
     IMapper mapper)
 {
-    private readonly IGenericRepository<Scoop> scoopRepository = scoopRepository;
-    private readonly IMapper mapper = mapper;
-
     /// <summary>
     /// Получение ковша по идентификатору.
     /// </summary>

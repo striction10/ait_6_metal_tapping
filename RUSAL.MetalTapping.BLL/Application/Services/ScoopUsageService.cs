@@ -15,9 +15,6 @@ public class ScoopUsageService(
     IScoopUsageRepository scoopUsageRepository,
     IMapper mapper)
 {
-    private readonly IScoopUsageRepository scoopUsageRepository = scoopUsageRepository;
-    private readonly IMapper mapper = mapper;
-
     /// <summary>
     /// Получение записи об использовании ковша по идентификатору ковша.
     /// </summary>

@@ -9,7 +9,7 @@ public class MetalMarkAnalysisConfiguration : IEntityTypeConfiguration<MetalMark
     public void Configure(EntityTypeBuilder<MetalMarkAnalysis> builder)
     {
         builder.ToTable("MetalMarkAnalysis");
-        
+
         builder.HasKey(k => k.Id);
 
         builder.Property(b => b.PotId)
@@ -39,7 +39,7 @@ public class MetalMarkAnalysisConfiguration : IEntityTypeConfiguration<MetalMark
 
         builder.HasOne(p => p.Pot)
             .WithMany(p => p.metalMarkAnalyses)
-            .HasForeignKey (p => p.PotId)
+            .HasForeignKey(p => p.PotId)
             .IsRequired();
     }
 }

@@ -31,19 +31,6 @@ public class ViewDeviationAndTaskUseCase(
     PotViewService potViewService,
     PotParametersService potParamService)
 {
-    private readonly BuildingService buildingService = buildingService;
-    private readonly PotService potService = potService;
-    private readonly MetalMarkService metalMarkService = metalMarkService;
-    private readonly ReglamentService reglamentService = reglamentService;
-    private readonly PotReglamentService potReglamentService = potReglamentService;
-    private readonly CalculatedTaskService calculatedTaskService = calculatedTaskService;
-    private readonly MetalMarkAnalysisService metalMarkAnalysisService = metalMarkAnalysisService;
-    private readonly PotParametersService potParametersService = potParametersService;
-    private readonly ExternalDataService externalDataService = externalDataService;
-
-    private readonly PotViewService potViewService = potViewService;
-    private readonly PotParametersService potParamService = potParamService;
-
     /// <summary>
     /// Создание ViewModel для отображения таблицы параметров электролизёров в заданном корпусе.
     /// </summary>

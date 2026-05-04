@@ -8,8 +8,6 @@ namespace RUSAL.MetalTapping.DAL.Repositories;
 public class CalculatedTaskRepository(AppDbContext context)
     : GenericRepository<CalculatedTask>(context), ICalculatedTaskRepository
 {
-    private readonly AppDbContext context = context;
-
     public async Task<IEnumerable<CalculatedTask?>> GetByPotIdsAsync(IEnumerable<Guid> potIds)
     {
         return await context.CalculatedTasks

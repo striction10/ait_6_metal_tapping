@@ -5,7 +5,7 @@ namespace RUSAL.MetalTapping.DAL.Contexts;
 
 public class AppDbContext : DbContext
 {
-    public AppDbContext(DbContextOptions options) : base(options){}
+    public AppDbContext(DbContextOptions options) : base(options) { }
     public DbSet<Building> Buildings { get; set; }
     public DbSet<ChemicalElem> ChemicalElems { get; set; }
     public DbSet<Deviation> Deviations { get; set; }

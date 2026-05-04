@@ -14,9 +14,6 @@ public class DeviationService(
     IDeviationRepository deviationRepository,
     IMapper mapper)
 {
-    private readonly IDeviationRepository deviationRepository = deviationRepository;
-    private readonly IMapper mapper = mapper;
-
     /// <summary>
     /// Получение значения отклонения по идентификатору электролизёра.
     /// </summary>

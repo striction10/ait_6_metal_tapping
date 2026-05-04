@@ -19,11 +19,6 @@ public class RegisterUserUseCase(
     IPasswordHasher passwordHasher,
     UserRoleMembersService userRoleMembersService)
 {
-    private readonly UserService userService = userService;
-    private readonly RoleService roleService = roleService;
-    private readonly IPasswordHasher passwordHasher = passwordHasher;
-    private readonly UserRoleMembersService userRoleMembersService = userRoleMembersService;
-
     /// <summary>
     /// Регистрация пользователя в системе.
     /// </summary>

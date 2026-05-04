@@ -12,9 +12,6 @@ namespace RUSAL.MetalTapping.BLL.Application.Services;
 /// <param name="mapper">Маппер объектов.</param>
 public class ReglamentService(IReglamentRepository reglamentRepository, IMapper mapper)
 {
-    private readonly IReglamentRepository reglamentRepository = reglamentRepository;
-    private readonly IMapper mapper = mapper;
-
     /// <summary>
     /// Получение регламента по идентификатору.
     /// </summary>
@@ -30,7 +27,7 @@ public class ReglamentService(IReglamentRepository reglamentRepository, IMapper 
     }
 
     /// <summary>
-    /// Получение текущего действующего регламента. 
+    /// Получение текущего действующего регламента.
     /// </summary>
     /// <returns> DTO действующего регламента. </returns>
     public async Task<ReglamentDto> GetCurrentReglament()
@@ -43,13 +40,13 @@ public class ReglamentService(IReglamentRepository reglamentRepository, IMapper 
     }
 
     /// <summary>
-    /// 
+    /// Получения списка всех регламентов.
     /// </summary>
-    /// <returns></returns>
+    /// <returns> DTO регламентов. </returns>
     public async Task<IEnumerable<ReglamentDto>> GetAllAsync()
     {
         var entities = await reglamentRepository.GetAllAsync();
 
-        return mapper.Map <IEnumerable<ReglamentDto>>(entities);
+        return mapper.Map<IEnumerable<ReglamentDto>>(entities);
     }
 }

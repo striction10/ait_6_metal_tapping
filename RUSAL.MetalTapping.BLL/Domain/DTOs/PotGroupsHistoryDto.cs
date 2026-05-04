@@ -1,4 +1,5 @@
 ﻿namespace RUSAL.MetalTapping.BLL.Domain.DTOs;
+
 public class PotGroupsHistoryDto
 {
     public Guid Id { get; set; }

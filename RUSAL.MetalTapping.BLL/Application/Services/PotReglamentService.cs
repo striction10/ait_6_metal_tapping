@@ -14,9 +14,6 @@ public class PotReglamentService(
     IPotReglamentRepository potReglamentRepository,
     IMapper mapper)
 {
-    private readonly IPotReglamentRepository potReglamentRepository = potReglamentRepository;
-    private readonly IMapper mapper = mapper;
-
     /// <summary>
     /// Получение списка записей о регламенте электролизёров внутри корпуса.
     /// </summary>

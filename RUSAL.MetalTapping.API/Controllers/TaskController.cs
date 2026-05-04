@@ -24,10 +24,10 @@ public class TaskController(ViewTaskService service) : ControllerBase
     [Authorize]
     [ProducesResponseType(typeof(DailyTaskResponseViewModel), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult<DailyTaskResponseViewModel>> GetDaily([FromBody]TaskRequest taskRequest)
+    public async Task<ActionResult<DailyTaskResponseViewModel>> GetDaily([FromBody] TaskRequest taskRequest)
     {
         var response = await service.ViewTask(taskRequest);
 
-        return Ok(response); 
+        return Ok(response);
     }
 }

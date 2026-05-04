@@ -26,16 +26,6 @@ public class ProcessDeviationAndTaskUseCase(
     CalculatedTaskService taskCalc,
     PotParametersService potParamService)
 {
-    private readonly DeviationService deviationService = deviationService;
-    private readonly DeviationValuesService deviationValuesService = deviationValuesService;
-    private readonly ExternalDataService externalDataService = externalDataService;
-    private readonly PotParametersService potParametersService = potParametersService;
-    private readonly CalculatedTaskService calculatedTaskService = calculatedTaskService;
-
-    private readonly DeviationCalculationService deviationCalc = deviationCalc;
-    private readonly CalculatedTaskService taskCalc = taskCalc;
-    private readonly PotParametersService potParamService = potParamService;
-
     /// <summary>
     /// Расчёт расчётного задания и ЗПР для электролизёра.
     /// </summary>
