@@ -5,19 +5,20 @@ import Table from '../../components/Table/Table'
 import ActionButtons from '../../components/ActionButton/ActionButton'
 import SendPopup from "../../components/SendPopup/SendPopup"
 import { useReglamentsData } from '../../hooks/useReglamentsData'
-import { useParametersData } from '../../hooks/useParametresData'
+import { useParametersWithReglaments } from '../../hooks/useMergeReglamentWithParametres'
 import { exportTableToPDF } from '../../utils/exportToPDFParametres'
 import { getUserData } from '../../utils/auth'
 import { parametersApi } from '../../services/parameters'
 
 function Parametres() {
+    const [selectedReglament, setSelectedReglament] = useState('')
     const [selectedCorpus, setSelectedCorpus] = useState('')
     const [selectedDate, setSelectedDate] = useState(
         new Date().toISOString().split('T')[0]
     )
     
-    const { buildings } = useReglamentsData()
-    const { sortedData, setSortedData, headers, columns } = useParametersData(selectedCorpus, selectedDate)
+    const { reglaments, buildings } = useReglamentsData()
+    const { sortedData, setSortedData } = useParametersWithReglaments(selectedCorpus, selectedReglament, selectedDate)
 
     const [isUploadOpen, setIsUploadOpen] = useState(false)
     const { role } = getUserData()
@@ -50,7 +51,11 @@ function Parametres() {
 
     const getCellClassName = (row, col, rowIndex, colIndex) => {
         const deviation = parseFloat(row.deviationValue)
-        const isDeviationOutOfRange = !isNaN(deviation) && deviation <= -5 //TODO: get value from db
+        
+        const minDeviation = row.minDeviation ?? -5
+        const maxDeviation = row.maxDeviation ?? 5
+        
+        const isDeviationOutOfRange = !isNaN(deviation) && (deviation < minDeviation || deviation > maxDeviation)
         
         if (role === 'Technologist') {
             if (isDeviationOutOfRange && (
@@ -123,6 +128,30 @@ function Parametres() {
         }
     }
 
+    const headers = [
+        '№ Электролиза',
+        'Уровень металла, цель',
+        'Уровень металла, факт',
+        'Отклонение, см',
+        'Сила тока, кА',
+        'Выход по току, %',
+        'Расчетное задание, кг',
+        'ЗПР, кг',
+        'Марка'
+    ]
+
+    const columns = [
+        { field: 'potName', render: (row) => row.potName || '-' },
+        { field: 'targetMetalLevel', render: (row) => row.targetMetalLevel?.toFixed(1) ?? '-' },
+        { field: 'actualMetalLevel', render: (row) => row.actualMetalLevel?.toFixed(1) ?? '-' },
+        { field: 'deviationValue', render: (row) => row.deviationValue?.toFixed(1) ?? '-' },
+        { field: 'amperage', render: (row) => row.amperage?.toFixed(0) ?? '-' },
+        { field: 'avgAmperage', render: (row) => row.avgAmperage?.toFixed(1) ?? '-' },
+        { field: 'calculatedTask', render: (row) => row.calculatedTask?.toFixed(0) ?? '-' },
+        { field: 'roundCalculatedTask', render: (row) => row.roundCalculatedTask?.toFixed(0) ?? '-' },
+        { field: 'metalMarkName', render: (row) => row.metalMarkName || '-' }
+    ]
+
     const handleSave = () => {
         exportTableToPDF(sortedData, selectedCorpus)
     }
@@ -153,6 +182,16 @@ function Parametres() {
                             ],
                             value: selectedCorpus,
                             onChange: (e) => setSelectedCorpus(e.target.value)
+                        },
+                        {
+                            name: "reglament",
+                            options: [
+                                { value: "0", label: "Выбрать регламент" },
+                                ...reglaments
+                            ],
+                            value: selectedReglament,
+                            onChange: (e) => setSelectedReglament(e.target.value),
+                            disabled: !selectedCorpus || selectedCorpus === '0'
                         }
                     ],
                     showDate: true,
@@ -160,6 +199,7 @@ function Parametres() {
                     onDateChange: (e) => setSelectedDate(e.target.value)
                 }}
             />
+
             <div className="table-container">
                 <div className="tables-wrapper">
                     <Table 
