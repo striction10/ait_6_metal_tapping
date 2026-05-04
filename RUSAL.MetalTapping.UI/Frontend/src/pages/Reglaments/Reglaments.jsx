@@ -103,6 +103,13 @@ function Reglaments() {
         setIsUploadOpen(false)
     }
 
+    const isCorpusSelected = selectedCorpus && selectedCorpus !== '0'
+
+    const handleCorpusChange = (e) => {
+        setSelectedCorpus(e.target.value)
+        setSelectedReglament('')
+    }
+
     return (
         <>
             <PageTitle title="Регламенты" />
@@ -120,7 +127,7 @@ function Reglaments() {
                                 ...buildings
                             ],
                             value: selectedCorpus,
-                            onChange: (e) => setSelectedCorpus(e.target.value)
+                            onChange: handleCorpusChange
                         },
                         {
                             name: "reglament",
@@ -129,7 +136,8 @@ function Reglaments() {
                                 ...reglaments
                             ],
                             value: selectedReglament,
-                            onChange: (e) => setSelectedReglament(e.target.value)
+                            onChange: (e) => setSelectedReglament(e.target.value),
+                            disabled: !isCorpusSelected
                         },
                     ],
                     showDate: true,
