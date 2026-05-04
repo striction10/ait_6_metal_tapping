@@ -14,10 +14,6 @@ public class ShiftTaskService(
     TasksService tasksService,
     ScoopReservationService scoopReservationService)
 {
-    private readonly ShiftService shiftService = shiftService;
-    private readonly TasksService tasksService = tasksService;
-    private readonly ScoopReservationService scoopReservationService = scoopReservationService;
-
     /// <summary>
     /// Создание задания на выливку и резервация ковша.
     /// </summary>
@@ -25,7 +21,7 @@ public class ShiftTaskService(
     /// <param name="shift"> Текущая смена. </param>
     /// <param name="leadTime"> Время выполнения. </param>
     /// <param name="countOfPots"> Количество электролизёров в задании.</param>
-    /// <returns> Задание на выливку. </returns>
+    /// <returns> Задание на выливку.</returns>
     /// <exception cref="BusinessException"> Нет следующей смены для текущей смены - перенос задания невозможен. </exception>
     public async Task<ShiftTaskDto> CreateAsync(TapTaskDto tapTask, ShiftDto shift, DateTime? leadTime, int countOfPots)
     {

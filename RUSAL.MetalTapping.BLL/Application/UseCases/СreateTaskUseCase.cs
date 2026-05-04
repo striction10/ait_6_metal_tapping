@@ -39,21 +39,6 @@ public class CreateTaskUseCase(
     TapTaskReservationService tapTaskReservationService,
     ShiftAssignmentService shiftAssignmentService)
 {
-    private readonly BuildingService buildingService = buildingService;
-    private readonly PotGroupService potGroupService = potGroupService;
-    private readonly PotService potService = potService;
-    private readonly ScoopService scoopService = scoopService;
-    private readonly ScoopStateService scoopStateService = scoopStateService;
-    private readonly ScoopUsageService scoopUsageService = scoopUsageService;
-    private readonly CalculatedTaskService calculatedTaskService = calculatedTaskService;
-    private readonly MetalMarkAnalysisService metalMarkAnalysisService = metalMarkAnalysisService;
-    private readonly MetalMarkService metalMarkService = metalMarkService;
-    private readonly GroupService groupService = groupService;
-    private readonly BuildingService buildingInfoService = buildingInfoService;
-    private readonly CastingExecutionPlanService planSelector = planSelector;
-    private readonly TapTaskReservationService tapTaskReservationService = tapTaskReservationService;
-    private readonly ShiftAssignmentService shiftAssignmentService = shiftAssignmentService;
-
     /// <summary>
     /// Создание ViewModel для отображения таблицы заданий на выливку для смен для заданного корпуса.
     /// </summary>

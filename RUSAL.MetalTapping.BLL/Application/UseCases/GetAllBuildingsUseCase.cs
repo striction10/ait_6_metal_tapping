@@ -9,8 +9,6 @@ namespace RUSAL.MetalTapping.BLL.Application.UseCases.Buildings;
 /// <param name="buildingService">Сервис для работы с корпусами.</param>
 public class GetAllBuildingsUseCase(BuildingService buildingService)
 {
-    private readonly BuildingService buildingService = buildingService;
-
     /// <summary>
     /// Получение списка всех корпусов.
     /// </summary>

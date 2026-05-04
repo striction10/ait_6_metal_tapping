@@ -10,5 +10,5 @@ public class Deviation : IEntity
     public Guid PotReglamentId { get; set; }
     public bool? IsValid { get; set; }
     public PotReglament PotReglament { get; set; } = null!;
-    public ICollection<DeviationValues>  DeviationValues { get; set; } = new List<DeviationValues>();
+    public ICollection<DeviationValues> DeviationValues { get; set; } = new List<DeviationValues>();
 }

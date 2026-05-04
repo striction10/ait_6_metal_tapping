@@ -14,9 +14,6 @@ public class PotGroupService(
     IPotGroupRepository potGroupRepository,
     IMapper mapper)
 {
-    private readonly IPotGroupRepository potGroupRepository = potGroupRepository;
-    private readonly IMapper mapper = mapper;
-
     /// <summary>
     /// Получение списка групп электролизёров по идентификатору корпуса.
     /// </summary>

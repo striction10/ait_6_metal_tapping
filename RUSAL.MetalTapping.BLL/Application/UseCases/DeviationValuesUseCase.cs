@@ -17,15 +17,10 @@ public class DeviationValuesUseCase(
     PotReglamentService potReglamentService,
     PotService potService)
 {
-    private readonly BuildingService buildingService = buildingService;
-    private readonly ReglamentService reglamentService = reglamentService;
-    private readonly PotReglamentService potReglamentService = potReglamentService;
-    private readonly PotService potService = potService;
-
     /// <summary>
-    /// Создание ViewModel таблицы регламентов для клиента. 
+    /// Создание ViewModel таблицы регламентов для клиента.
     /// </summary>
-    /// <param name="model"></param>
+    /// <param name="model"> Данные для отображения таблицы регламентов.</param>
     /// <returns> ViewModel таблицы регламентов. </returns>
     public async Task<ReglamentTableResponse> GetReglamentTableAsync(ReglamentTableRequest model)
     {

@@ -15,9 +15,6 @@ public class TapTaskPotService(
     ITapTaskPotRepository tapTaskPotRepository,
     IMapper mapper)
 {
-    private readonly ITapTaskPotRepository tapTaskPotRepository = tapTaskPotRepository;
-    private readonly IMapper mapper = mapper;
-
     /// <summary>
     /// Получение задания на выливку для электролизера по заданию на выливку.
     /// </summary>

@@ -5,11 +5,9 @@ using RUSAL.MetalTapping.DAL.Interfaces;
 
 namespace RUSAL.MetalTapping.DAL.Repositories;
 
-public class DeviationRepository(AppDbContext context) 
+public class DeviationRepository(AppDbContext context)
     : GenericRepository<Deviation>(context), IDeviationRepository
 {
-    private readonly AppDbContext context = context;
-
     public async Task<Deviation?> GetDeviationWithPotIdAsync(Guid potId)
     {
         return await context.Deviations

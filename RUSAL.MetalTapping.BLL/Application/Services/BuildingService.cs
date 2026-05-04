@@ -18,10 +18,6 @@ public class BuildingService(
     IGenericRepository<Building> buildingRepository,
     IMapper mapper)
 {
-    private readonly BuildingMetalInfoService buildingService = buildingService;
-    private readonly IGenericRepository<Building> buildingRepository = buildingRepository;
-    private readonly IMapper mapper = mapper;
-
     /// <summary>
     /// Создание ViewModel.
     /// </summary>
@@ -58,6 +54,10 @@ public class BuildingService(
         return mapper.Map<BuildingDto>(entity);
     }
 
+    /// <summary>
+    /// Получение всех корпусов.
+    /// </summary>
+    /// <returns> DTO корпусов. </returns>
     public async Task<IEnumerable<BuildingDto>> GetAllAsync()
     {
         var entities = await buildingRepository.GetAllAsync();

@@ -5,11 +5,9 @@ using RUSAL.MetalTapping.DAL.Interfaces;
 
 namespace RUSAL.MetalTapping.DAL.Repositories;
 
-public class PotReglamentRepository(AppDbContext context) 
+public class PotReglamentRepository(AppDbContext context)
     : GenericRepository<PotReglament>(context), IPotReglamentRepository
 {
-    private readonly AppDbContext context = context;
-
     public async Task<IEnumerable<PotReglament>> GetByReglamentAndBuildingWithDeviationsAsync(
         Guid reglamentId,
         Guid buildingId)

@@ -53,7 +53,7 @@ public class CastingGroupSelectorService
     /// <param name="requiredWeight"> Заданное количество металла. </param>
     /// <returns> Список групп в корпусе, которые смогут выполнить выливку заданного количества металла. </returns>
     public List<(PotGroupViewModel group, List<PotViewModel> pots)> SelectMultiGroupInBuilding(
-        BuildingMetalInfoViewModel building, 
+        BuildingMetalInfoViewModel building,
         double requiredWeight)
     {
         var allPots = building.Groups

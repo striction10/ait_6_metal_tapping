@@ -5,11 +5,9 @@ using RUSAL.MetalTapping.DAL.Interfaces;
 
 namespace RUSAL.MetalTapping.DAL.Repositories;
 
-public class RoleRepository(AppDbContext context) 
+public class RoleRepository(AppDbContext context)
     : GenericRepository<Role>(context), IRoleRepository
 {
-    private readonly AppDbContext context = context;
-
     public async Task<Role?> GetByNameAsync(string name)
     {
         return await context.Roles.FirstOrDefaultAsync(r => r.Name == name);

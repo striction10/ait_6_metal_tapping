@@ -5,11 +5,9 @@ using RUSAL.MetalTapping.DAL.Interfaces;
 
 namespace RUSAL.MetalTapping.DAL.Repositories;
 
-public class PotGroupRepository(AppDbContext context) 
+public class PotGroupRepository(AppDbContext context)
     : GenericRepository<PotGroup>(context), IPotGroupRepository
 {
-    private readonly AppDbContext context = context;
-
     public async Task<IEnumerable<PotGroup?>> GetByBuildingIdsAsync(Guid buildingId)
     {
         return await context.PotGroupModels

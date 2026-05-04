@@ -8,8 +8,6 @@ namespace RUSAL.MetalTapping.DAL.Repositories;
 public class DeviationValuesRepository(AppDbContext context)
     : GenericRepository<DeviationValues>(context), IDeviationValuesRepository
 {
-    private readonly AppDbContext context = context;
-
     public async Task<IEnumerable<DeviationValues>> GetDeviationValuesWithDeviationId(Guid id)
     {
         return await context.DeviationValues

@@ -9,14 +9,14 @@ public class ScoopStateConfiguration : IEntityTypeConfiguration<ScoopState>
     public void Configure(EntityTypeBuilder<ScoopState> builder)
     {
         builder.ToTable("ScoopState");
-        
+
         builder.HasKey(b => b.Id);
-        
+
         builder.Property(b => b.Id)
             .HasColumnName("Id")
             .HasColumnType("uniqueidentifier")
             .IsRequired();
-        
+
         builder.Property(b => b.Name)
             .HasColumnName("Name")
             .HasColumnType("nvarchar(20)")

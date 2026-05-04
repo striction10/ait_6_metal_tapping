@@ -13,9 +13,6 @@ public class MetalMarkAnalysisValueService(
     IMetalMarkAnalysisValueRepository metalMarkAnalysisValueRepository,
     IMapper mapper)
 {
-    private readonly IMetalMarkAnalysisValueRepository metalMarkAnalysisValueRepository = metalMarkAnalysisValueRepository;
-    private readonly IMapper mapper = mapper;
-
     /// <summary>
     /// Получение списка значений анализа марки металла по идентификатору анализа.
     /// </summary>

@@ -29,7 +29,7 @@ public class DeviationConfiguration : IEntityTypeConfiguration<Deviation>
         builder.Property(b => b.IsValid)
             .HasColumnName("IsValid")
             .HasColumnType("bit");
-           
+
         builder.HasOne(b => b.PotReglament)
             .WithMany(b => b.Deviations)
             .HasForeignKey(b => b.PotReglamentId)

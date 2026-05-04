@@ -14,16 +14,12 @@ public class MetalMarkService(
     IMetalMarkRepository metalMarkRepository,
     IMapper mapper)
 {
-    private readonly IMetalMarkRepository metalMarkRepository = metalMarkRepository;
-    private readonly IMapper mapper = mapper;
-
     /// <summary>
     /// Получить имя марки металла.
     /// </summary>
     /// <param name="metalMark"> Марка металла. </param>
     /// <returns> Имя марки металла, иначе стандартное значение для отображения на клиенте. </returns>
-    public string ResolveMetalMarkName(MetalMarkDto? metalMark)
-        => metalMark?.Name ?? "N/A";
+    public string ResolveMetalMarkName(MetalMarkDto? metalMark) => metalMark?.Name ?? "N/A";
 
     /// <summary>
     /// Получение списка всех марок металла.

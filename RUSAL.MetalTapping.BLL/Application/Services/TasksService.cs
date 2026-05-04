@@ -15,9 +15,6 @@ public class TasksService(
     ITasksRepository tasksRepository,
     IMapper mapper)
 {
-    private readonly ITasksRepository tasksRepository = tasksRepository;
-    private readonly IMapper mapper = mapper;
-
     /// <summary>
     /// Получение задания на смену по идентификатору смены.
     /// </summary>

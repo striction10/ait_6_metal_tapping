@@ -8,8 +8,6 @@ namespace RUSAL.MetalTapping.BLL.Application.Services;
 /// <param name="scoopUsageService">Сервис для работы с занятостью ковшей.</param>
 public class ScoopReservationService(ScoopUsageService scoopUsageService)
 {
-    private readonly ScoopUsageService scoopUsageService = scoopUsageService;
-
     /// <summary>
     /// Резервация ковша на время выполнения задания.
     /// </summary>

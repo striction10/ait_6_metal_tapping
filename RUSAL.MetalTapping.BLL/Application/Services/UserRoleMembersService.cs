@@ -14,9 +14,6 @@ public class UserRoleMembersService(
     IGenericRepository<UserRoleMembers> userRoleMembersRepository,
     IMapper mapper)
 {
-    private readonly IGenericRepository<UserRoleMembers> userRoleMembersRepository = userRoleMembersRepository;
-    private readonly IMapper mapper = mapper;
-
     /// <summary>
     /// Создание записи о роли пользователя.
     /// </summary>

@@ -22,7 +22,7 @@ public class ExternalDataConfiguration : IEntityTypeConfiguration<ExternalData>
 
         builder.Property(b => b.PotParametersGroupId)
             .HasColumnType("uniqueidentifier");
-        
+
         builder.HasOne(b => b.Pot)
             .WithMany(b => b.ExternalDatas)
             .HasForeignKey(b => b.PotId)

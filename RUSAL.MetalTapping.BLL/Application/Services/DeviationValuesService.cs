@@ -14,15 +14,12 @@ public class DeviationValuesService(
     IDeviationValuesRepository deviationValuesRepository,
     IMapper mapper)
 {
-    private readonly IDeviationValuesRepository deviationValuesRepository = deviationValuesRepository;
-    private readonly IMapper mapper = mapper;
-
     /// <summary>
     /// Получение значений отклонения по идентификатору отклонения.
     /// </summary>
     /// <param name="deviationId"> Идентификатор отклонения. </param>
     /// <returns> DTO значений отклонения. </returns>
-    public async Task<IEnumerable<DeviationValuesDto>> GetWithDeviationIdAsync(Guid deviationId) 
+    public async Task<IEnumerable<DeviationValuesDto>> GetWithDeviationIdAsync(Guid deviationId)
     {
         var entities = EnsureFound(
             await deviationValuesRepository.GetDeviationValuesWithDeviationId(deviationId),

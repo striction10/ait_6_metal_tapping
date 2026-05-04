@@ -24,10 +24,10 @@ public class PotConfiguration : IEntityTypeConfiguration<Pot>
 
         builder.Property(b => b.StateId)
             .HasColumnType("uniqueidentifier");
-        
+
         builder.Property(b => b.BuildingId)
             .HasColumnType("uniqueidentifier");
-        
+
         builder.HasOne(b => b.Building)
             .WithMany(b => b.Pots)
             .HasForeignKey(b => b.BuildingId)

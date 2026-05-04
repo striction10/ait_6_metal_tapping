@@ -9,9 +9,9 @@ public class WorkGroupMembersConfiguration : IEntityTypeConfiguration<WorkGroupM
     public void Configure(EntityTypeBuilder<WorkGroupMembers> builder)
     {
         builder.ToTable("WorkGroupMembers");
-        
+
         builder.HasKey(x => x.Id);
-        
+
         builder.Property(x => x.Id)
             .HasColumnName("Id")
             .HasColumnType("uniqueidentifier")
@@ -24,12 +24,12 @@ public class WorkGroupMembersConfiguration : IEntityTypeConfiguration<WorkGroupM
         builder.Property(x => x.WorkGroupId)
             .HasColumnName("WorkGroupId")
             .HasColumnType("uniqueidentifier");
-        
+
         builder.HasOne(x => x.User)
             .WithMany(x => x.WorkGroupMembers)
             .HasForeignKey(x => x.UserId)
             .IsRequired();
-            
+
         builder.HasOne(x => x.WorkGroup)
             .WithMany(x => x.WorkGroupMembers)
             .HasForeignKey(x => x.WorkGroupId)

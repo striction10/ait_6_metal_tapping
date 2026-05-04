@@ -14,9 +14,6 @@ public class RoleService(
     IRoleRepository roleRepository,
     IMapper mapper)
 {
-    private readonly IRoleRepository roleRepository = roleRepository;
-    private readonly IMapper mapper = mapper;
-
     /// <summary>
     /// Получение роли по названию.
     /// </summary>

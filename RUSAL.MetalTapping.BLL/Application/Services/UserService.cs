@@ -15,11 +15,8 @@ public class UserService(
     IUserRepository userRepository,
     IMapper mapper)
 {
-    private readonly IUserRepository userRepository = userRepository;
-    private readonly IMapper mapper = mapper;
-
     /// <summary>
-    /// Получение пользователя по адресу почты. 
+    /// Получение пользователя по адресу почты.
     /// </summary>
     /// <param name="email"> Адрес почты пользователя. </param>
     /// <returns> DTO пользователя. </returns>

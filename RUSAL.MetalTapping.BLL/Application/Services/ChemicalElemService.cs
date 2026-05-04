@@ -15,9 +15,6 @@ public class ChemicalElemService(
     IGenericRepository<ChemicalElem> chemicalElemRepository,
     IMapper mapper)
 {
-    private readonly IGenericRepository<ChemicalElem> chemicalElemRepository = chemicalElemRepository;
-    private readonly IMapper mapper = mapper;
-
     /// <summary>
     /// Получение хим элемента по идентификатору.
     /// </summary>

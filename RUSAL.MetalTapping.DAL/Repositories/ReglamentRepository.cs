@@ -5,10 +5,9 @@ using RUSAL.MetalTapping.DAL.Interfaces;
 
 namespace RUSAL.MetalTapping.DAL.Repositories;
 
-public class ReglamentRepository(AppDbContext context) : GenericRepository<Reglament>(context), IReglamentRepository
+public class ReglamentRepository(AppDbContext context)
+    : GenericRepository<Reglament>(context), IReglamentRepository
 {
-    private readonly AppDbContext context = context;
-
     public async Task<Reglament?> GetNewReglament()
     {
         var now = DateTime.Now;

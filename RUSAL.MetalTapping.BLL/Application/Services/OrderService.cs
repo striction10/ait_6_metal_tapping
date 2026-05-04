@@ -14,9 +14,6 @@ public class OrderService(
     IGenericRepository<Order> orderRepository,
     IMapper mapper)
 {
-    private readonly IGenericRepository<Order> orderRepository = orderRepository;
-    private readonly IMapper mapper = mapper;
-
     /// <summary>
     /// Создание записи о заказе в базе данных.
     /// </summary>

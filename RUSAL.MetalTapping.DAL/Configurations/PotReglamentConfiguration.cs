@@ -9,9 +9,9 @@ public class PotReglamentConfiguration : IEntityTypeConfiguration<PotReglament>
     public void Configure(EntityTypeBuilder<PotReglament> builder)
     {
         builder.ToTable("PotReglament");
-        
+
         builder.HasKey(b => b.Id);
-        
+
         builder.Property(b => b.Id)
             .HasColumnName("Id")
             .HasColumnType("uniqueidentifier")
@@ -19,10 +19,10 @@ public class PotReglamentConfiguration : IEntityTypeConfiguration<PotReglament>
 
         builder.Property(b => b.ReglamentId)
             .HasColumnType("uniqueidentifier");
-        
+
         builder.Property(b => b.PotId)
             .HasColumnType("uniqueidentifier");
-        
+
         builder.HasOne(b => b.Reglament)
             .WithMany(b => b.Reglaments)
             .HasForeignKey(b => b.ReglamentId)

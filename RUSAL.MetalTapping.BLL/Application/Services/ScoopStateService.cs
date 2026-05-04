@@ -15,9 +15,6 @@ public class ScoopStateService(
     IGenericRepository<ScoopState> scoopStateRepository,
     IMapper mapper)
 {
-    private readonly IGenericRepository<ScoopState> scoopStateRepository = scoopStateRepository;
-    private readonly IMapper mapper = mapper;
-
     /// <summary>
     /// Получение состояние ковша по идентификатору состояния.
     /// </summary>

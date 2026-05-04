@@ -17,7 +17,7 @@ public class JwtProvider : IJwtProvider
         this.jwtOptions = jwtOptions.Value;
     }
 
-    public string GenerateJwtToken(UserDto user, IEnumerable<string> roles) 
+    public string GenerateJwtToken(UserDto user, IEnumerable<string> roles)
     {
         var claims = new List<Claim>
         {

@@ -29,7 +29,8 @@ public static class AppExtension
         app.UseAuthentication();
         app.UseAuthorization();
 
-        app.MapGet("/swagger", context => {
+        app.MapGet("/swagger", context =>
+        {
             context.Response.Redirect("/api/swagger");
             return Task.CompletedTask;
         });

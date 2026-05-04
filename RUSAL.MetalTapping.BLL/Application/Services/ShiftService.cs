@@ -14,12 +14,10 @@ public class ShiftService(
     IShiftRepository shiftRepository,
     IMapper mapper)
 {
-    private readonly IShiftRepository shiftRepository = shiftRepository;
-    private readonly IMapper mapper = mapper;
-
     /// <summary>
     /// Получение действующих смен.
     /// </summary>
+    /// <returns> DTO смен. </returns>
     public async Task<IEnumerable<ShiftDto?>> GetCurrentShifts()
     {
         var entities = EnsureFound(
@@ -32,6 +30,7 @@ public class ShiftService(
     /// <summary>
     /// Получение следующих смен после действующих.
     /// </summary>
+    /// <returns> DTO смен. </returns>
     public async Task<IEnumerable<ShiftDto?>> GetNextShifts()
     {
         var entities = EnsureFound(
@@ -59,7 +58,7 @@ public class ShiftService(
     /// <summary>
     /// Получение текущей смены для конкретного корпуса.
     /// </summary>
-    /// <param name="buildingId"></param>
+    /// <param name="buildingId"> Идентификатор копруса. </param>
     /// <returns> DTO смены. </returns>
     public async Task<ShiftDto?> GetByBuildingId(Guid buildingId)
     {

@@ -11,17 +11,17 @@ public class OrderConfgiration : IEntityTypeConfiguration<Order>
         builder.ToTable("Order");
 
         builder.HasKey(b => b.Id);
-        
+
         builder.Property(b => b.Id)
             .HasColumnName("Id")
             .HasColumnType("uniqueidentifier")
             .IsRequired();
-        
+
         builder.Property(b => b.WeightOfMetal)
             .HasColumnName("WeightOfMetal")
             .HasColumnType("numeric(10, 0)")
             .IsRequired();
-        
+
         builder.Property(b => b.DateOfOrder)
             .HasColumnName("DateOfOrder")
             .HasColumnType("datetime")
@@ -29,7 +29,7 @@ public class OrderConfgiration : IEntityTypeConfiguration<Order>
 
         builder.Property(b => b.MetalMarkId)
             .HasColumnType("uniqueidentifier");
-        
+
         builder.HasOne(b => b.MetalMark)
             .WithMany(b => b.Orders)
             .HasForeignKey(b => b.MetalMarkId)

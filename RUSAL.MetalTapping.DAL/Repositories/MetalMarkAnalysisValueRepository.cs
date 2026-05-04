@@ -8,8 +8,6 @@ namespace RUSAL.MetalTapping.DAL.Repositories;
 public class MetalMarkAnalysisValueRepository(AppDbContext context)
     : GenericRepository<MetalMarkAnalysisValue>(context), IMetalMarkAnalysisValueRepository
 {
-    private readonly AppDbContext context = context;
-
     public async Task<IEnumerable<MetalMarkAnalysisValue>> GetValuesByAnalysisIdAsync(Guid analysisId)
     {
         return await context.MetalMarkAnalysisValues
