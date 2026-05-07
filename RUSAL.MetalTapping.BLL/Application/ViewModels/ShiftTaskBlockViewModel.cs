@@ -4,4 +4,5 @@ public class ShiftTaskBlockViewModel
 {
     public List<ShiftTaskItemViewModel> Items { get; init; } = new();
     public double TotalWeight { get; set; }
+    public List<GradeSummaryViewModel> GradeSummaries { get; set; } = new();
 }

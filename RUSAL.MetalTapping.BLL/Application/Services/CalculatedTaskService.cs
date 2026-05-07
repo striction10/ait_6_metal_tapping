@@ -92,4 +92,16 @@ public class CalculatedTaskService(
 
         return mapper.Map<IEnumerable<CalculatedTaskDto?>>(entities);
     }
+
+    /// <summary>
+    /// Получение значения расчётного задания для электролизёра.
+    /// </summary>
+    /// <param name="potId"> Идентификатор электролизёра. </param>
+    /// <param name="freshnessThreshold"> Интервал. </param>
+    /// <param name="ct"> Cancelation Token.</param>
+    /// <returns> Значение расчётного задания. </returns>
+    public async Task<double?> GetCalculatedWeightForPotAsync(Guid potId, DateTime freshnessThreshold, CancellationToken ct)
+    {
+        return await calculatedTaskRepository.GetFreshWeightForPotAsync(potId, freshnessThreshold, ct);
+    }
 }

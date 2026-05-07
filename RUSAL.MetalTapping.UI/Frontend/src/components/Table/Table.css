@@ -1,61 +1,219 @@
-.main-table{
-    max-height: 78vh;
-    overflow-y: scroll;
-    position: fixed;
-    left: 0;
-    top: 9.08rem;
-    width: 100%;
+:root {
+    --tbl-header-bg: #f8fafc;
+    --tbl-row-hover: #fef7f7;
+    --tbl-border: #e8ecf0;
+    --tbl-stripe: #fafbfc;
+    --tbl-cell-red: #dc2626;
+    --tbl-cell-blue: #2563eb;
 }
 
-.main-table > table {
+.tbl-wrapper {
+    width: 100%;
+    background: #ffffff;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    padding: 0 clamp(12px, 3vw, 32px);
+}
+
+.tbl-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    background: #ffffff;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
+.tbl-title {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+
+.tbl-count {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    background: #f1f5f9;
+    padding: 0.25rem 0.625rem;
+    border-radius: 20px;
+}
+
+.tbl-scroll {
+    overflow-x: auto;
+    max-height: calc(100vh - 240px);
+    overflow-y: auto;
+}
+
+.tbl {
+    width: 100%;
     border-collapse: collapse;
-    width: 100%;
+    font-size: 0.8125rem;
 }
 
-.main-table td, .main-table tr, .main-table th {
-    border: 1px solid black;
-    height: 2.1rem;
-    font-family: "Roboto", sans-serif;
-    color: black;
+.tbl thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
-.main-table tbody tr:nth-child(odd) td {
-    background-color: #F2F2F2;
-}
-
-.main-table tbody tr:nth-child(even) td {
-    background-color: white;
-}
-
-.main-table th {
-    font-size: 16px;
-    width: 12vh;
-}
-
-.main-table td {
+.tbl th {
+    background: var(--tbl-header-bg);
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border);
+    white-space: normal;
     text-align: center;
-    font-size: 14px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
-#color-item {
-    background-color: rgba(242, 242, 242, 1) !important;
+.tbl th:first-child {
+    padding-left: 1.25rem;
+    min-width: 140px;
 }
 
-.technologist-blue {
-    background-color: rgba(182, 215, 253, 1) !important;
+.tbl td {
+    padding: 0.625rem 1rem;
+    border-bottom: 1px solid var(--tbl-border);
+    color: var(--text-primary);
+    font-weight: 400;
+    white-space: normal;
+    text-align: center;
+    transition: background 0.15s ease;
+    min-width: 80px;
+}
+
+.tbl td:first-child {
+    padding-left: 1.25rem;
+    font-weight: 500;
+    min-width: 140px;
+}
+
+.tbl tbody tr:nth-child(even) td {
+    background: var(--tbl-stripe);
+}
+
+.tbl tbody tr:hover td {
+    background: var(--tbl-row-hover);
+}
+
+.tbl tbody tr:nth-child(even):hover td {
+    background: var(--tbl-row-hover);
+}
+
+.tbl-cell-inner {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.tbl-cell-value {
+    display: inline;
+}
+
+.tbl-pencil {
+    width: 12px;
+    height: 12px;
+    opacity: 0.25;
+    transition: opacity 0.2s;
+    flex-shrink: 0;
+    color: var(--text-muted);
+}
+
+.tbl-cell-editable:hover .tbl-pencil {
+    opacity: 0.6;
 }
 
 .red-item {
-    background-color: rgba(255, 199, 199, 1) !important;
+    color: var(--tbl-cell-red) !important;
+    font-weight: 500 !important;
+    background: rgba(220, 38, 38, 0.03) !important;
 }
 
-td > input{
-    font-size: 14px;
+.tbl tbody tr:nth-child(even) .red-item {
+    background: rgba(220, 38, 38, 0.04) !important;
+}
+
+.technologist-blue {
+    color: var(--tbl-cell-blue) !important;
+    font-weight: 900 !important;
+    background: rgba(15, 90, 250, 0.04) !important;
+}
+
+.tbl tbody tr:nth-child(even) .technologist-blue {
+    background: rgba(15, 90, 250, 0.04) !important;
+}
+
+.tbl-cell-editing {
+    padding: 0 !important;
+}
+
+.tbl-input {
     width: 100%;
-    height: 100%;
-    padding: 0;
-    margin: 0;
-    border: none;
+    padding: 0.375rem 0.5rem;
+    font-size: 0.8125rem;
+    font-family: inherit;
+    font-weight: 500;
+    color: var(--text-primary);
+    border: 1.5px solid var(--accent);
+    border-radius: 6px;
     outline: none;
+    background: #fff;
     text-align: center;
+    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.15);
+}
+
+.tbl-scroll::-webkit-scrollbar { 
+    height: 6px; 
+    width: 6px; 
+}
+
+.tbl-scroll::-webkit-scrollbar-track { 
+    background: transparent; 
+}
+
+.tbl-scroll::-webkit-scrollbar-thumb { 
+    background: #cbd5e1; 
+    border-radius: 3px; 
+}
+
+.tbl-scroll::-webkit-scrollbar-thumb:hover { 
+    background: #94a3b8; 
+}
+
+@media (max-width: 768px) {
+    .tbl th,
+    .tbl td { 
+        padding: 0.5rem 0.75rem; 
+        font-size: 0.75rem; 
+    }
+    .tbl th:first-child, 
+    .tbl td:first-child { 
+        padding-left: 1rem; 
+        min-width: 100px; 
+    }
+    .tbl-header { 
+        padding: 0.875rem 1rem; 
+    }
+}
+
+@media (max-width: 480px) {
+    .tbl th, 
+    .tbl td { 
+        padding: 0.45rem 0.625rem; 
+        font-size: 0.6875rem; 
+    }
 }

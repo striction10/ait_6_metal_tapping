@@ -62,7 +62,7 @@ public class DalToDomainProfile : Profile
         CreateMap<Scoop, ScoopDto>();
         CreateMap<ScoopState, ScoopStateDto>();
 
-        CreateMap<Shift, ShiftDto>();
+        CreateMap<ShiftTaskDto, ShiftTask>();
         CreateMap<ShiftTask, ShiftTaskDto>();
 
         CreateMap<TapTask, TapTaskDto>();
@@ -99,7 +99,7 @@ public class DalToDomainProfile : Profile
         CreateMap<TapTaskPotDto, TapTaskPot>();
         CreateMap<TapTaskPot, TapTaskPotDto>();
 
-        CreateMap<ShiftTaskDto, Task>();
-        CreateMap<Task, ShiftTaskDto>();
+        CreateMap<Shift, ShiftDto>();
+        CreateMap<ShiftDto, Shift>();
     }
 }

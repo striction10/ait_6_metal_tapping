@@ -22,4 +22,12 @@ public class CalculatedTaskRepository(AppDbContext context)
             .OrderByDescending(t => t.CreatedAt)
             .FirstOrDefaultAsync();
     }
+
+    public async Task<double?> GetFreshWeightForPotAsync(Guid potId, DateTime freshnessThreshold, CancellationToken ct)
+    {
+        return await context.CalculatedTasks
+            .Where(ct => ct.PotId == potId && ct.CreatedAt >= freshnessThreshold)
+            .Select(ct => ct.RoundCalculatedTaskForPot ?? ct.CalculatedTaskForPot)
+            .FirstOrDefaultAsync(ct);
+    }
 }

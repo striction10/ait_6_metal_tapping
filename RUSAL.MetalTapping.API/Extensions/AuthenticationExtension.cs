@@ -13,7 +13,7 @@ namespace RUSAL.MetalTapping.API.Extensions;
 public static class AuthenticationExtension
 {
     /// <summary>
-    /// Регистрация и настройка аутентификации. 
+    /// Регистрация и настройка аутентификации.
     /// </summary>
     /// <param name="services"> Коллекция сервисов. </param>
     /// <param name="configuration"> Конфигурация. </param>

@@ -4,4 +4,5 @@ public class DailySummaryViewModel
 {
     public double TotalWeight { get; init; }
     public string MetalGrade { get; init; }
+    public List<GradeSummaryViewModel> GradeSummaries { get; set; } = new();
 }

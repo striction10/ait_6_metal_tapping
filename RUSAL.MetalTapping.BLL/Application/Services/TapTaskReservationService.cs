@@ -74,4 +74,53 @@ public class TapTaskReservationService(
 
         return tapTasks;
     }
+
+    public async Task<IEnumerable<TapTaskDto>> CreateTasksForOrderAsync(
+    Guid orderId,
+    ExecutionPlanViewModel plan,
+    Dictionary<Guid, MetalMarkAnalysisDto> marksByPot,
+    Dictionary<Guid, double> metalLevelByPot)
+    {
+        var tapTasks = new List<TapTaskDto>();
+
+        foreach (var segment in plan.Segments)
+        {
+            var tapTask = new TapTaskDto
+            {
+                Id = Guid.NewGuid(),
+                BuildingId = segment.BuildingId,
+                OrderId = orderId,
+                ScoopId = segment.ScoopId,
+            };
+
+            tapTasks.Add(tapTask);
+            await tapTaskService.CreateAsync(tapTask);
+
+            foreach (var potId in segment.PotIds)
+            {
+                if (!marksByPot.TryGetValue(potId, out var analysis))
+                {
+                    continue;
+                }
+
+                if (!metalLevelByPot.TryGetValue(potId, out var weight))
+                {
+                    continue;
+                }
+
+                var tapTaskPot = new TapTaskPotDto
+                {
+                    Id = Guid.NewGuid(),
+                    TapTaskId = tapTask.Id,
+                    PotId = potId,
+                    MetalMarkAnalysisId = analysis.Id,
+                    PotMetalWeigth = weight,
+                };
+
+                await tapTaskPotService.CreateAsync(tapTaskPot);
+            }
+        }
+
+        return tapTasks;
+    }
 }

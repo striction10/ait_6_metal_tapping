@@ -81,24 +81,22 @@ export function useTasksData(selectedCorpus, selectedDate) {
                 setAvailableMarks(uniqueMarks)
                 
                 if (response.data.summary) {
-                    // const calculateTotalWeight = () => {
-                    //     let total = 0
-                    //     if (response.data.nightShift?.items) {
-                    //         total += response.data.nightShift.items.reduce((sum, item) => sum + (item.weight || 0), 0)
-                    //     }
-                    //     if (response.data.dayShift?.items) {
-                    //         total += response.data.dayShift.items.reduce((sum, item) => sum + (item.weight || 0), 0)
-                    //     }
-                    //     return total
-                    // }
-                    setTotalTaskData([{
-                        task: response.data.summary.totalWeight ?? 0,
-                        mark: response.data.summary.metalGrade || '-'
-                    }])
+                    if (response.data.summary.gradeSummaries?.length > 0) {
+                        const grades = response.data.summary.gradeSummaries.map(g => ({
+                            task: g.totalWeight ?? 0,
+                            mark: g.metalGrade || '-'
+                        }));
+                        setTotalTaskData(grades);
+                    } 
+                    else {
+                        setTotalTaskData([{
+                            task: response.data.summary.totalWeight ?? 0,
+                            mark: response.data.summary.metalGrade || '-'
+                        }]);
+                    }
                 } else {
-                    setTotalTaskData([{ task: 0, mark: '-' }])
+                    setTotalTaskData([{ task: 0, mark: '-' }]);
                 }
-                
             } catch (err) {
                 setShiftTaskData([])
                 setTotalTaskData([])

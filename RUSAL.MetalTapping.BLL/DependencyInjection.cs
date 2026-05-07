@@ -48,6 +48,7 @@ public static class DependencyInjection
         services.AddScoped<TasksService>();
         services.AddScoped<UserRoleMembersService>();
         services.AddScoped<UserService>();
+        services.AddScoped<EmailSenderService>();
 
         services.AddScoped<ProcessDeviationAndTaskUseCase>();
         services.AddScoped<ProcessCalculatedTaskUseCase>();
@@ -59,10 +60,10 @@ public static class DependencyInjection
         services.AddScoped<GetAllMetalMarksUseCase>();
         services.AddScoped<GetAllBuildingsUseCase>();
         services.AddScoped<DeviationValuesUseCase>();
-        services.AddScoped<CreateTaskUseCase>();
 
         services.AddScoped<IJwtProvider, JwtProvider>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
+        services.AddHostedService<OrderQueueWorker>();
 
         return services;
     }

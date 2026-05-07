@@ -34,12 +34,17 @@ public class PotService(
         IEnumerable<CalculatedTaskDto> calculated,
         IEnumerable<MetalMarkAnalysisDto> analysis,
         Dictionary<Guid, MetalMarkAnalysisDto> marksByPot,
-        Dictionary<Guid, double> metalLevelByPot) // TODO: Вынести для пота поиск расчётного задания в этот сервис
+        Dictionary<Guid, double> metalLevelByPot)
     {
         var potDtos = new List<PotViewModel>();
 
-        var calcByPot = calculated.ToDictionary(c => c.PotId);
-        var analysisByPot = analysis.ToDictionary(a => a.PotId);
+        var calcByPot = calculated
+            .GroupBy(c => c.PotId)
+            .ToDictionary(g => g.Key, g => g.First());
+
+        var analysisByPot = analysis
+            .GroupBy(a => a.PotId)
+            .ToDictionary(g => g.Key, g => g.First());
 
         foreach (var pot in pots)
         {
@@ -95,5 +100,26 @@ public class PotService(
             $"Pots with group {groupId} was not found");
 
         return mapper.Map<IEnumerable<PotDto?>>(entities);
+    }
+
+    /// <summary>
+    /// Получение списка электролизёров с обновленными параметрами.
+    /// </summary>
+    /// <param name="buildingId">Идентификатор корпуса.</param>
+    /// <param name="metalMarkId">Идентификатор марки металла.</param>
+    /// <param name="freshnessThreshold">Период пригодности параметров.</param>
+    /// <param name="limit">Лимит количества электролизёров.</param>
+    /// <param name="ct">Cancellation Token.</param>
+    /// <returns>DTO электролизёров.</returns>
+    public async Task<List<PotDto>> GetFreshPotsWithAnalysisAsync(
+        Guid buildingId,
+        Guid metalMarkId,
+        DateTime freshnessThreshold,
+        int limit,
+        CancellationToken ct)
+    {
+        var entities = await potRepository.GetFreshPotsWithAnalysisAsync(buildingId, metalMarkId, freshnessThreshold, limit, ct);
+
+        return mapper.Map<List<PotDto>>(entities);
     }
 }

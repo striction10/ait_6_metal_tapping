@@ -53,12 +53,22 @@ public class ViewTaskService(
         var nightBlock = await BuildShiftBlock(nightTasks);
         var dayBlock = await BuildShiftBlock(dayTasks);
 
+        var allGrades = nightBlock.GradeSummaries
+            .Concat(dayBlock.GradeSummaries)
+            .GroupBy(g => g.MetalGrade)
+            .Select(g => new GradeSummaryViewModel
+            {
+                MetalGrade = g.Key,
+                TotalWeight = g.Sum(x => x.TotalWeight),
+            })
+            .OrderByDescending(x => x.TotalWeight)
+            .ToList();
+
         var summary = new DailySummaryViewModel
         {
             TotalWeight = nightBlock.TotalWeight + dayBlock.TotalWeight,
-            MetalGrade = nightBlock.Items.FirstOrDefault()?.MetalGrade
-                         ?? dayBlock.Items.FirstOrDefault()?.MetalGrade
-                         ?? "N/A",
+            MetalGrade = allGrades.FirstOrDefault()?.MetalGrade ?? "N/A",
+            GradeSummaries = allGrades,
         };
 
         return new DailyTaskResponseViewModel
@@ -71,14 +81,15 @@ public class ViewTaskService(
     }
 
     /// <summary>
-    /// Создание задания на выливку конкретного электролизёра для смены.
+    /// Создание задания на выливку для смены.
     /// </summary>
     /// <param name="tasks"> Задания на выливку.</param>
     /// <returns> Задание на выливку конкретного электролизёра для смены.</returns>
     private async Task<ShiftTaskBlockViewModel> BuildShiftBlock(IEnumerable<ShiftTaskDto> tasks)
     {
         var block = new ShiftTaskBlockViewModel();
-        double total = 0;
+
+        var gradeTotals = new Dictionary<string, double>();
 
         foreach (var task in tasks)
         {
@@ -91,9 +102,7 @@ public class ViewTaskService(
                 $"Scoop {tapTask.ScoopId} not found");
 
             var pots = await tapTaskPotService.GetByTapTaskIdAsync(task.TapTaskId);
-
-            var startLeadTime = task.LeadTime;
-            var currentTime = startLeadTime;
+            var currentTime = task.LeadTime;
 
             foreach (var pot in pots)
             {
@@ -110,24 +119,35 @@ public class ViewTaskService(
                     $"MetalMark {analysis.MetalMarkId} not found");
 
                 var elements = await BuildChemicalElements(analysis.Id);
+                var weight = pot.PotMetalWeigth;
 
                 block.Items.Add(new ShiftTaskItemViewModel
                 {
                     Time = currentTime,
-                    Weight = pot.PotMetalWeigth,
+                    Weight = weight,
                     PotName = potEntity.Name,
                     ScoopName = scoop.Name,
                     MetalGrade = mark.Name,
                     elements = elements,
                 });
 
-                total += pot.PotMetalWeigth;
+                gradeTotals.TryGetValue(mark.Name, out var current);
+                gradeTotals[mark.Name] = current + weight;
 
                 currentTime += TimeSpan.FromHours(1);
             }
-
-            block.TotalWeight = total;
         }
+
+        block.GradeSummaries = gradeTotals
+            .Select(kvp => new GradeSummaryViewModel
+            {
+                MetalGrade = kvp.Key,
+                TotalWeight = kvp.Value
+            })
+            .OrderByDescending(x => x.TotalWeight)
+            .ToList();
+
+        block.TotalWeight = gradeTotals.Values.Sum();
 
         return block;
     }

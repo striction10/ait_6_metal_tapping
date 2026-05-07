@@ -6,7 +6,7 @@ using RUSAL.MetalTapping.BLL.Application.UseCases;
 namespace RUSAL.MetalTapping.API.Controllers;
 
 /// <summary>
-/// Контроллер параметров. 
+/// Контроллер параметров.
 /// </summary>
 /// <param name="processDeviationAndTask"> Оркестратор для работы сервисов с расчётом параметров электролизёров. </param>
 /// <param name="processCalculatedTask"> Оркестратор для работы сервисов с расчётом расчётного задания. </param>
@@ -20,11 +20,6 @@ public class ParametersController(
     ViewDeviationAndTaskUseCase viewDeviationAndTask,
     ProcessRoundTaskUseCase processRoundTask) : ControllerBase
 {
-    private readonly ProcessDeviationAndTaskUseCase processDeviationAndTask = processDeviationAndTask;
-    private readonly ProcessCalculatedTaskUseCase processCalculatedTask = processCalculatedTask;
-    private readonly ViewDeviationAndTaskUseCase viewDeviationAndTask = viewDeviationAndTask;
-    private readonly ProcessRoundTaskUseCase processRoundTask = processRoundTask;
-
     /// <summary>
     /// Запись актуального уровня металла внутри электролизёра.
     /// </summary>

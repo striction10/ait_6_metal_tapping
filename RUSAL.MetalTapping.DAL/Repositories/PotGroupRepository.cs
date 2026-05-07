@@ -14,4 +14,11 @@ public class PotGroupRepository(AppDbContext context)
             .Where(pg => pg.BuildingId == buildingId)
             .ToListAsync();
     }
+
+    public async Task<PotGroup?> GetByScoopIdAsync(Guid scoopId)
+    {
+        return await context.PotGroupModels
+            .Where(pg => pg.ScoopId == scoopId)
+            .FirstOrDefaultAsync();
+    }
 }

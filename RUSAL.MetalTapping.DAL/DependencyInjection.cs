@@ -40,6 +40,8 @@ public static class DependencyInjection
         services.AddScoped<ITapTaskPotRepository, TapTaskPotRepository>();
         services.AddScoped<IMetalMarkAnalysisValueRepository, MetalMarkAnalysisValueRepository>();
         services.AddScoped<IPotRepository, PotRepository>();
+        services.AddScoped<IScoopRepository, ScoopRepository>();
+        services.AddScoped<IOrderRepository, OrderRepository>();
 
         return services;
     }

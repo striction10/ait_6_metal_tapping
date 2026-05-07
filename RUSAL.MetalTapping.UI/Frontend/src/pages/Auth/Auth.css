@@ -1,6 +1,311 @@
-#main {
+:root {
+    --a-accent: #dc2626;
+    --a-accent-dark: #b91c1c;
+    --a-accent-darker: #991b1b;
+    --a-accent-light: #fee2e2;
+    --a-accent-glow: rgba(220, 38, 38, 0.3);
+    --a-bg: #f8fafc;
+    --a-surface: #ffffff;
+    --a-text: #0f172a;
+    --a-text-secondary: #475569;
+    --a-text-muted: #94a3b8;
+    --a-border: #e2e8f0;
+    --a-error: #ef4444;
+    --a-error-bg: #fef2f2;
+    --a-radius: 16px;
+    --a-radius-sm: 10px;
+}
+
+.auth-container {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+}
+
+.auth-panel {
+    width: 100%;
+    position: relative;
     display: flex;
     justify-content: center;
+}
+
+.auth-left {
+    background: linear-gradient(160deg, var(--a-accent) 0%, var(--a-accent-darker) 40%, #1e1e2e 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    margin-top: 100px;
+    padding: 3rem;
+    color: #fff;
+    overflow: hidden;
+}
+
+.auth-left-bg-pattern {
+    position: absolute; inset: 0; opacity: 0.07;
+    background-image: radial-gradient(circle at 25% 25%, #fff 1px, transparent 1px), radial-gradient(circle at 75% 75%, #fff 1px, transparent 1px);
+    background-size: 48px 48px; pointer-events: none;
+}
+
+.auth-brand-mark {
+    position: absolute; 
+    top: 2rem; 
+    left: 3rem; 
+    z-index: 3;
+    display: flex; 
+    align-items: center; 
+    gap: 0.75rem;
+    font-size: 0.875rem; 
+    font-weight: 600; 
+    letter-spacing: 0.02em;
+    color: rgba(255,255,255,0.9);
+}
+.auth-brand-icon {
+    width: 32px; 
+    height: 32px; 
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25); 
+    border-radius: 8px;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+}
+.auth-brand-icon svg { 
+    width: 18px; 
+    height: 18px; 
+}
+
+.auth-left-content { 
+    position: relative; 
+    z-index: 2; 
+    max-width: 460px; 
+}
+
+.auth-left-icon {
+    width: 56px; 
+    height: 56px; 
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.2); 
+    border-radius: 14px;
+    display: flex; align-items: center; 
+    justify-content: center; 
+    margin-bottom: 1.75rem;
+    backdrop-filter: blur(8px);
+}
+.auth-left-icon svg { 
+    width: 28px; 
+    height: 28px; 
+    color: #fff; 
+}
+
+.auth-left-title { 
+    font-size: 2.125rem; 
+    font-weight: 700; 
+    line-height: 1.15; 
+    letter-spacing: -0.02em; 
+    margin-bottom: 0.875rem; 
+}
+
+.auth-left-desc { 
+    font-size: 1rem; 
+    line-height: 1.6; 
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 2.25rem; 
+}
+
+.auth-left-features { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 0.75rem; 
+}
+
+.auth-feature {
+    display: flex; 
+    align-items: center; 
+    gap: 0.75rem; 
+    padding: 0.75rem 1rem;
+    background: rgba(255,255,255,0.08); 
+    border-radius: 10px; 
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(5px); transition: background 0.2s;
+}
+.auth-feature:hover { 
+    background: rgba(255,255,255,0.12); 
+}
+
+.auth-feature-icon {
+    width: 32px; 
+    height: 32px; 
+    background: rgba(255,255,255,0.12); 
+    border-radius: 8px;
+    display: flex; 
+    align-items: center;
+    justify-content: center; 
+    flex-shrink: 0;
+}
+
+.auth-feature-icon svg { 
+    width: 16px; 
+    height: 16px; 
+    color: #fff; 
+}
+
+.auth-feature-text { 
+    font-size: 0.8125rem; 
+    font-weight: 500; 
+    color: rgba(255,255,255,0.9); 
+}
+
+.auth-right {
+    background: var(--a-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.auth-right-inner {
+    width: 100%;
+    max-width: 420px;
+    padding: 2rem;
+    animation: fadeInUp 0.4s var(--a-ease, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+@keyframes fadeInUp {
+    from { 
+        opacity: 0; 
+        transform: translateY(12px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+.auth-right-footer {
+    position: absolute; 
+    bottom: 1.5rem; 
+    left: 0; 
+    right: 0;
+    text-align: center; 
+    font-size: 0.75rem; 
+    color: var(--a-text-muted);
+    pointer-events: none;
+}
+
+#auth_box h2 {
+    margin: 0 0 0.25rem; 
+    font-size: 1.5rem; 
+    font-weight: 700;
+    color: var(--a-text); 
+    letter-spacing: -0.02em;
+}
+
+.auth-box-subtitle {
+    font-size: 0.875rem; 
+    color: var(--a-text-muted); 
+    margin: 0 0 1.5rem; 
+    line-height: 1.5;
+}
+
+.error-banner-auth {
+    display: flex; 
+    align-items: flex-start; 
+    gap: 0.75rem; 
+    padding: 0.875rem 1rem;
+    background: var(--a-error-bg); 
+    border: 1px solid #fecaca; 
+    border-radius: var(--a-radius-sm);
+    margin-bottom: 1.25rem; 
+    animation: bannerSlideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.error-banner-auth svg { 
+    width: 20px; 
+    height: 20px; 
+    color: var(--a-error); 
+    flex-shrink: 0; 
+    margin-top: 1px; 
+}
+
+.error-banner-auth span { 
+    font-size: 0.875rem; 
+    font-weight: 500; 
+    color: var(--a-accent-dark); 
+    line-height: 1.4; 
+}
+
+@keyframes bannerSlideDown {
+    from { 
+        opacity: 0; 
+        transform: translateY(-8px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+@keyframes shakeForm {
+    0%, 100% { 
+        transform: translateX(0); 
+    }
+    10%, 30%, 50%, 70%, 90% { 
+        transform: translateX(-4px); 
+    }
+    20%, 40%, 60%, 80% { 
+        transform: translateX(4px); 
+    }
+}
+
+.shake-form { 
+    animation: shakeForm 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97); 
+}
+
+@media (max-width: 1024px) {
+    .auth-container { 
+        flex-direction: column; 
+        height: auto; 
+        min-height: 100vh; 
+    }
+    .auth-panel { 
+        width: 100%; 
+    }
+    .auth-left { 
+        padding: 2.5rem 2rem; 
+        flex: 0 0 auto;
+        min-height: 280px;
+    }
+    .auth-brand-mark { 
+        display: none; 
+    }
+    .auth-left-content { 
+        margin: 0 auto; 
+        text-align: center; 
+    }
+    .auth-left-features { 
+        display: none; 
+    }
+    .auth-left-desc { 
+        margin-bottom: 0; 
+    }
+    .auth-right { 
+        padding: 2.5rem 1.5rem 4rem; 
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-left { 
+        padding: 2rem 1.25rem; 
+        min-height: 220px; 
+    }
+    .auth-left-title { 
+        font-size: 1.75rem; 
+    }
+    #auth_box { 
+        padding: 1.5rem; 
+    }
+    .auth-right { 
+        padding: 1.5rem 1rem 3.5rem; 
+    }
 }

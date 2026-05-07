@@ -13,8 +13,6 @@ namespace RUSAL.MetalTapping.API.Controllers;
 [Route("api/[controller]")]
 public class MetalMarkController(GetAllMetalMarksUseCase useCase) : ControllerBase
 {
-    private readonly GetAllMetalMarksUseCase useCase = useCase;
-
     /// <summary>
     /// Получение списка всех марок металла.
     /// </summary>

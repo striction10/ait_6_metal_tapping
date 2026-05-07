@@ -30,6 +30,16 @@ public class OrderConfgiration : IEntityTypeConfiguration<Order>
         builder.Property(b => b.MetalMarkId)
             .HasColumnType("uniqueidentifier");
 
+        builder.Property(b => b.RemainingWeight)
+            .HasColumnName("RemainingWeight")
+            .HasColumnType("numeric(10, 0)")
+            .IsRequired();
+
+        builder.Property(b => b.Status)
+            .HasColumnName("Status")
+            .HasColumnType("int")
+            .IsRequired();
+
         builder.HasOne(b => b.MetalMark)
             .WithMany(b => b.Orders)
             .HasForeignKey(b => b.MetalMarkId)

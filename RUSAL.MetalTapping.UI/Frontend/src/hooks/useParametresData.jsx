@@ -73,7 +73,7 @@ export function useParametersData(selectedCorpus, selectedDate) {
     }, [selectedCorpus, selectedDate])
 
     const headers = [
-        '№ Электролиза',
+        '№ Электролизера',
         'Уровень металла, цель',
         'Уровень металла, факт',
         'Отклонение, см',

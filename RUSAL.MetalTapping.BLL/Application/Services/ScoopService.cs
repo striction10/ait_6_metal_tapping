@@ -12,7 +12,7 @@ namespace RUSAL.MetalTapping.BLL.Application.Services;
 /// <param name="scoopRepository">Репозиторий ковшей.</param>
 /// <param name="mapper">Маппер объектов.</param>
 public class ScoopService(
-    IGenericRepository<Scoop> scoopRepository,
+    IScoopRepository scoopRepository,
     IMapper mapper)
 {
     /// <summary>
@@ -27,5 +27,17 @@ public class ScoopService(
             $"Scoop with id {scoopId} was not found");
 
         return mapper.Map<ScoopDto?>(entity);
+    }
+
+    /// <summary>
+    /// Получение первого доступного ковша.
+    /// </summary>
+    /// <param name="ct">Cancellation Token.</param>
+    /// <returns>DTO ковша.</returns>
+    public async Task<ScoopDto?> GetFirstAvailableScoopAsync(CancellationToken ct)
+    {
+        var entity = await scoopRepository.GetFirstAvailableScoopAsync(ct);
+
+        return mapper.Map<ScoopDto>(entity);
     }
 }

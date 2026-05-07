@@ -15,9 +15,6 @@ public class AuthController(
     RegisterUserUseCase registerUserUseCase,
     LoginUserUseCase loginUserUseCase) : ControllerBase
 {
-    private readonly RegisterUserUseCase registerUserUseCase = registerUserUseCase;
-    private readonly LoginUserUseCase loginUserUseCase = loginUserUseCase;
-
     /// <summary>
     /// Регистрация пользователя в системе.
     /// </summary>

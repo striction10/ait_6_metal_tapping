@@ -7,15 +7,13 @@ using RUSAL.MetalTapping.BLL.Application.ViewModels;
 namespace RUSAL.MetalTapping.API.Controllers;
 
 /// <summary>
-/// Контроллер для работы с заданиями на выливку. 
+/// Контроллер для работы с заданиями на выливку.
 /// </summary>
 /// <param name="service"> Сервис отображения заданий на выливку. </param>
 [ApiController]
 [Route("api/[controller]")]
 public class TaskController(ViewTaskService service) : ControllerBase
 {
-    private readonly ViewTaskService service = service;
-
     /// <summary>
     /// Получение списка заданий на указанную дату.
     /// </summary>

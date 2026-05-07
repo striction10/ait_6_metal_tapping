@@ -13,8 +13,6 @@ namespace RUSAL.MetalTapping.API.Controllers;
 [Route("api/[controller]")]
 public class BuildingController(GetAllBuildingsUseCase useCase) : ControllerBase
 {
-    private readonly GetAllBuildingsUseCase useCase = useCase;
-
     /// <summary>
     /// Получение списка всех корпусов.
     /// </summary>

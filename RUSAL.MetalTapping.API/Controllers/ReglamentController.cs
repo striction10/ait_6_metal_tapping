@@ -17,9 +17,6 @@ public class ReglamentController(
     GetAllReglamentsUseCase getAllUseCase,
     DeviationValuesUseCase deviationValuesUseCase) : ControllerBase
 {
-    private readonly GetAllReglamentsUseCase getAllUseCase = getAllUseCase;
-    private readonly DeviationValuesUseCase deviationValuesUseCase = deviationValuesUseCase;
-
     /// <summary>
     /// Получение списка регламентов.
     /// </summary>
