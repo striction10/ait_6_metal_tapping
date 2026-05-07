@@ -4,20 +4,21 @@ import Table from '../../components/Table/Table'
 import ActionButtons from '../../components/ActionButton/ActionButton'
 import SendPopup from "../../components/SendPopup/SendPopup"
 import { useReglamentsData } from '../../hooks/useReglamentsData'
-import { useParametersData } from '../../hooks/useParametresData'
+import { useParametersWithReglaments } from '../../hooks/useMergeReglamentWithParametres'
 import { exportTableToPDF } from '../../utils/exportToPDFParametres'
 import { getUserData } from '../../utils/auth'
 import { parametersApi } from '../../services/parameters'
 import './Parametres.css'
 
 function Parametres() {
+    const [selectedReglament, setSelectedReglament] = useState('')
     const [selectedCorpus, setSelectedCorpus] = useState('')
     const [selectedDate, setSelectedDate] = useState(
         new Date().toISOString().split('T')[0]
     )
     
-    const { buildings } = useReglamentsData()
-    const { sortedData, setSortedData, headers, columns } = useParametersData(selectedCorpus, selectedDate)
+    const { reglaments, buildings } = useReglamentsData()
+    const { sortedData, setSortedData } = useParametersWithReglaments(selectedCorpus, selectedReglament, selectedDate)
 
     const [isUploadOpen, setIsUploadOpen] = useState(false)
     const { role } = getUserData()
@@ -113,6 +114,16 @@ function Parametres() {
                             options: [{ value: "0", label: "Выбрать корпус" }, ...buildings],
                             value: selectedCorpus,
                             onChange: (e) => setSelectedCorpus(e.target.value)
+                        },
+                        {
+                            name: "reglament",
+                            options: [
+                                { value: "0", label: "Выбрать регламент" },
+                                ...reglaments
+                            ],
+                            value: selectedReglament,
+                            onChange: (e) => setSelectedReglament(e.target.value),
+                            disabled: !selectedCorpus || selectedCorpus === '0'
                         }
                     ],
                     showDate: true,

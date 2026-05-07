@@ -83,6 +83,13 @@ function Reglaments() {
     const handleSubmit = () => setIsUploadOpen(true)
     const handleFileSubmit = () => setIsUploadOpen(false)
 
+    const isCorpusSelected = selectedCorpus && selectedCorpus !== '0'
+
+    const handleCorpusChange = (e) => {
+        setSelectedCorpus(e.target.value)
+        setSelectedReglament('')
+    }
+
     return (
         <>
             <Header 
@@ -96,13 +103,14 @@ function Reglaments() {
                             name: "corpus",
                             options: [{ value: "0", label: "Выбрать корпус" }, ...buildings],
                             value: selectedCorpus,
-                            onChange: (e) => setSelectedCorpus(e.target.value)
+                            onChange: handleCorpusChange
                         },
                         {
                             name: "reglament",
                             options: [{ value: "0", label: "Выбрать регламент" }, ...reglaments],
                             value: selectedReglament,
-                            onChange: (e) => setSelectedReglament(e.target.value)
+                            onChange: (e) => setSelectedReglament(e.target.value),
+                            disabled: !isCorpusSelected
                         },
                     ],
                     showDate: true,
