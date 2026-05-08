@@ -94,6 +94,6 @@ export const exportTasksToPDF = (shiftData, totalData, corpusName, date) => {
         }
     }
 
-    const fileName = `tasks_${corpusName}_${new Date(date).toLocaleDateString()}.pdf`
+    const fileName = `Задания_${corpusName}_${new Date(date).toLocaleDateString()}.pdf`
     pdfMake.createPdf(docDefinition).download(fileName)
 }

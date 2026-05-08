@@ -4,9 +4,11 @@ import { getUserData } from './auth'
 
 pdfMake.vfs = pdfFonts.vfs
 
-export const exportTableToPDF = (data, corpusId) => {
+export const exportTableToPDF = (data, corpusId, corpusName, reglamentName, selectedDate) => {
     const { role } = getUserData()
     const isTechnologist = role === 'Technologist'
+    
+    const formattedDate = selectedDate ? new Date(selectedDate).toLocaleDateString() : new Date().toLocaleDateString()
     
     const headers = [
         '№ Электролиза',
@@ -24,35 +26,36 @@ export const exportTableToPDF = (data, corpusId) => {
         headers,
         ...data.map(row => {
             const deviation = parseFloat(row.deviationValue)
-            const isDeviationOutOfRange = !isNaN(deviation) && deviation <= -5
             
-            let deviationStyle = 'normalCell'
-            let calculatedStyle = 'normalCell'
-            let zprStyle = 'normalCell'
+            const minDeviation = row.minDeviation ?? -5
+            const maxDeviation = row.maxDeviation ?? 5
             
-            if (isTechnologist) {
-                if (isDeviationOutOfRange) {
-                    deviationStyle = 'technologistBlue'
-                    calculatedStyle = 'technologistBlue'
-                    zprStyle = 'technologistBlue'
+            const isDeviationOutOfRange = !isNaN(deviation) && (deviation < minDeviation || deviation > maxDeviation)
+            
+            const getCellColor = () => {
+                if (isTechnologist) {
+                    if (isDeviationOutOfRange) {
+                        return '#b6d7fd'
+                    }
+                } else {
+                    if (isDeviationOutOfRange) {
+                        return '#ffc7c7'
+                    }
                 }
-            } else {
-                if (isDeviationOutOfRange) {
-                    deviationStyle = 'redCell'
-                    calculatedStyle = 'redCell'
-                    zprStyle = 'redCell'
-                }
+                return null
             }
+            
+            const cellColor = getCellColor()
             
             return [
                 { text: row.potName || '-' },
                 { text: (row.targetMetalLevel?.toFixed(1) ?? '-').toString() },
                 { text: (row.actualMetalLevel?.toFixed(1) ?? '-').toString() },
-                { text: (row.deviationValue?.toFixed(1) ?? '-').toString(), style: deviationStyle },
+                { text: (row.deviationValue?.toFixed(1) ?? '-').toString(), fillColor: cellColor },
                 { text: (row.amperage?.toFixed(0) ?? '-').toString() },
                 { text: (row.avgAmperage?.toFixed(1) ?? '-').toString() },
-                { text: (row.calculatedTask?.toFixed(0) ?? '-').toString(), style: calculatedStyle },
-                { text: (row.roundCalculatedTask?.toFixed(0) ?? '-').toString(), style: zprStyle },
+                { text: (row.calculatedTask?.toFixed(0) ?? '-').toString(), fillColor: cellColor },
+                { text: (row.roundCalculatedTask?.toFixed(0) ?? '-').toString(), fillColor: cellColor },
                 { text: row.metalMarkName || '-' }
             ]
         })
@@ -61,7 +64,9 @@ export const exportTableToPDF = (data, corpusId) => {
     const docDefinition = {
         content: [
             { text: 'Таблица параметров', style: 'header' },
-            { text: `Дата: ${new Date().toLocaleDateString()}`, margin: [0, 0, 0, 20] },
+            { text: `Корпус: ${corpusName}`, margin: [0, 5, 0, 0] },
+            { text: `Регламент: ${reglamentName}`, margin: [0, 5, 0, 10] },
+            { text: `Дата: ${formattedDate}`, margin: [0, 0, 0, 20] },
             {
                 table: {
                     headerRows: 1,
@@ -80,20 +85,7 @@ export const exportTableToPDF = (data, corpusId) => {
             header: {
                 fontSize: 18,
                 bold: true,
-                margin: [0, 0, 0, 10],
-                fillColor: '#fd8288',
-                color: 'white'
-            },
-            technologistBlue: {
-                fillColor: '#b6d7fd',
-                color: 'black'
-            },
-            redCell: {
-                fillColor: '#ffc7c7',
-                color: 'black'
-            },
-            normalCell: {
-                color: 'black'
+                margin: [0, 0, 0, 10]
             }
         },
         defaultStyle: {
@@ -101,5 +93,6 @@ export const exportTableToPDF = (data, corpusId) => {
         }
     }
 
-    pdfMake.createPdf(docDefinition).download(`parameters_${corpusId}_${new Date().toLocaleDateString()}.pdf`)
+    const fileName = `Параметры_${corpusName}_${reglamentName}_${formattedDate.replace(/\//g, '-')}.pdf`
+    pdfMake.createPdf(docDefinition).download(fileName)
 }
