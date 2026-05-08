@@ -26,6 +26,8 @@ function Reglaments() {
     }
 
     useEffect(() => {
+        document.title = "Регламенты"
+
         const fetchTableData = async () => {
             if (!selectedReglament || !selectedCorpus || 
                 selectedReglament === '0' || selectedCorpus === '0') {
@@ -77,7 +79,8 @@ function Reglaments() {
     const handleSave = () => {
         const corpusName = buildings.find(b => b.value === selectedCorpus)?.label || selectedCorpus
         const reglamentName = reglaments.find(r => r.value === selectedReglament)?.label || selectedReglament
-        exportReglamentsToPDF(sortedData, corpusName, reglamentName)
+        
+        exportReglamentsToPDF(sortedData, corpusName, reglamentName, selectedDate)
     }
 
     const handleSubmit = () => setIsUploadOpen(true)
@@ -145,7 +148,14 @@ function Reglaments() {
                     )}
                 </div>
             </div>
-            <SendPopup isOpen={isUploadOpen} onClose={() => setIsUploadOpen(false)} onSubmit={handleFileSubmit} />
+
+            <SendPopup
+                isOpen={isUploadOpen}
+                onClose={() => setIsUploadOpen(false)}
+                pageType="reglaments"
+                selectedDate={selectedDate}
+            />
+
         </>
     )
 }

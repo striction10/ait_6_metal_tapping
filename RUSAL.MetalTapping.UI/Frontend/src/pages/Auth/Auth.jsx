@@ -13,6 +13,8 @@ function Auth() {
     const [shake, setShake] = useState(false)
 
     useEffect(() => {
+        document.title = "Выливка металла"
+        
         if (shake) {
             const timer = setTimeout(() => setShake(false), 450)
             return () => clearTimeout(timer)

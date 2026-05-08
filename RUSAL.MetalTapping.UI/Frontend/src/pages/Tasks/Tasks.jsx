@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Header from '../../components/Header/Header'
 import Table from '../../components/Table/Table'
 import ActionButtons from '../../components/ActionButton/ActionButton'
@@ -39,6 +39,10 @@ function Tasks() {
 
     const handleSubmit = () => setIsUploadOpen(true)
     const handleFileSubmit = () => setIsUploadOpen(false)
+
+    useEffect(() => {
+            document.title = "Задания"
+    }, []);
 
     const handleCorpusChange = (e) => {
         setSelectedCorpus(e.target.value)
@@ -127,8 +131,10 @@ function Tasks() {
             <SendPopup
                 isOpen={isUploadOpen}
                 onClose={() => setIsUploadOpen(false)}
-                onSubmit={handleFileSubmit}
+                pageType="tasks"
+                selectedDate={selectedDate}
             />
+
         </>
     )
 }
