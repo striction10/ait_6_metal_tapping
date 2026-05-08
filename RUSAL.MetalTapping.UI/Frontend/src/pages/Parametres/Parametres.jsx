@@ -96,6 +96,30 @@ function Parametres() {
         }
     }
 
+    const headers = [
+        '№ Электролиза',
+        'Уровень металла, цель',
+        'Уровень металла, факт',
+        'Отклонение, см',
+        'Сила тока, кА',
+        'Выход по току, %',
+        'Расчетное задание, кг',
+        'ЗПР, кг',
+        'Марка'
+    ]
+
+    const columns = [
+        { field: 'potName', render: (row) => row.potName || '-' },
+        { field: 'targetMetalLevel', render: (row) => row.targetMetalLevel?.toFixed(1) ?? '-' },
+        { field: 'actualMetalLevel', render: (row) => row.actualMetalLevel?.toFixed(1) ?? '-' },
+        { field: 'deviationValue', render: (row) => row.deviationValue?.toFixed(1) ?? '-' },
+        { field: 'amperage', render: (row) => row.amperage?.toFixed(0) ?? '-' },
+        { field: 'avgAmperage', render: (row) => row.avgAmperage?.toFixed(1) ?? '-' },
+        { field: 'calculatedTask', render: (row) => row.calculatedTask?.toFixed(0) ?? '-' },
+        { field: 'roundCalculatedTask', render: (row) => row.roundCalculatedTask?.toFixed(0) ?? '-' },
+        { field: 'metalMarkName', render: (row) => row.metalMarkName || '-' }
+    ]
+
     const handleSave = () => exportTableToPDF(sortedData, selectedCorpus)
     const handleSubmit = () => setIsUploadOpen(true)
     const handleFileSubmit = () => setIsUploadOpen(false)
