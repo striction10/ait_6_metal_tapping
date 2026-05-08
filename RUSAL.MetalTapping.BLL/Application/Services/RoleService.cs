@@ -27,4 +27,32 @@ public class RoleService(
 
         return mapper.Map<RoleDto>(entity);
     }
+
+    /// <summary>
+    /// Получение роли по идентификатору.
+    /// </summary>
+    /// <param name="roleId"> Идентификатор роли. </param>
+    /// <returns>DTO роли.</returns>
+    public async Task<RoleDto> GetByIdAsync(Guid roleId)
+    {
+        var entity = EnsureFound(
+            await roleRepository.GetByIdAsync(roleId),
+            $"Role {roleId} was not found");
+
+        return mapper.Map<RoleDto>(entity);
+    }
+
+    /// <summary>
+    /// Получение роли пользователя.
+    /// </summary>
+    /// <param name="userId">Идентификатор пользователя.</param>
+    /// <returns>DTO роли.</returns>
+    public async Task<RoleDto?> GetUserRoleAsync(Guid userId)
+    {
+        var entity = EnsureFound(
+            await roleRepository.GetUserRoleAsync(userId),
+            $"Role for user {userId} was not found");
+
+        return mapper.Map<RoleDto?>(entity);
+    }
 }

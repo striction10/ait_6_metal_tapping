@@ -4,5 +4,5 @@ namespace RUSAL.MetalTapping.BLL.Domain.Interfaces;
 
 public interface IJwtProvider
 {
-    public string GenerateJwtToken(UserDto user, IEnumerable<string> roles);
+    public string GenerateJwtToken(UserDto user, string role);
 }

@@ -18,6 +18,7 @@ public class EmailController(EmailSenderService service) : ControllerBase
     /// </summary>
     [HttpPost("send")]
     [Authorize(Roles = "User,Technologist")]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> SendPdf(
         [FromForm] string email,
         [FromForm] string subject,

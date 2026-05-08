@@ -60,6 +60,8 @@ public static class DependencyInjection
         services.AddScoped<GetAllMetalMarksUseCase>();
         services.AddScoped<GetAllBuildingsUseCase>();
         services.AddScoped<DeviationValuesUseCase>();
+        services.AddScoped<GetAllUsersUseCase>();
+        services.AddScoped<DeleteUserUseCase>();
 
         services.AddScoped<IJwtProvider, JwtProvider>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();

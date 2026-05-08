@@ -35,7 +35,9 @@ public class GenericRepository<TEntity>(AppDbContext context)
 
     public async Task DeleteAsync(TEntity entity)
     {
-        dbSet.Remove(entity);
+        var existing = await context.Set<TEntity>().FindAsync(entity.Id);
+
+        dbSet.Remove(existing);
         await context.SaveChangesAsync();
     }
 

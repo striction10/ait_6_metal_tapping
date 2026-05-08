@@ -53,4 +53,40 @@ public class UserService(
 
         await userRepository.CreateAsync(entity);
     }
+
+    /// <summary>
+    /// Получения списка всех пользователей системы.
+    /// </summary>
+    /// <returns>DTO пользователей.</returns>
+    public async Task<IEnumerable<UserDto>> GetAllAsync()
+    {
+        var entities = await userRepository.GetAllAsync();
+
+        return mapper.Map<IEnumerable<UserDto>>(entities);
+    }
+
+    /// <summary>
+    /// Удаление пользователя из системы.
+    /// </summary>
+    /// <param name="dto">DTO пользователя.</param>
+    public async Task DeleteAsync(UserDto dto)
+    {
+        var entity = mapper.Map<User>(dto);
+
+        await userRepository.DeleteAsync(entity);
+    }
+
+    /// <summary>
+    /// Получение пользователя по идентификатору.
+    /// </summary>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <returns> DTO пользователя. </returns>
+    public async Task<UserDto?> GetByIdAsync(Guid userId)
+    {
+        var entity = EnsureFound(
+            await userRepository.GetByIdAsync(userId),
+            $"User {userId} was not found");
+
+        return mapper.Map<UserDto?>(entity);
+    }
 }

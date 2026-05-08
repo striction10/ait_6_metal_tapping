@@ -13,11 +13,11 @@ public class RoleRepository(AppDbContext context)
         return await context.Roles.FirstOrDefaultAsync(r => r.Name == name);
     }
 
-    public async Task<IEnumerable<Role?>> GetUserRolesAsync(Guid userId)
+    public async Task<Role?> GetUserRoleAsync(Guid userId)
     {
         return await context.UserRoleMembers
             .Where(x => x.UserId == userId)
             .Select(x => x.Role)
-            .ToListAsync();
+            .FirstOrDefaultAsync();
     }
 }

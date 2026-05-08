@@ -17,18 +17,14 @@ public class JwtProvider : IJwtProvider
         this.jwtOptions = jwtOptions.Value;
     }
 
-    public string GenerateJwtToken(UserDto user, IEnumerable<string> roles)
+    public string GenerateJwtToken(UserDto user, string role)
     {
         var claims = new List<Claim>
         {
             new Claim("userId", user.Id.ToString()),
             new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.Role, role),
         };
-
-        foreach (var role in roles)
-        {
-            claims.Add(new Claim(ClaimTypes.Role, role));
-        }
 
         var signingCredentials = new SigningCredentials(
             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SecretKey)),

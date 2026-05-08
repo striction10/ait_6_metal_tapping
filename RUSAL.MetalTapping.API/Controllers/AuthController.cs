@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RUSAL.MetalTapping.BLL.Application.Contracts;
 using RUSAL.MetalTapping.BLL.Application.UseCases;
 
@@ -20,6 +21,10 @@ public class AuthController(
     /// </summary>
     /// <param name="model"> Параметры регистрации. </param>
     [HttpPost("register")]
+    [Authorize(Roles = "Admin")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> Register(RegisterUserRequest model)
     {
         await registerUserUseCase.ExecuteAsync(model);
@@ -30,7 +35,7 @@ public class AuthController(
     /// <summary>
     /// Регистрация пользователя в системе.
     /// </summary>
-    /// <param name="model"> Параметры регистрации. </param>
+    /// <param name="model"> Параметры авторизации. </param>
     /// <returns> Токен. </returns>
     [HttpPost("login")]
     [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]

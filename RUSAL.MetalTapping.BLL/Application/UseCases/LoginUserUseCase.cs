@@ -36,10 +36,8 @@ public class LoginUserUseCase(
             throw new AuthentificationException("Invalid login attempt");
         }
 
-        var roles = await roleRepository.GetUserRolesAsync(user.Id);
+        var role = await roleRepository.GetUserRoleAsync(user.Id);
 
-        var roleNames = roles.Select(r => r.Name);
-
-        return jwtProvider.GenerateJwtToken(user, roleNames);
+        return jwtProvider.GenerateJwtToken(user, role.Name);
     }
 }
