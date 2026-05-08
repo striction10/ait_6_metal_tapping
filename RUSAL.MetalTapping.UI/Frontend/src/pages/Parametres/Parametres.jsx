@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Header from '../../components/Header/Header'
 import Table from '../../components/Table/Table'
 import ActionButtons from '../../components/ActionButton/ActionButton'
@@ -22,6 +22,10 @@ function Parametres() {
 
     const [isUploadOpen, setIsUploadOpen] = useState(false)
     const { role } = getUserData()
+
+    useEffect(() => {
+        document.title = "Параметры"
+    }, []);
 
     const validateNumberInput = (value) => {
         let cleaned = value.replace(/[^\d.-]/g, '')
@@ -54,7 +58,11 @@ function Parametres() {
 
     const getCellClassName = (row, col, rowIndex, colIndex) => {
         const deviation = parseFloat(row.deviationValue)
-        const isDeviationOutOfRange = !isNaN(deviation) && deviation <= -5
+
+        const minDeviation = row.minDeviation ?? -5
+        const maxDeviation = row.maxDeviation ?? 5
+    
+        const isDeviationOutOfRange = !isNaN(deviation) && (deviation < minDeviation || deviation > maxDeviation)
 
         if (role === 'Technologist') {
             if (isDeviationOutOfRange && (col.field === 'deviationValue' || col.field === 'calculatedTask' || col.field === 'roundCalculatedTask')) {
@@ -120,7 +128,13 @@ function Parametres() {
         { field: 'metalMarkName', render: (row) => row.metalMarkName || '-' }
     ]
 
-    const handleSave = () => exportTableToPDF(sortedData, selectedCorpus)
+    const handleSave = () => {
+        const corpusName = buildings.find(b => b.value === selectedCorpus)?.label || selectedCorpus
+        const reglamentName = reglaments.find(r => r.value === selectedReglament)?.label || selectedReglament
+        
+        exportTableToPDF(sortedData, selectedCorpus, corpusName, reglamentName, selectedDate)
+    }
+    
     const handleSubmit = () => setIsUploadOpen(true)
     const handleFileSubmit = () => setIsUploadOpen(false)
 
@@ -184,7 +198,14 @@ function Parametres() {
                     )}
                 </div>
             </div>
-            <SendPopup isOpen={isUploadOpen} onClose={() => setIsUploadOpen(false)} onSubmit={handleFileSubmit} />
+
+            <SendPopup
+                isOpen={isUploadOpen}
+                onClose={() => setIsUploadOpen(false)}
+                pageType="parameters"
+                selectedDate={selectedDate}
+            />
+
         </>
     )
 }
