@@ -58,21 +58,25 @@ function Parametres() {
 
     const getCellClassName = (row, col, rowIndex, colIndex) => {
         const deviation = parseFloat(row.deviationValue)
-
         const minDeviation = row.minDeviation ?? -5
         const maxDeviation = row.maxDeviation ?? 5
-    
         const isDeviationOutOfRange = !isNaN(deviation) && (deviation < minDeviation || deviation > maxDeviation)
-
-        if (role === 'Technologist') {
-            if (isDeviationOutOfRange && (col.field === 'deviationValue' || col.field === 'calculatedTask' || col.field === 'roundCalculatedTask')) {
-                return 'technologist-blue'
+        
+        const isCalculatedTaskFilled = row.calculatedTask && row.calculatedTask !== '-'
+        const isRoundCalculatedTaskFilled = row.roundCalculatedTask && row.roundCalculatedTask !== '-'
+        
+        if (isDeviationOutOfRange && (!isCalculatedTaskFilled || !isRoundCalculatedTaskFilled)) {
+            if (role === 'Technologist') {
+                if (col.field === 'deviationValue' || col.field === 'calculatedTask' || col.field === 'roundCalculatedTask') {
+                    return 'technologist-blue'
+                }
+            } else {
+                if (col.field === 'deviationValue' || col.field === 'calculatedTask' || col.field === 'roundCalculatedTask') {
+                    return 'red-item'
+                }
             }
-            return ''
         }
-        if (isDeviationOutOfRange && (col.field === 'deviationValue' || col.field === 'calculatedTask' || col.field === 'roundCalculatedTask')) {
-            return 'red-item'
-        }
+        
         return ''
     }
 
