@@ -30,7 +30,7 @@ function Auth() {
             saveUserFromToken(response.data.token)
             navigate('/reglaments')
         } catch (err) {
-            const msg = err.response?.status === 404 || err.response?.status === 500 
+            const msg = err.response?.status === 401 || err.response?.status === 500 
                 ? 'Неверный логин или пароль' 
                 : 'Ошибка сервера. Попробуйте позже'
             setServerError(msg)
