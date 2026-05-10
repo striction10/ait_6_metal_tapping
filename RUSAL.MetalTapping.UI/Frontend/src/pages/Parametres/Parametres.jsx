@@ -3,6 +3,7 @@ import Header from '../../components/Header/Header'
 import Table from '../../components/Table/Table'
 import ActionButtons from '../../components/ActionButton/ActionButton'
 import SendPopup from "../../components/SendPopup/SendPopup"
+import BuildingMapPopup from "../../components/BuildingMapPopup/BuildingMapPopup"
 import { useReglamentsData } from '../../hooks/useReglamentsData'
 import { useParametersWithReglaments } from '../../hooks/useMergeReglamentWithParametres'
 import { exportTableToPDF } from '../../utils/exportToPDFParametres'
@@ -19,8 +20,9 @@ function Parametres() {
     
     const { reglaments, buildings } = useReglamentsData()
     const { sortedData, setSortedData } = useParametersWithReglaments(selectedCorpus, selectedReglament, selectedDate)
-
+    
     const [isUploadOpen, setIsUploadOpen] = useState(false)
+    const [isMapOpen, setIsMapOpen] = useState(false)
     const { role } = getUserData()
 
     useEffect(() => {
@@ -197,7 +199,12 @@ function Parametres() {
                                 canEdit={canEdit}
                                 getCellClassName={getCellClassName}
                             />
-                            <ActionButtons onSave={handleSave} onSubmit={handleSubmit} />
+                            <ActionButtons 
+                                onSave={handleSave}
+                                onSubmit={handleSubmit}
+                                onMap={() => setIsMapOpen(true)}
+                                selectedCorpus={selectedCorpus}
+                            />
                         </>
                     )}
                 </div>
@@ -208,6 +215,12 @@ function Parametres() {
                 onClose={() => setIsUploadOpen(false)}
                 pageType="parameters"
                 selectedDate={selectedDate}
+            />
+
+            <BuildingMapPopup 
+                isOpen={isMapOpen} 
+                onClose={() => setIsMapOpen(false)} 
+                buildingId={selectedCorpus} 
             />
 
         </>

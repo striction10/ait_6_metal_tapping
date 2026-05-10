@@ -40,4 +40,18 @@ public class ScoopService(
 
         return mapper.Map<ScoopDto>(entity);
     }
+
+    /// <summary>
+    /// Получение ковша по идентифкатору группы.
+    /// </summary>
+    /// <param name="groupId">Идентификатор группы.</param>
+    /// <returns>DTO ковша.</returns>
+    public async Task<ScoopDto?> GetByGroupIdAsync(Guid groupId)
+    {
+        var entity = EnsureFound(
+            await scoopRepository.GetByGroupIdAsync(groupId),
+            $"Scoop for group {groupId} was not found");
+
+        return mapper.Map<ScoopDto?>(entity);
+    }
 }

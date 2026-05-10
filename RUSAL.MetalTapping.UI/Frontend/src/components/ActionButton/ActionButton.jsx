@@ -1,8 +1,17 @@
 import './ActionButton.css'
 
-function ActionButtons({ onSave, onSubmit }) {
+function ActionButtons({ onSave, onSubmit, onMap, selectedCorpus }) {
     return (
         <div className="action-bar">
+            {onMap && selectedCorpus && selectedCorpus !== '0' && (
+                <button className="act-btn act-btn-map" onClick={onMap}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+                        <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+                    </svg>
+                    <span>Карта корпуса</span>
+                </button>
+            )}
             <button className="act-btn act-btn-save" onClick={onSave}>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>

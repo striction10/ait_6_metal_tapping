@@ -3,6 +3,7 @@ import Header from '../../components/Header/Header'
 import Table from '../../components/Table/Table'
 import ActionButtons from '../../components/ActionButton/ActionButton'
 import SendPopup from "../../components/SendPopup/SendPopup"
+import BuildingMapPopup from "../../components/BuildingMapPopup/BuildingMapPopup"
 import { useReglamentsData } from '../../hooks/useReglamentsData'
 import { exportReglamentsToPDF } from '../../utils/exportToPDFReglaments'
 import { reglamentsApi } from '../../services/reglaments'
@@ -17,6 +18,7 @@ function Reglaments() {
     
     const [sortedData, setSortedData] = useState([])
     const [isUploadOpen, setIsUploadOpen] = useState(false)
+    const [isMapOpen, setIsMapOpen] = useState(false)
     
     const { reglaments, buildings } = useReglamentsData()
 
@@ -143,7 +145,12 @@ function Reglaments() {
                                 columns={columns}
                                 colspan={headers.length}
                             />
-                            <ActionButtons onSave={handleSave} onSubmit={handleSubmit} />
+                            <ActionButtons 
+                                onSave={handleSave}
+                                onSubmit={handleSubmit}
+                                onMap={() => setIsMapOpen(true)}
+                                selectedCorpus={selectedCorpus}
+                            />
                         </>
                     )}
                 </div>
@@ -154,6 +161,12 @@ function Reglaments() {
                 onClose={() => setIsUploadOpen(false)}
                 pageType="reglaments"
                 selectedDate={selectedDate}
+            />
+
+            <BuildingMapPopup 
+                isOpen={isMapOpen} 
+                onClose={() => setIsMapOpen(false)} 
+                buildingId={selectedCorpus} 
             />
 
         </>

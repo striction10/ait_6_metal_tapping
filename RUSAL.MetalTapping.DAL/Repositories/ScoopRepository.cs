@@ -8,6 +8,14 @@ namespace RUSAL.MetalTapping.DAL.Repositories;
 public class ScoopRepository(AppDbContext context) :
     GenericRepository<Scoop>(context), IScoopRepository
 {
+    public async Task<Scoop?> GetByGroupIdAsync(Guid groupId)
+    {
+        return await context.PotGroupModels
+            .Where(pg => pg.Id == groupId)
+            .Select(pg => pg.Scoop)
+            .FirstOrDefaultAsync();
+    }
+
     public async Task<Scoop?> GetFirstAvailableScoopAsync(CancellationToken cancellationToken = default)
     {
         return await context.Scoops

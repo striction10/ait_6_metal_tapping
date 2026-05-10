@@ -22,7 +22,6 @@ public static class DependencyInjection
         services.AddScoped<TapTaskService>();
         services.AddScoped<PotService>();
         services.AddScoped<BuildingService>();
-        services.AddScoped<GroupService>();
         services.AddScoped<ShiftTaskService>();
         services.AddScoped<ShiftAssignmentService>();
         services.AddScoped<ScoopReservationService>();
@@ -49,6 +48,7 @@ public static class DependencyInjection
         services.AddScoped<UserRoleMembersService>();
         services.AddScoped<UserService>();
         services.AddScoped<EmailSenderService>();
+        services.AddScoped<BuildingInfoService>();
 
         services.AddScoped<ProcessDeviationAndTaskUseCase>();
         services.AddScoped<ProcessCalculatedTaskUseCase>();

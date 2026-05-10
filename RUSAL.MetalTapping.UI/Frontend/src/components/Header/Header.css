@@ -152,18 +152,17 @@
     transform: scale(0.97); 
 }
 
-.hd-user-btn img { 
-    width: 20px; 
-    height: 20px; 
-    opacity: 0.7; 
-    transition: all 0.2s ease; 
-    position: relative; 
-    z-index: 1; 
+.hd-user-btn svg {
+    width: 20px;
+    height: 20px;
+    color: var(--hd-text-muted);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    stroke-width: 2;
 }
 
-.hd-user-btn:hover img { 
-    opacity: 1; 
-    transform: scale(1.05); 
+.hd-user-btn:hover svg {
+    color: var(--hd-accent);
+    transform: scale(1.1);
 }
 
 .hd-divider { 
@@ -171,6 +170,41 @@
     width: 1px; 
     background: var(--hd-border); 
     margin: 0 0.25rem; 
+}
+
+.hd-admin-btn {
+    width: 42px; 
+    height: 42px; 
+    border-radius: 50%; 
+    background: transparent;
+    border: 1.5px solid var(--hd-border); 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    cursor: pointer; 
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); 
+    color: var(--hd-text-muted);
+    flex-shrink: 0;
+}
+
+.hd-admin-btn:hover { 
+    border-color: var(--hd-accent); 
+    color: var(--hd-accent); 
+    background: var(--hd-accent-light); 
+    transform: scale(1.05); 
+    box-shadow: 0 4px 12px var(--hd-accent-glow); 
+}
+
+.hd-admin-btn svg { 
+    width: 20px; 
+    height: 20px; 
+}
+
+@media (max-width: 480px) {
+    .hd-admin-btn { 
+        width: 38px; 
+        height: 38px; 
+    }
 }
 
 @media (max-width: 900px) {

@@ -24,8 +24,6 @@ public class OrderQueueWorker(IServiceProvider sp) : BackgroundService
             var scoopUsageService = scope.ServiceProvider.GetRequiredService<ScoopUsageService>();
             var calculatedTaskService = scope.ServiceProvider.GetRequiredService<CalculatedTaskService>();
             var metalMarkAnalysisService = scope.ServiceProvider.GetRequiredService<MetalMarkAnalysisService>();
-            var metalMarkService = scope.ServiceProvider.GetRequiredService<MetalMarkService>();
-            var groupService = scope.ServiceProvider.GetRequiredService<GroupService>();
             var buildingInfoService = scope.ServiceProvider.GetRequiredService<BuildingService>();
             var planSelector = scope.ServiceProvider.GetRequiredService<CastingExecutionPlanService>();
             var tapTaskReservationService = scope.ServiceProvider.GetRequiredService<TapTaskReservationService>();
@@ -86,7 +84,7 @@ public class OrderQueueWorker(IServiceProvider sp) : BackgroundService
                     }
 
                     var potDtos = await potService.CreateAsync(validPots, freshCalculated, freshAnalysis, marksByPot, metalLevelByPot);
-                    var groupDto = groupService.Create(group, scoop, scoopState, scoopUsage, potDtos);
+                    var groupDto = potGroupService.Create(group, scoop, scoopState, scoopUsage, potDtos);
                     groupDtos.Add(groupDto);
                 }
 
@@ -99,7 +97,7 @@ public class OrderQueueWorker(IServiceProvider sp) : BackgroundService
 
             if (!buildingInfos.Any())
             {
-                await Task.Delay(TimeSpan.FromSeconds(15), stoppingToken);
+                await Task.Delay(TimeSpan.FromMinutes(10), stoppingToken);
                 continue;
             }
 
@@ -110,7 +108,7 @@ public class OrderQueueWorker(IServiceProvider sp) : BackgroundService
             }
             catch (BusinessException ex)
             {
-                await Task.Delay(TimeSpan.FromMinutes(2), stoppingToken);
+                await Task.Delay(TimeSpan.FromMinutes(10), stoppingToken);
                 continue;
             }
 

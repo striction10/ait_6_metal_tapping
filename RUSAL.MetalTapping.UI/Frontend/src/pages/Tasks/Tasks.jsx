@@ -3,6 +3,7 @@ import Header from '../../components/Header/Header'
 import Table from '../../components/Table/Table'
 import ActionButtons from '../../components/ActionButton/ActionButton'
 import SendPopup from '../../components/SendPopup/SendPopup'
+import BuildingMapPopup from "../../components/BuildingMapPopup/BuildingMapPopup"
 import { useReglamentsData } from '../../hooks/useReglamentsData'
 import { useTasksData } from '../../hooks/useTasksData'
 import { exportTasksToPDF } from '../../utils/exportToPDFTasks'
@@ -16,6 +17,7 @@ function Tasks() {
     const [selectedCorpus, setSelectedCorpus] = useState('0')
     const [selectedShift, setSelectedShift] = useState('all')
     const [isUploadOpen, setIsUploadOpen] = useState(false)
+    const [isMapOpen, setIsMapOpen] = useState(false)
     
     const { buildings } = useReglamentsData()
     const { 
@@ -111,7 +113,12 @@ function Tasks() {
                                 colspan={2}
                                 canEdit={() => false}
                             />
-                            <ActionButtons onSave={handleSave} onSubmit={handleSubmit} />
+                            <ActionButtons 
+                                onSave={handleSave}
+                                onSubmit={handleSubmit}
+                                onMap={() => setIsMapOpen(true)}
+                                selectedCorpus={selectedCorpus}
+                            />
                         </>
                     ) : (
                         <div className="tasks-empty">
@@ -133,6 +140,12 @@ function Tasks() {
                 onClose={() => setIsUploadOpen(false)}
                 pageType="tasks"
                 selectedDate={selectedDate}
+            />
+
+            <BuildingMapPopup 
+                isOpen={isMapOpen} 
+                onClose={() => setIsMapOpen(false)} 
+                buildingId={selectedCorpus} 
             />
 
         </>
