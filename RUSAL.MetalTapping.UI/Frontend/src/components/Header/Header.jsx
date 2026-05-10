@@ -27,7 +27,6 @@ function Header({
                 <div className="hd-container">
                     <div className="hd-brand">
                         <img src={logo} alt="rusalLogo" className="hd-logo" id="logo1" />
-                        <h1 className="hd-title">{title}</h1>
                     </div>
                     {showNav && (
                         <nav className="hd-nav">
