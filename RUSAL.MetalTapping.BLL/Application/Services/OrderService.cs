@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using RUSAL.MetalTapping.BLL.Domain.DTOs;
 using RUSAL.MetalTapping.DAL.Entities;
 using RUSAL.MetalTapping.DAL.Interfaces;
-using RUSAL.MetalTapping.DAL.Repositories;
 
 namespace RUSAL.MetalTapping.BLL.Application.Services;
 

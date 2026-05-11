@@ -14,4 +14,11 @@ public class DeviationRepository(AppDbContext context)
             .Include(d => d.PotReglament)
             .FirstOrDefaultAsync(d => d.PotReglament.PotId == potId);
     }
+
+    public async Task<Deviation?> GetWithPotAndReglamentIdAsync(Guid reglamentId, Guid potId)
+    {
+        return await context.Deviations
+            .Include(d => d.PotReglament)
+            .FirstOrDefaultAsync(d => d.PotReglament.PotId == potId && d.PotReglament.ReglamentId == reglamentId);
+    }
 }

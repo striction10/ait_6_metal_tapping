@@ -29,6 +29,10 @@ public class LoginUserUseCase(
     public async Task<string> ExecuteAsync(LoginUserRequest model)
     {
         var user = await userService.GetByEmailAsync(model.email);
+        if (user == null)
+        {
+            throw new NotFoundException($"User with email {model.email} was not found");
+        }
 
         var valid = passwordHasher.Verify(model.password, user.Password);
         if (!valid)

@@ -97,7 +97,7 @@ public class OrderQueueWorker(IServiceProvider sp) : BackgroundService
 
             if (!buildingInfos.Any())
             {
-                await Task.Delay(TimeSpan.FromMinutes(10), stoppingToken);
+                await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
                 continue;
             }
 
@@ -108,7 +108,7 @@ public class OrderQueueWorker(IServiceProvider sp) : BackgroundService
             }
             catch (BusinessException ex)
             {
-                await Task.Delay(TimeSpan.FromMinutes(10), stoppingToken);
+                await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
                 continue;
             }
 
@@ -139,8 +139,8 @@ public class OrderQueueWorker(IServiceProvider sp) : BackgroundService
                 {
                     Id = Guid.NewGuid(),
                     ScoopId = segment.ScoopId,
-                    BusyFrom = DateTime.UtcNow,
-                    BusyUntil = DateTime.UtcNow.AddHours(1),
+                    BusyFrom = DateTime.Now,
+                    BusyUntil = DateTime.Now.AddHours(1),
                 });
             }
 

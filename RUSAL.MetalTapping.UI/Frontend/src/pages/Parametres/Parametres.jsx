@@ -89,7 +89,7 @@ function Parametres() {
         if (isNaN(numValue)) return
 
         if (field === 'actualMetalLevel') {
-            const response = await parametersApi.updateMetalLevel(row.potId, numValue)
+            const response = await parametersApi.updateMetalLevel(selectedReglament, row.potId, numValue)
             setSortedData(prev => prev.map(item =>
                 item.potId === row.potId
                     ? { ...item, actualMetalLevel: numValue, deviationValue: response.data.deviation, calculatedTask: response.data.calculatedTask, roundCalculatedTask: response.data.roundCalculatedTask }

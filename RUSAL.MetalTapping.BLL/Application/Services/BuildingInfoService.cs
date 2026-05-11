@@ -54,8 +54,9 @@ public class BuildingInfoService(
 
             foreach (var c in calculated)
             {
-                var weight = c.RoundCalculatedTaskForPot ?? c.CalculatedTaskForPot;
-                metalLevelByPot[c.PotId] = weight is double d ? d : (double)c.CalculatedTaskForPot;
+                var weight = c.RoundCalculatedTaskForPot ?? c.CalculatedTaskForPot ?? 0.0;
+
+                metalLevelByPot[c.PotId] = weight;
             }
 
             var potDtos = await potService.CreateAsync(pots, calculated, analysis, marksByPot, metalLevelByPot);

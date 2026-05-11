@@ -40,4 +40,12 @@ public class DeviationService(
 
         await deviationRepository.SaveChangesAsync();
     }
+
+    public async Task<DeviationDto?> GetWithPotAndReglamentIdAsync(Guid reglamentId, Guid potId)
+    {
+        var entity = EnsureFound(await deviationRepository.GetWithPotAndReglamentIdAsync(reglamentId, potId),
+            $"Deviation with pot {potId} reglament {reglamentId} was not found");
+
+        return mapper.Map<DeviationDto?>(entity);
+    }
 }

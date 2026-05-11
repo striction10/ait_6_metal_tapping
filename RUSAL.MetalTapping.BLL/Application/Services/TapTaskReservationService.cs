@@ -36,7 +36,7 @@ public class TapTaskReservationService(
             Id = Guid.NewGuid(),
             WeightOfMetal = orderRequest.requiredMetalWeight,
             MetalmarkId = metalMarkId,
-            DateOfOrder = DateTime.UtcNow,
+            DateOfOrder = DateTime.Now,
         };
 
         await orderService.CreateAsync(order);

@@ -33,7 +33,7 @@ public class ProcessDeviationAndTaskUseCase(
     /// <returns> ViewModel расчётного задания и ЗПР для клиента. </returns>
     public async Task<ProcessDeviationAndTaskResponse> ExecuteAsync(ProcessDeviationAndTaskRequest model)
     {
-        var deviation = await deviationService.GetWithPotIdAsync(model.potId);
+        var deviation = await deviationService.GetWithPotAndReglamentIdAsync(model.reglamentId, model.potId);
 
         var deviationValues = await deviationValuesService.GetWithDeviationIdAsync(deviation.Id);
 

@@ -33,10 +33,11 @@ public class ParametersController(
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ProcessDeviationAndTaskResponse>> PutParameters(
+        [FromQuery] Guid reglamentId,
         [FromQuery] Guid potId,
         [FromQuery] double actualMetalLevel)
     {
-        var request = new ProcessDeviationAndTaskRequest(potId, actualMetalLevel);
+        var request = new ProcessDeviationAndTaskRequest(reglamentId, potId, actualMetalLevel);
         var response = await processDeviationAndTask.ExecuteAsync(request);
         return Ok(response);
     }

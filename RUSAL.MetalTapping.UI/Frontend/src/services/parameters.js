@@ -10,9 +10,10 @@ export const parametersApi = {
         })
     },
     
-    updateMetalLevel: (potId, actualMetalLevel) => {
+    updateMetalLevel: (reglamentId, potId, actualMetalLevel) => {
         return api.post('/api/parameters', null, {
             params: {
+                reglamentId: reglamentId,
                 potId: potId,
                 actualMetalLevel: actualMetalLevel
             }
